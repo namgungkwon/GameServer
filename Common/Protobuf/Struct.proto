@@ -1,0 +1,85 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+
+
+message ServerInfo
+{
+	ServerType		serverType = 1;
+	string			name = 2;
+	uint32			currentUsers = 3;
+	uint32			maxCapacity = 4;
+	ServerStatus	status = 5;
+	string			publicIP = 6;
+	uint32			publicPort = 7;
+}
+
+message ClientInfo
+{
+	uint64			clientId = 1;
+	string			ip = 2;
+	uint32			port = 3;
+}
+
+message SpawnInfo
+{
+	uint64			objectId = 1;
+	float			x = 2;
+	float			y = 3;
+	int32			hp = 4;
+	int32			maxHp = 5;
+}
+
+message MoveInfo
+{
+	uint64			objectId = 1;
+	float			x = 2;
+	float			y = 3;
+}
+
+message AttackInfo
+{
+	uint64 attackerId = 1;
+	repeated uint64 targetId = 2;
+	uint64 skillid = 3;
+	Direction dir = 4;
+
+}
+
+message Vector3
+{
+	float x = 1;
+	float y = 2;
+	float z = 3;
+}
+
+message DamageInfo
+{	
+	uint64 attackerId = 1;
+	uint64 targetId = 2;
+	uint64 skillid = 3;
+	uint64 damage = 4;
+	bool isDead = 5;
+}
+
+message PlayerSummaryData
+{
+	uint64 objectId = 1;
+	string name = 2;
+	int32 templateId = 3;
+	int32 playerLevel = 4;
+}
+
+message PlayerPosData
+{
+	Vector3 location = 1;
+	float yaw = 2;
+}
+
+message PlayerStatData
+{
+	int32 hp = 1;
+	int32 mp = 2;
+	int32 exp = 3;
+}

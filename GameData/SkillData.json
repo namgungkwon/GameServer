@@ -1,0 +1,13 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "level": 1,
+      "attackRate": 1.0,
+      "attackRange": 10.0,
+      "attackAngle": 90,
+      "cooldownMs": 500,
+      "moveDelayMs" : 500
+    }
+  ]
+}

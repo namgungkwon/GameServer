@@ -1,0 +1,43 @@
+#pragma once
+
+using CallBack = function<void(void)>;
+
+useRef(GameSession)
+
+useRef(GameScene)
+useRef(Zone)
+
+useRef(Entity)
+useRef(Player)
+useRef(Monster)
+
+
+#define GETSET(type, name, funcName)							\
+public:															\
+	void Set##funcName(type name) { this->name = name; }		\
+	type Get##funcName() const { return name; }					\
+private:														\
+	type name;
+
+#define GETSET_SHARED(type, name, funcName)						\
+public:															\
+	void Set##funcName(type##Ref name) { this->name = name; }	\
+	type##Ref Get##funcName() const { return name; }			\
+private:														\
+	type##Ref name;
+
+#define GETSET_WEAK(type, name, funcName)						\
+public:															\
+	void Set##funcName(type##Ref name) { this->name = name; }	\
+	type##Ref Get##funcName() const { return name.lock(); }		\
+private:														\
+	std::weak_ptr<class type> name;
+
+
+// 문자열 등 원본 참조로 전달하고 싶을 때 사용
+#define GETSET_REF(type, name, funcName)							\
+public:																\
+	void Set##funcName(const type##& name) { this->name = name; }	\
+	const type##& Get##funcName() const { return name; }			\
+private:															\
+	type name;

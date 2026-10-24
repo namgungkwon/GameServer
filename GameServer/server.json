@@ -1,0 +1,28 @@
+{
+  "database": {
+    "trustedConnection": 1,
+    "host": "(localdb)\\ProjectModels",
+    "port": 8001,
+    "user": "root",
+    "password": "admin",
+    "name": "portfolio",
+    "threads": 2
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },
+  "server": {
+    "id": 1,
+    "name": "Server1",
+    "ip": "127.0.0.1",
+    "port": 8000,
+    "masSessions": 3000,
+    "acceptPool": 10
+  },
+  "world": {
+    "mapSize": 1000,
+    "zoneSize": 20,
+    "sceneCount" : 8
+  }
+}

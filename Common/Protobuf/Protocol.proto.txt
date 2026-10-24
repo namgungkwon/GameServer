@@ -1,0 +1,69 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+import "Struct.proto";
+
+///////////////////////////////////////////////////////
+//	패킷
+//	C 클라이언트
+//	L 로그인서버
+//  G 게임서버
+//	M 센터 & DB서버
+//  H 채팅서버(미사용)
+///////////////////////////////////////////////////////
+//	REQ 요청
+//  RES 응답
+///////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////
+//	<	Login	>
+///////////////////////////////////////////////////////
+message CL_REQ_LOGIN
+{
+	string		id = 1;
+	string		password = 2;
+}
+
+message LM_REQ_LOGIN
+{
+	string		id = 1;
+	string		password = 2;
+}
+
+message ML_RES_LOGIN
+{
+	bool					success = 1;
+	uint64					token = 2;
+}
+
+message LC_RES_LOGIN
+{
+	bool					success = 1;
+	uint64					token = 2;
+}
+
+///////////////////////////////////////////////////////
+//	<	gameServerList >
+///////////////////////////////////////////////////////
+message CL_REQ_GAMESERVERLIST
+{
+	uint64					token = 1;
+}
+
+message LM_REQ_GAMESERVERLIST
+{
+	uint64					token = 2;
+}
+
+message ML_RES_GAMESERVERLIST
+{
+	bool					success = 1;
+	GameServerInfo			GameServerInfo = 2;
+}
+
+message LC_RES_GAMESERVERLIST
+{
+	bool					success = 1;
+	GameServerInfo			GameServerInfo = 2;
+}

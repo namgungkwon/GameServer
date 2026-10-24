@@ -1,0 +1,54 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Subsystems/GameInstanceSubsystem.h"
+#include "Network/Protocol.pb.h"
+#include "GameObject.h"
+#include "ObjectHandler.generated.h"
+
+class AA1Object;
+/**
+ * 
+ */
+UCLASS(NotBlueprintType)
+class CLIENT_API UObjectHandler : public UGameInstanceSubsystem
+{
+	GENERATED_BODY()
+
+public:
+	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+	virtual void Deinitialize() override;
+	
+public:
+	//void Spawn(const Protocol::GC_SPAWN_OBJECTS& Pkt);
+	//void Spawn(const Protocol::GC_SPAWN_PLAYERS& Pkt);
+	//void Spawn(const Protocol::GC_SPAWN_HERO& Pkt);
+	
+	//void LoadMap(const Protocol::GC_LOAD_MAP& Pkt);
+	//void UnloadMap(const Protocol::GC_UNLOAD_MAP& Pkt);
+	
+	//void MovePacketReceived(const Protocol::GC_MOVE& Pkt);
+	//void AttackPacketReceived(const Protocol::GC_RES_ATTACK& Pkt);
+	//void DamagePacketReceived(const Protocol::GC_DAMAGE& Pkt);
+	
+	AActor* Spawn(uint64 ObjectId, int32 X, int32 Y);
+	
+public:
+	void Despawn(uint64 ObjectId);
+	TObjectPtr<AGameObject> FindObject(uint64 ObjectId);
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TSubclassOf<AGameObject>>			MonsterClasses;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AGameObject>				CharacterClass;
+	
+public:
+	UPROPERTY()
+	TMap<uint64, TObjectPtr<AGameObject>>	SpawnedObjects;
+	UPROPERTY()
+	TObjectPtr<AGameObject>				MyCharacter;
+};
