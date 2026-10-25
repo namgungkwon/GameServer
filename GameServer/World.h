@@ -13,21 +13,24 @@ class World : public JobQueue
 {
 public:
 	void Init(const WorldConfig& config);
+	void Start();
 
 public:
 	void EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load);
-	void EnterEntity(EntityRef entity);
+	bool EnterEntity(EntityRef entity);
+	void LeaveEntity(EntityRef entity);
 
 public:
 	ZoneRef         GetZoneByPos(Vector3 pos);
 	ZoneRef         GetZoneById(int32 id);
+	MoveResultRef	GetMoveResult(ZoneRef oldZone, ZoneRef newZone);
 
 private:
 	void CreateScene();
 	void CreateZone();
 	void CreateMoveTable();
 	
-	MoveResult		CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone);
+	MoveResultRef		CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone);
 
 private:
 	WorldConfig _config;
@@ -39,5 +42,5 @@ private:
 
 	HashMap<GameScene*, Vector<ZoneRef>> _enterSceneGroups;
 	HashMap<GameScene*, Vector<ZoneRef>> _leaveSceneGroups;
-	HashMap<int32, HashMap<int32, MoveResult>> _moveTable;
+	HashMap<int32, HashMap<int32, MoveResultRef>> _moveTable;
 };

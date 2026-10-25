@@ -2,9 +2,32 @@
 
 struct Vector3
 {
+    Vector3() = default;
+    Vector3(float x, float y, float z) : x(x), y(y), z(z) {};
+
     float x = 0.f;
     float y = 0.f;
     float z = 0.f;
+
+    Vector3 operator+(const Vector3& rhs) const { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
+    Vector3 operator-(const Vector3& rhs) const { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
+    Vector3 operator*(float s)          const { return { x * s,   y * s,   z * s }; }
+    bool    operator==(const Vector3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
+
+    float LengthSq() const { return x * x + y * y + z * z; }
+    float Length() const { return ::sqrt(LengthSq()); }
+
+    float DistanceSq(const Vector3& rhs) const { return (*this - rhs).LengthSq(); }
+    float Distance(const Vector3& ths)   const { return (*this - ths).Length(); }
+
+    Vector3 Normalized() const
+    {
+        float len = Length();
+        if (len < 1e-6f) return { 0.f, 0.f, 0.f };
+        return { x / len, y / len, z / len };
+    }
+
+    bool IsZero() const { return LengthSq() < 1e-12f; }
 };
 
 struct PlayerSummaryData

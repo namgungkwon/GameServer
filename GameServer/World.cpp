@@ -17,6 +17,12 @@ void World::Init(const WorldConfig& config)
 	CreateMoveTable();
 }
 
+void World::Start()
+{
+    for (GameSceneRef& scene : _scenes)
+        scene->StartUpdate();
+}
+
 void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load)
 {
     if (session == nullptr)
@@ -25,7 +31,6 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
     PlayerRef player = MakeShared<Player>();
     if (player->Init(summary, load) == false)
     {
-        // TODO
         Protocol::GC_ENTER_GAME pkt;
         pkt.set_success(false);
         SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
@@ -37,31 +42,39 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
 
     player->SetSession(session);
     session->SetPlayer(player);
-    
-    EnterEntity(player);
 
     {
         Protocol::GC_ENTER_GAME pkt;
         pkt.set_success(true);
-        player->MakePkt(OUT pkt);
+        player->MakePkt(OUT * pkt.mutable_object());
 
         SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
         session->Send(sendBuffer);
     }
+    
+    if (EnterEntity(player))
+    {
+        const Vector<ZoneRef>& zones = player->GetZone()->GetAdjacentZones();
+        
+        for (const ZoneRef& zone : zones)
+        {
+            zone->SpawnPktToEnterPlayer(player);
+        }
+    }
 }
 
-void World::EnterEntity(EntityRef entity)
+bool World::EnterEntity(EntityRef entity)
 {
     if (entity == nullptr)
-        return;
+        return false;
 
     ZoneRef mainZone = GetZoneByPos(entity->GetLocation());
     if (mainZone == nullptr)
-        return;
+        return false;
 
     GameSceneRef mainScene = mainZone->GetScene();
     if (mainScene == nullptr)
-        return;
+        return false;
 
     entity->SetZone(mainZone);
     entity->SetScene(mainScene);
@@ -84,6 +97,40 @@ void World::EnterEntity(EntityRef entity)
                     entity->SetScene(zone->GetScene());
                 }
                 zone->AddPendingSpawn(entity);
+            }
+            }));
+    }
+}
+
+void World::LeaveEntity(EntityRef entity)
+{
+    if (entity == nullptr)
+        return;
+
+    ZoneRef mainZone = entity->GetZone();
+    if (mainZone == nullptr)
+        return;
+
+    entity->SetZone(nullptr);
+    entity->SetScene(nullptr);
+
+    Vector<ZoneRef> adjacentZone = mainZone->GetAdjacentZones();
+
+    _leaveSceneGroups.clear();
+    for (const ZoneRef& zone : adjacentZone)
+        _leaveSceneGroups[zone->GetScene().get()].push_back(zone);
+
+    for (auto& [scene, zones] : _leaveSceneGroups)
+    {
+        scene->DoAsync(Job([scene, zones, entity, mainZone, objectId = entity->GetObjectId()]() {
+            for (const ZoneRef& zone : zones)
+            {
+                if (zone == mainZone)
+                {
+                    zone->LeaveZone(entity);
+                    
+                }
+                zone->AddPendingDespawn(objectId);
             }
             }));
     }
@@ -195,12 +242,30 @@ ZoneRef World::GetZoneById(int32 id)
     return _zones[id];
 }
 
-MoveResult World::CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone)
+MoveResultRef World::GetMoveResult(ZoneRef oldZone, ZoneRef newZone)
+{
+    if (oldZone == nullptr || newZone == nullptr) return nullptr;
+
+    int32 oldId = oldZone->GetZoneId();
+    int32 newId = newZone->GetZoneId();
+
+    auto outerIt = _moveTable.find(oldId);
+    if (outerIt != _moveTable.end())
+    {
+        auto innerIt = outerIt->second.find(newId);
+        if (innerIt != outerIt->second.end())
+            return innerIt->second;
+    }
+
+    return CalculateMoveResult(oldZone, newZone);
+}
+
+MoveResultRef World::CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone)
 {
     const Vector<ZoneRef>& oldAdj = oldZone->GetAdjacentZones();
     const Vector<ZoneRef>& newAdj = newZone->GetAdjacentZones();
 
-    MoveResult result = MoveResult();
+    MoveResultRef result = MakeShared<MoveResult>();
     auto itOld = oldAdj.begin();
     auto itNew = newAdj.begin();
 
@@ -210,18 +275,18 @@ MoveResult World::CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone)
         int32 newAdjId = (*itNew)->GetZoneId();
 
         if (oldAdjId < newAdjId)
-            result.leaveZones.push_back(*itOld++);
+            result->leaveZones.push_back(*itOld++);
         else if (oldAdjId > newAdjId)
-            result.enterZones.push_back(*itNew++);
+            result->enterZones.push_back(*itNew++);
         else
         {
-            result.keepZones.push_back(*itOld);
+            result->keepZones.push_back(*itOld);
             ++itOld; ++itNew;
         }
     }
 
-    while (itOld != oldAdj.end()) result.leaveZones.push_back(*itOld++);
-    while (itNew != newAdj.end()) result.enterZones.push_back(*itNew++);
+    while (itOld != oldAdj.end()) result->leaveZones.push_back(*itOld++);
+    while (itNew != newAdj.end()) result->enterZones.push_back(*itNew++);
 
     return result;
 }

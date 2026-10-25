@@ -5,6 +5,9 @@
 #include "DBManager.h"
 #include "job.h"
 #include "World.h"
+#include "player.h"
+#include "GameScene.h"
+#include "MovementComponent.h"
 
 bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pkt)
 {
@@ -20,7 +23,11 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
     }
 
     uint64 accountId = gameSession->GetAccountDBId();
-    uint64 playerId = pkt.playerid();
+
+    //temp
+    static Atomic<uint64> tempId = 1;
+    uint64 playerId = tempId.fetch_add(1);
+    //uint64 playerId = pkt.playerid();
     // DB에서 선택한 계정의 목록을 불러옴
     GDBManager->DoAsync(Job([gameSession, accountId, playerId]()
         {
@@ -40,6 +47,7 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
             gameSession->SetPlayerDBId(playerId);
 
             // Todo : World에 넣기
+            GWorld->EnterPlayer(gameSession, summary, load);
         }));
 
     return true;
@@ -50,6 +58,32 @@ bool Handle_CG_LEAVE_GAME(PacketSessionRef& session, Protocol::CG_LEAVE_GAME& pk
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
     if (gameSession->IsAuthenticated() == false) return false;
 
+    gameSession->LeavePlayer();
+
+    return true;
+}
+
+bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
+{
+    GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+    if (gameSession->IsAuthenticated() == false) return false;
+
+    PlayerRef player = gameSession->GetPlayer();
+    if (player == nullptr)
+        return false;
+
+    GameSceneRef scene = player->GetScene();
+    if (scene == nullptr)
+        return false;
+
+    MoveJob job;
+    Protocol::Vector3 rawVelocity = pkt.movedata().velocity();
+    job.velocity = Vector3(rawVelocity.x(), rawVelocity.y(), rawVelocity.z());
+    Protocol::Vector3 rawLocation = pkt.movedata().location();
+    job.location = Vector3(rawLocation.x(), rawLocation.y(), rawLocation.z());
+    job.yaw = pkt.movedata().yaw();
+
+    player->GetComponent<MovementComponent>()->SetPendingJob(job);
 
     return true;
 }

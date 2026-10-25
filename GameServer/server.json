@@ -21,8 +21,8 @@
     "acceptPool": 10
   },
   "world": {
-    "mapSize": 1000,
-    "zoneSize": 20,
+    "mapSize": 100000,
+    "zoneSize": 2000,
     "sceneCount" : 8
   }
 }

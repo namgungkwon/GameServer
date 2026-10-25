@@ -13,5 +13,13 @@ UCLASS()
 class CLIENT_API ASimulateObject : public AGameObject
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
+public:
+	virtual void MovePkt(const Protocol::ObjectPosData& Pkt) override;
+
+public:
+	void SimulateMovement(float DeltaTime);
 };

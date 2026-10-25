@@ -6,6 +6,7 @@ useRef(GameSession)
 
 useRef(GameScene)
 useRef(Zone)
+useRef(MoveResult)
 
 useRef(Entity)
 useRef(Player)

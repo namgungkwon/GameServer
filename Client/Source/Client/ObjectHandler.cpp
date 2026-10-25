@@ -6,6 +6,7 @@
 #include "IDetailTreeNode.h"
 #include "Utils.h"
 #include "GameObject.h"
+#include "MyPlayer.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -26,6 +27,94 @@ void UObjectHandler::Initialize(FSubsystemCollectionBase& Collection)
 void UObjectHandler::Deinitialize()
 {
 	Super::Deinitialize();
+}
+
+void UObjectHandler::Handle(const Protocol::GC_ENTER_GAME& pkt)
+{
+	uint64 templateId = pkt.object().summary().templateid();
+	if (templateId < MyCharacterClass.Num())
+	{
+		MyCharacter = GetWorld()->SpawnActor<AMyPlayer>(MyCharacterClass[templateId]);
+
+		if (MyCharacter)
+		{
+			MyCharacter->SpawnPkt(pkt.object());
+			APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+			AActor* actor = PC->GetPawn();
+			if (actor)
+				actor->Destroy();
+			PC->UnPossess();
+			PC->Possess(MyCharacter);
+			PC->SetViewTargetWithBlend(MyCharacter);
+
+			SpawnedObjects.Add(pkt.object().summary().objectid(),MyCharacter);
+		}
+	}
+}
+
+void UObjectHandler::Handle(const Protocol::GC_SPAWN& pkt)
+{
+	for (const auto& item : pkt.object())
+	{
+		auto id = item.summary().objectid();
+
+		if (SpawnedObjects.Find(id) != nullptr)
+			continue;
+		
+		auto Type = item.summary().objecttype();
+		auto templateId = item.summary().templateid();
+
+		switch(Type)
+		{
+		case Protocol::OBJECT_CATEGORY_PLAYER:
+			{
+				if (templateId < CharacterClass.Num())
+				{
+					if (AGameObject* SpawnedActor = GetWorld()->SpawnActor<AGameObject>(CharacterClass[templateId]))
+					{
+						SpawnedObjects.Add(id, SpawnedActor);
+						SpawnedActor->SpawnPkt(item);
+					}
+				}
+			}
+			break;
+		case Protocol::OBJECT_CATEGORY_MONSTER:
+			{
+				if (templateId < MonsterClasses.Num())
+				{
+					if (AGameObject* SpawnedActor = GetWorld()->SpawnActor<AGameObject>(MonsterClasses[templateId]))
+					{
+						SpawnedObjects.Add(id, SpawnedActor);
+						SpawnedActor->SpawnPkt(item);
+					}
+				}
+			}
+			break;
+		}
+	}
+}
+
+void UObjectHandler::Handle(const Protocol::GC_DESPAWN& pkt)
+{
+	for (uint64 id : pkt.objectid())
+	{
+		if (SpawnedObjects.Find(id) != nullptr)
+		{
+			SpawnedObjects[id]->Destroy();
+			SpawnedObjects.Remove(id);
+		}	
+	}
+}
+
+void UObjectHandler::Handle(const Protocol::GC_MOVE& pkt)
+{
+	for (const Protocol::ObjectPosData& data : pkt.movedata())
+	{
+		if (SpawnedObjects.Find(data.objectid()) != nullptr)
+		{
+			SpawnedObjects[data.objectid()]->MovePkt(data);
+		}	
+	}
 }
 
 /*void UObjectHandler::Spawn(const Protocol::GC_SPAWN_OBJECTS& Pkt)

@@ -2,12 +2,7 @@
 
 #include <typeindex>
 #include <typeinfo>
-
-enum EntityType
-{
-	PLAYER,
-	MONSTER,
-};
+#include "Protocol.pb.h"
 
 enum EntityState
 {
@@ -44,26 +39,35 @@ class Entity : public enable_shared_from_this<Entity>
 public:
 	template <typename T>
 	T* AddComponent(EntityRef owner);
-
 	template<typename T>
 	T* GetComponent();
+
+public:
+	void MakePkt(OUT Protocol::ObjectData& objectData);
+
+public:
+	void MakePkt(OUT Protocol::ObjectSummaryData& summary);
+	void MakePkt(OUT Protocol::ObjectPosData& pos);
+	void MakePkt(OUT Protocol::ObjectStatData& stat);
 
 private:
 	HashMap<std::type_index, IObjectComponent*> Components;
 
 public:
-	GETSET_WEAK(Zone,			_ownerZone,		Zone);
-	GETSET_WEAK(GameScene,		_ownerScene,	Scene);
+	GETSET_WEAK(Zone,						_ownerZone,		Zone);
+	GETSET_WEAK(GameScene,					_ownerScene,	Scene);
 
-	GETSET		(uint64,		_objectId,		ObjectId);
+	GETSET		(uint64,					_objectId,		ObjectId);
+	GETSET		(uint64,					_templateId,	TemplateId);
 	
-	GETSET_REF	(wstring,		_name,			Name);
-	GETSET		(int32,			_level,			Level);
-	GETSET		(Vector3,		_location,		Location);
-	GETSET		(float,			_yaw,			Yaw);
+	GETSET_REF	(wstring,					_name,			Name);
+	GETSET		(int32,						_level,			Level);
+	GETSET		(int32,						_exp,			Exp);
+	GETSET		(Vector3,					_location,		Location);
+	GETSET		(float,						_yaw,			Yaw);
 
-	GETSET		(EntityType,	_type,			Type);
-	GETSET		(EntityState,	_state,			State);
+	GETSET		(Protocol::ObjectCategory,	_type,			Type);
+	GETSET		(EntityState,				_state,			State);
 };
 
 template<typename T>

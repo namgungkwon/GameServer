@@ -22,9 +22,7 @@ message CG_ENTER_GAME
 message GC_ENTER_GAME
 {
 	bool success = 1;
-	PlayerSummaryData summaryData = 2;
-	PlayerPosData posData = 3;
-	PlayerStatData statData = 4;
+	ObjectData object= 2;
 }
 
 
@@ -41,12 +39,28 @@ message CG_LEAVE_GAME
 ///////////////////////////////////////////////////////
 //	<	Spawn	>
 ///////////////////////////////////////////////////////
+message GC_SPAWN
+{
+	repeated ObjectData object = 1;
+}
 
+message GC_DESPAWN
+{
+	repeated uint64 objectId = 1;
+}
 
 ///////////////////////////////////////////////////////
 //	<	Move	>
 ///////////////////////////////////////////////////////
+message CG_MOVE
+{
+	ObjectMoveData moveData = 1;
+}
 
+message GC_MOVE
+{
+	repeated ObjectPosData moveData = 1;
+}
 
 ///////////////////////////////////////////////////////
 //	<	Attack	>

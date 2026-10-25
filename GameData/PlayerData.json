@@ -8,7 +8,7 @@
       "attack": 10,
       "defense": 5,
       "requireExp": 10,
-      "speed": 5.0
+      "speed": 100.0
     },
     {
       "id": 0,
@@ -18,7 +18,7 @@
       "attack": 15,
       "defense": 7,
       "requireExp": 30,
-      "speed": 5.0
+      "speed": 300.0
     },
     {
       "id": 0,
@@ -28,7 +28,7 @@
       "attack": 20,
       "defense": 10,
       "requireExp": 60,
-      "speed": 5.0
+      "speed": 300.0
     },
     {
       "id": 0,
@@ -38,7 +38,7 @@
       "attack": 25,
       "defense": 13,
       "requireExp": 100,
-      "speed": 5.0
+      "speed": 300.0
     },
     {
       "id": 0,
@@ -47,8 +47,8 @@
       "maxMp": 300,
       "attack": 30,
       "defense": 15,
-      "requireExp": 9999999,
-      "speed": 5.0
+      "requireExp": 999999,
+      "speed": 300.0
     }
   ]
 }

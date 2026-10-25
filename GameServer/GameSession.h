@@ -9,6 +9,7 @@ public:
 public:
 	bool IsAuthenticated() { return _accountDBId != 0; }
 	bool TryEnterGame() { return EnterRoomProcess.exchange(true) == false; }
+	void LeavePlayer();
 	void ReleaseEnterGame() { EnterRoomProcess.store(false); }
 
 private:

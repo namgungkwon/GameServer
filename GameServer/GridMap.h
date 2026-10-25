@@ -7,6 +7,7 @@ public:
 
 public:
 	bool FindPath(Vector3& from, Vector3& to, Vector<Vector3>& outPath);
+	bool CanGo(Vector3& to);
 
 
 private:

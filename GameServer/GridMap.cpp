@@ -8,6 +8,14 @@
 
 bool GridMap::Init(const char* path)
 {
+    _cells.resize(100'0000, false);
+    _xSize = 1000;
+    _ySize = 1000;
+    _cellWidth = 100;
+
+    return true;
+
+
     Vector<BYTE> gridData = FileUtils::ReadFile(Utils::ToWString(path).c_str());
     Vector<string> lines = SplitLine(string(gridData.begin(), gridData.end()));
 
@@ -159,6 +167,15 @@ bool GridMap::FindPath(Vector3& from, Vector3& to, Vector<Vector3>& outPath)
         outPath.push_back(CellCenter(corners[i] % cols, corners[i] / cols));
     outPath.push_back(to);
     return true;
+}
+
+bool GridMap::CanGo(Vector3& to)
+{
+    int32 xIdx = 0;
+    int32 yIdx = 0;
+    ToCell(to, &xIdx, &yIdx);    
+
+    return CellWalkable(xIdx, yIdx);
 }
 
 void GridMap::ToCell(Vector3& location, int32* xIdx, int32* yIdx)

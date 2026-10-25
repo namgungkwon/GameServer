@@ -63,23 +63,41 @@ message DamageInfo
 	bool isDead = 5;
 }
 
-message PlayerSummaryData
+message ObjectSummaryData
 {
 	uint64 objectId = 1;
-	string name = 2;
-	int32 templateId = 3;
-	int32 playerLevel = 4;
+	ObjectCategory objectType = 2;
+	string name = 3;
+	int32 templateId = 4;
+	int32 level = 5;
 }
 
-message PlayerPosData
+message ObjectPosData
 {
-	Vector3 location = 1;
-	float yaw = 2;
+	uint64 objectId = 1;
+	Vector3 location = 2;
+	float yaw = 3;
 }
 
-message PlayerStatData
+message ObjectStatData
 {
-	int32 hp = 1;
-	int32 mp = 2;
-	int32 exp = 3;
+	uint64 objectId = 1;
+	int32 hp = 2;
+	int32 mp = 3;
+	int32 exp = 4;
+}
+
+message ObjectData
+{
+	ObjectSummaryData summary = 1;
+	ObjectPosData pos = 2;
+	ObjectStatData stat = 3;
+}
+
+message ObjectMoveData
+{
+	uint64 objectId = 1;
+	Vector3 location = 2;
+	Vector3 Velocity = 3;
+	float yaw = 4;
 }

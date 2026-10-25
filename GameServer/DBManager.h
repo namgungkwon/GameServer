@@ -2,6 +2,14 @@
 
 #include "ConfigLoader.h"
 #include "DBConnection.h"
+#include "DBConnectionPool.h"
+
+struct DBConn
+{
+    DBConn() { conn = GDBConnectionPool->Pop();  }
+    ~DBConn() { GDBConnectionPool->Push(conn); }
+    DBConnection* conn;
+};
 
 struct DBTransactionGuard
 {
@@ -27,6 +35,7 @@ public:
 
 public:
 	bool GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load);
+    void SavePlayer(uint64 playerId, const PlayerLoadData* load);
 
 
 private:

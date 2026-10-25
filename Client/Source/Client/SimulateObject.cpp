@@ -3,3 +3,38 @@
 
 #include "SimulateObject.h"
 
+void ASimulateObject::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	SimulateMovement(DeltaTime);
+}
+
+void ASimulateObject::MovePkt(const Protocol::ObjectPosData& Pkt)
+{
+	Super::MovePkt(Pkt);
+
+	SetActorRotation(FRotator(0.f, Pkt.yaw(), 0.f));
+}
+
+void ASimulateObject::SimulateMovement(float DeltaTime)
+{
+	FVector Location = GetActorLocation();
+	FVector MoveDir = (serverPos - Location);
+
+	SetActorRotation(FRotator(0.f, Yaw, 0.f));
+
+	const float DistToDest = MoveDir.Length();
+	if (DistToDest <= KINDA_SMALL_NUMBER)
+		return;
+	
+	const float MoveDist = FMath::Min(moveSpeed * DeltaTime, DistToDest);
+	const FVector MoveDirection = MoveDir.GetSafeNormal();
+
+	FVector NextLocation = GetActorLocation() + MoveDirection * MoveDist;
+
+	NextLocation.X = FMath::Clamp(NextLocation.X, 0.f, 100000.f);
+	NextLocation.Y = FMath::Clamp(NextLocation.Y, 0.f, 100000.f);
+
+	SetActorLocation(NextLocation, true);
+}

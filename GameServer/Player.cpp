@@ -9,7 +9,7 @@
 
 bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 {
-	PlayerData* data = GGameData->GetPlayerData(GetLevel());
+	PlayerData* data = GGameData->GetPlayerData(summary.level);
 	if (data == nullptr)
 	{
 		LOG_ERROR(L"Fail to find PlayerData" + std::to_wstring(GetLevel()));
@@ -22,13 +22,13 @@ bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 	SetLevel(summary.level);
 	SetLocation(load.location);
 	SetYaw(load.yaw);
-	SetType(EntityType::PLAYER);
+	SetType(Protocol::OBJECT_CATEGORY_PLAYER);
 	SetState(EntityState::Idle);
+	SetTemplateId(summary.templateId);
+	SetExp(load.exp);
 
 	// Player
-	_dbId = summary.dbId;
-	_templateId = summary.templateId;
-	_exp = load.exp;
+	_playerDBId = summary.playerId;
 	_requiredExp = data->requireExp;
 
 	// Component
@@ -42,26 +42,25 @@ bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 	AddComponent<SkillComponent>(shared_from_this())->Init(skills);
 }
 
-void Player::MakePkt(Protocol::GC_ENTER_GAME& pkt)
+PlayerLoadData Player::MakeLoadData()
 {
-	// summary
-	Protocol::PlayerSummaryData* summary = pkt.mutable_summarydata();
-	summary->set_objectid(GetObjectId());
-	summary->set_name(Utils::ToString(GetName()));
-	summary->set_templateid(_templateId);
-
-	// pos
-	Protocol::PlayerPosData* pos = pkt.mutable_posdata();
-	Protocol::Vector3* vec = pos->mutable_location();
-	vec->set_x(GetLocation().x);
-	vec->set_y(GetLocation().y);
-	vec->set_z(GetLocation().z);
-	pos->set_yaw(GetYaw());
-
-	// stat
 	StatComponent* sc = GetComponent<StatComponent>();
-	Protocol::PlayerStatData* stat = pkt.mutable_statdata();
-	stat->set_hp(sc->GetCurrentHP());
-	stat->set_mp(sc->GetCurrentMP());
-	stat->set_exp(_exp);
+	
+	PlayerLoadData data;
+	data.location = GetLocation();
+	data.yaw = GetYaw();
+	data.hp = sc->GetCurrentHP();
+	data.mp = sc->GetCurrentMP();
+	data.exp = GetExp();
+	
+	
+	return std::move(data);
+}
+
+void Player::Send(SendBufferRef& sendBuffer)
+{
+	if (GameSessionRef session = GetSession())
+	{
+		session->Send(sendBuffer);
+	}
 }

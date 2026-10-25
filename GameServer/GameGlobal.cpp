@@ -51,6 +51,7 @@ void GameGlobal::Init()
 	_world = MakeShared<World>();
 	GWorld = _world.get();
 	GWorld->Init(_config.world);
+	GWorld->Start();
 
 	// 5. GridMap
 	_gridMap = MakeShared<GridMap>();

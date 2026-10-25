@@ -8,11 +8,12 @@
 #include "GameObject.h"
 #include "ObjectHandler.generated.h"
 
-class AA1Object;
+class AMyPlayer;
+class AGameObject;
 /**
  * 
  */
-UCLASS(NotBlueprintType)
+UCLASS(BlueprintType, Blueprintable)
 class CLIENT_API UObjectHandler : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
@@ -23,6 +24,10 @@ public:
 	virtual void Deinitialize() override;
 	
 public:
+	void Handle(const Protocol::GC_ENTER_GAME& pkt);
+	void Handle(const Protocol::GC_SPAWN& pkt);
+	void Handle(const Protocol::GC_DESPAWN& pkt);
+	void Handle(const Protocol::GC_MOVE& pkt);
 	//void Spawn(const Protocol::GC_SPAWN_OBJECTS& Pkt);
 	//void Spawn(const Protocol::GC_SPAWN_PLAYERS& Pkt);
 	//void Spawn(const Protocol::GC_SPAWN_HERO& Pkt);
@@ -42,13 +47,15 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<TSubclassOf<AGameObject>>			MonsterClasses;
+	TArray<TSubclassOf<AGameObject>>				MonsterClasses;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AGameObject>				CharacterClass;
+	TArray<TSubclassOf<AGameObject>>				CharacterClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TSubclassOf<AGameObject>>				MyCharacterClass;
 	
 public:
 	UPROPERTY()
 	TMap<uint64, TObjectPtr<AGameObject>>	SpawnedObjects;
 	UPROPERTY()
-	TObjectPtr<AGameObject>				MyCharacter;
+	TObjectPtr<AMyPlayer>				MyCharacter;
 };

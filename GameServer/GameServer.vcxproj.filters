@@ -86,6 +86,7 @@
       <Filter>Packet</Filter>
     </ClInclude>
     <ClInclude Include="GameConfig.h" />
+    <ClInclude Include="MovementSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -170,6 +171,7 @@
       <Filter>Packet</Filter>
     </ClCompile>
     <ClCompile Include="GameConfig.cpp" />
+    <ClCompile Include="MovementSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pch">

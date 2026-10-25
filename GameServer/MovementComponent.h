@@ -1,6 +1,13 @@
 #pragma once
 #include "Entity.h"
 
+struct MoveJob
+{
+	Vector3 location;
+	Vector3 velocity;
+	float yaw;
+};
+
 class MovementComponent final : public IObjectComponent
 {
 public:
@@ -8,14 +15,16 @@ public:
 public:
 	void Init(float moveSpeed)
 	{
-		_velocity = Vector3();
+		pendingJob = MoveJob();
 		SetMoveSpeed(moveSpeed);
 		_moveDelayEndTick = 0;
 	};
 
 public:
-	void SetVelocity(Vector3 velocity) { _velocity = velocity; }
-	Vector3 GetVelocity() { return _velocity; }
+	bool CanMove(uint64 now) { return now > _moveDelayEndTick; }
+
+	void SetPendingJob(const MoveJob& job) { WRITE_LOCK; pendingJob = std::move(job); }
+	MoveJob& GetPendingJob() { WRITE_LOCK; return pendingJob; }
 
 	void SetMoveSpeed(float moveSpeed) { _moveSpeed = UtilMath::Max(moveSpeed, 0.f); }
 	float GetMoveSpeed() { return _moveSpeed; }
@@ -24,7 +33,8 @@ public:
 	uint64 GetMoveDelayEndTick() { return _moveDelayEndTick; }
 
 private:
-	Vector3 _velocity;
+	USE_LOCK;
+	MoveJob pendingJob;
 	float _moveSpeed = 0.f;
 	uint64 _moveDelayEndTick = 0;// 스킬을 썼을때나 이상이 있을 때 moveDelay를 설정
 };

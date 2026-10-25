@@ -182,6 +182,7 @@
     <ClInclude Include="GameLibraries.h" />
     <ClInclude Include="GameMacro.h" />
     <ClInclude Include="GridMap.h" />
+    <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="StatComponent.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GameStruct.cpp" />
     <ClCompile Include="GridMap.cpp" />
+    <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="Protocol.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

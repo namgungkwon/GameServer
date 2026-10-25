@@ -6,6 +6,7 @@
 #include "GameLibraries.h"
 #include "GameMacro.h"
 #include "GameStruct.h"
+#include "GameConfig.h"
 
 #include "GameGlobal.h"
 #include "UtilMath.h"

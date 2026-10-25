@@ -7,6 +7,9 @@
 #endif
 
 bool Handle_GC_ENTER_GAME(PacketSessionRef& session, Protocol::GC_ENTER_GAME& pkt);
+bool Handle_GC_SPAWN(PacketSessionRef& session, Protocol::GC_SPAWN& pkt);
+bool Handle_GC_DESPAWN(PacketSessionRef& session, Protocol::GC_DESPAWN& pkt);
+bool Handle_GC_MOVE(PacketSessionRef& session, Protocol::GC_MOVE& pkt);
 
 ///////////////////////////////////////////////////////
 //	<	GameServerPacketHandler	>
@@ -17,6 +20,9 @@ public:
 	static void Init()
 	{
 		GPacketHandler[PKT_GC_ENTER_GAME] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_ENTER_GAME>(Handle_GC_ENTER_GAME, session, buffer, len); };
+		GPacketHandler[PKT_GC_SPAWN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_SPAWN>(Handle_GC_SPAWN, session, buffer, len); };
+		GPacketHandler[PKT_GC_DESPAWN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_DESPAWN>(Handle_GC_DESPAWN, session, buffer, len); };
+		GPacketHandler[PKT_GC_MOVE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_MOVE>(Handle_GC_MOVE, session, buffer, len); };
 	}
 
 	static bool	HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -28,6 +34,7 @@ public:
 
 	static SendBufferRef MakeSendBuffer(Protocol::CG_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_CG_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::CG_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_CG_LEAVE_GAME); }
+	static SendBufferRef MakeSendBuffer(Protocol::CG_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_CG_MOVE); }
 	
 
 private:
