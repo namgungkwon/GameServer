@@ -22,16 +22,20 @@ void ASimulateObject::SimulateMovement(float DeltaTime)
 	FVector Location = GetActorLocation();
 	FVector MoveDir = (serverPos - Location);
 
-	SetActorRotation(FRotator(0.f, Yaw, 0.f));
+	//SetActorRotation(FRotator(0.f, Yaw, 0.f));
 
 	const float DistToDest = MoveDir.Length();
 	if (DistToDest <= KINDA_SMALL_NUMBER)
+	{
+		abp_isMoving = false;
 		return;
-	
-	const float MoveDist = FMath::Min(moveSpeed * DeltaTime, DistToDest);
-	const FVector MoveDirection = MoveDir.GetSafeNormal();
+	}
 
-	FVector NextLocation = GetActorLocation() + MoveDirection * MoveDist;
+	abp_isMoving = true;
+	const float MoveDist = FMath::Min(moveSpeed * DeltaTime, DistToDest);
+	abp_MoveDirection = MoveDir.GetSafeNormal();
+
+	FVector NextLocation = GetActorLocation() + abp_MoveDirection * MoveDist;
 
 	NextLocation.X = FMath::Clamp(NextLocation.X, 0.f, 100000.f);
 	NextLocation.Y = FMath::Clamp(NextLocation.Y, 0.f, 100000.f);

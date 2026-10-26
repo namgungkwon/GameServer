@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 AMyPlayer::AMyPlayer()
@@ -23,6 +24,12 @@ AMyPlayer::AMyPlayer()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	//bUseControllerRotationYaw = false;
+	//bUseControllerRotationPitch = false;
+	//bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 720.f, 0.f);
 }
 
 void AMyPlayer::BeginPlay()
@@ -44,20 +51,40 @@ void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	MoveTick(DeltaTime);
+}
+
+void AMyPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		//Moving
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyPlayer::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AMyPlayer::Move);
+		
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMyPlayer::Look);
+	}
+}
+
+void AMyPlayer::MoveTick(float DeltaTime)
+{
 	MovePacketTimer -= DeltaTime;
 
 	if (MovePacketTimer <= 0)
 	{
-		if (CurrentInput.IsNearlyZero())
+		/*if (CurrentInput.IsNearlyZero())
 		{
 			MovePacketTimer = MOVEPKT_DELAY;
 		}
-		else
+		else*/
 		{
 			SendMovePkt();
 		}
 	}
 
+	
 	FVector CurrentLocation = GetActorLocation();
 	
 	FVector Diff = serverPos - CurrentLocation;
@@ -71,20 +98,29 @@ void AMyPlayer::Tick(float DeltaTime)
 		return;
 	}
 
-	// 작게 어긋났으면 부드럽게 보정
-	/*SetActorLocation(FMath::VInterpTo(
-		CurrentLocation,
-		DesiredLocation,
-		GetWorld()->GetDeltaSeconds(),
-		MoveSpeedY * interptorate
-	));*/
-
 	FVector InputDirection = FVector::ZeroVector;
 	
 	if (CurrentInput.IsNearlyZero() == false)
 		InputDirection = CurrentInput.GetSafeNormal();
 
-	FVector MoveVelocity = InputDirection * FVector(moveSpeed, moveSpeed, 0.f);
+	// 2. 플레이어 Yaw 기준으로 입력 회전
+	const float PlayerYaw = GetActorRotation().Yaw;
+	const FRotator YawRotation(0.f, PlayerYaw, 0.f);
+
+	const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector Right   = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	// CurrentInput.Y = 전진/후진, CurrentInput.X = 좌/우라고 가정
+	FVector MoveDirection =
+		Forward * CurrentInput.X +
+		Right   * CurrentInput.Y;
+
+	if (!MoveDirection.IsNearlyZero())
+	{
+		MoveDirection = MoveDirection.GetSafeNormal();
+	}
+	
+	FVector MoveVelocity = MoveDirection * moveSpeed;
 
 	FVector CorrectionVelocity = Diff * 3.f;
 	if (CorrectionVelocity.Size() > 0.5f)
@@ -96,19 +132,7 @@ void AMyPlayer::Tick(float DeltaTime)
 	
 	FVector NextLocation = CurrentLocation + FVector(MoveVelocity.X * DeltaTime, MoveVelocity.Y * DeltaTime, 0.f);
 
-	SetActorLocation(NextLocation);
-}
-
-void AMyPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
-	{
-		//Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMyPlayer::Move);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AMyPlayer::Move);
-	}
+	SetActorLocation(NextLocation, true);
 }
 
 void AMyPlayer::SpawnPkt(const Protocol::ObjectData& Pkt)
@@ -130,7 +154,7 @@ void AMyPlayer::SendMovePkt()
 	FVector ActorLocation = GetActorLocation();
 	Location->set_x(ActorLocation.X);
 	Location->set_y(ActorLocation.Y);
-	Location->set_z(ActorLocation.Z);
+	Location->set_z(ActorLocation.Z - 90.f);
 
 	Protocol::Vector3* vec = moveData->mutable_velocity();
 	vec->set_x(CurrentInput.X);
@@ -155,13 +179,25 @@ void AMyPlayer::Move(const FInputActionValue& Value)
 
 	if (CurrentInput.IsNearlyZero())
 	{
-		int a = 0;
+		abp_isMoving = false;
+	}
+	else
+	{
+		abp_isMoving = true;
 	}
 
 	if (LastSentInput != CurrentInput)
 	{
 		SendMovePkt();
 	}
+}
+
+void AMyPlayer::Look(const FInputActionValue& Value)
+{
+	const FVector2D Axis = Value.Get<FVector2D>();
+
+	AddControllerYawInput(Axis.X);
+	AddControllerPitchInput(Axis.Y);
 }
 
 void AMyPlayer::Attack(const FInputActionValue& Value)

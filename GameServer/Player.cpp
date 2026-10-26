@@ -34,7 +34,9 @@ bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 	// Component
 	AddComponent<StatComponent>(shared_from_this())->Init(load.hp, data->maxHp, load.mp, data->maxMp);
 	AddComponent<CombatComponent>(shared_from_this())->Init(data->attack, data->defense);
-	AddComponent<MovementComponent>(shared_from_this())->Init(data->speed);
+	MovementComponent* mc = AddComponent<MovementComponent>(shared_from_this());
+	mc->Init(data->speed);
+	mc->SetPendingJob(MoveJob{ GetLocation(), Vector3(), GetYaw() });
 
 	// temp 기본 공격은 0번 스킬
 	Vector<SkillState> skills;

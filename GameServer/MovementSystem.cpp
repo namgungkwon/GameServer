@@ -30,17 +30,15 @@ bool MovementSystem::UpdateEntityMove(EntityRef entity, uint64 nowTick, uint64 d
 		return false;
 
 	MoveJob job = mc->GetPendingJob();
+	if (job.velocity.IsZero() && entity->GetYaw() == job.yaw)
+		return false;
+
 	entity->SetYaw(job.yaw);
 
 	if (mc->CanMove(nowTick) == false)
 		return false;
 
-	if (job.velocity.IsZero())
-		return false;
-
 	Vector3 nextLocation = GetNextPos(entity, job, deltaTime);
-	LOG_INFO(L"nextLocation" + std::to_wstring(nextLocation.x) + L'/' + std::to_wstring(nextLocation.y) + L'/' + std::to_wstring(nextLocation.z));
-	LOG_INFO(L"DeltaTime");
 	entity->SetLocation(nextLocation);
 	return true;
 }
@@ -48,7 +46,12 @@ bool MovementSystem::UpdateEntityMove(EntityRef entity, uint64 nowTick, uint64 d
 Vector3 MovementSystem::GetNextPos(EntityRef entity, MoveJob& job, uint64 deltaTime)
 {
 	MovementComponent* mc = entity->GetComponent<MovementComponent>();
-	
+
+	if (job.velocity.IsZero())
+	{
+		return job.location;
+	}
+
 	Vector3 location = job.location;
 	Vector3 normal = job.velocity.Normalized();
 

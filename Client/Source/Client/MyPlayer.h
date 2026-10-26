@@ -24,6 +24,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+	void MoveTick(float DeltaTime);
+	void UpdateAnimState();
+public:
 	virtual void SpawnPkt(const Protocol::ObjectData& Pkt) override;
 	UFUNCTION(BlueprintImplementableEvent)
 	void SpawnPktReceived();
@@ -32,14 +35,18 @@ public:
 	void SendMovePkt();
 protected:
 	void 							Move(const FInputActionValue& Value);
+	void							Look(const FInputActionValue& Value);
 	void 							Attack(const FInputActionValue& Value);
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector CurrentInput;
 	FVector LastSentInput;
 	const float MOVEPKT_DELAY = 0.2f;
 	float MovePacketTimer = MOVEPKT_DELAY;
 	float SnapThreshold = moveSpeed * 0.5f;
+
+
 public:
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

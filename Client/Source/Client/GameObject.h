@@ -28,6 +28,12 @@ public:
 	virtual void SetHP(float currentHp, float currentMp) {};
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool abp_isMoving = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector abp_MoveDirection;
+	
+public:
 	uint64 ObjectId = 0;
 	uint64 TemplateId = 0;
 	Protocol::ObjectCategory Type;

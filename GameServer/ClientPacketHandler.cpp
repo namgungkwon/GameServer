@@ -47,7 +47,7 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
             gameSession->SetPlayerDBId(playerId);
 
             // Todo : World에 넣기
-            GWorld->EnterPlayer(gameSession, summary, load);
+            GWorld->DoAsync(&World::EnterPlayer, gameSession, summary, load);
         }));
 
     return true;
