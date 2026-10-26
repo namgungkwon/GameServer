@@ -81,6 +81,30 @@ void GameScene::HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef new
 	}
 }
 
+EntityRef GameScene::FindNearestPlayer(Vector<ZoneRef> zones, Vector3 location, float searchRange)
+{
+	float searchRangeSq = searchRange * searchRange;
+	EntityRef target;
+	float minRangeSq = 1000000000.f;
+	for (ZoneRef& zone : zones)
+	{
+		for (auto& [id, player] : zone->GetPlayers())
+		{
+			if (player->GetState() == EntityState::Dead)
+				continue;
+
+			float rangeSq = location.DistanceSq(player->GetLocation());
+			if (rangeSq < minRangeSq)
+			{
+				minRangeSq = rangeSq;
+				target = player;
+			}
+		}
+	}
+
+	return minRangeSq < searchRangeSq ? target : nullptr;
+}
+
 void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type)
 {
 	if (zones.size() == 0)

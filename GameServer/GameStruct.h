@@ -74,7 +74,7 @@ struct MonsterData
     float   searchRange = 0.f;
     float   maxSearchRange = 0.f;
     float   attackRange = 0.f;
-    float   attackSpeed = 0.f;
+    uint64  attackDelayMs = 0.f;
 };
 
 struct SpawnData
@@ -82,6 +82,8 @@ struct SpawnData
     int32 monsterId = 0;
     Vector3 location = Vector3();
     uint64 respawnMs = 5.f;
+    uint64 spawnCount = 1;
+    float patrolRadius = 300.f;
 };
 
 struct SkillData

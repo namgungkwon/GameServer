@@ -6,6 +6,17 @@
 
 Atomic<uint64> IdGenerator::id = 0;
 
+void Entity::Respawn(uint64 nowMs)
+{
+	SetYaw(0);
+
+	StatComponent* sc = GetComponent<StatComponent>();
+	if (sc)
+		sc->SetCurrentHP(sc->GetMaxHP());
+
+	SetState(EntityState::Idle);
+}
+
 void Entity::MakePkt(Protocol::ObjectData& objectData)
 {
 	MakePkt(*objectData.mutable_summary());

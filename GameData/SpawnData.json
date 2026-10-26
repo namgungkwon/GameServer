@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "monsterId": 0,
+      "xLocation": 52000,
+      "yLocation": 52000,
+      "respawnMs": 10000,
+      "spawnCount": 1,
+      "patrolRadius" : 300
+    }
+  ]
+}

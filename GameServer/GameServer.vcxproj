@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="AISystem.h" />
     <ClInclude Include="ClientPacketHandler.h" />
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="ConfigLoader.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="GameLibraries.h" />
     <ClInclude Include="GameMacro.h" />
     <ClInclude Include="GridMap.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Protocol.pb.h" />
@@ -200,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="ClientPacketHandler.cpp" />
     <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
@@ -216,6 +219,7 @@
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GameStruct.cpp" />
     <ClCompile Include="GridMap.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="Protocol.pb.cc">
@@ -247,8 +251,10 @@
     <None Include="..\Common\Protobuf\Enum.proto" />
     <None Include="..\Common\Protobuf\Protocol.proto" />
     <None Include="..\Common\Protobuf\Struct.proto" />
+    <None Include="..\GameData\MonsterData.json" />
     <None Include="..\GameData\PlayerData.json" />
     <None Include="..\GameData\SkillData.json" />
+    <None Include="..\GameData\SpawnData.json" />
     <None Include="server.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

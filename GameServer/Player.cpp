@@ -44,6 +44,17 @@ bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 	AddComponent<SkillComponent>(shared_from_this())->Init(skills);
 }
 
+void Player::Respawn(uint64 nowMs)
+{
+	Entity::Respawn(nowMs);
+
+	StatComponent* sc = GetComponent<StatComponent>();
+	sc->SetCurrentMP(sc->GetMaxMP());
+
+	MovementComponent* mc = AddComponent<MovementComponent>(shared_from_this());
+	mc->SetPendingJob(MoveJob{ GetLocation(), Vector3(), GetYaw() });
+}
+
 PlayerLoadData Player::MakeLoadData()
 {
 	StatComponent* sc = GetComponent<StatComponent>();

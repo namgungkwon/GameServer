@@ -29,6 +29,7 @@ private:
 	void CreateScene();
 	void CreateZone();
 	void CreateMoveTable();
+	void SpawnMonster();
 	
 	MoveResultRef		CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone);
 

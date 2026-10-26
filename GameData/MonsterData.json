@@ -1,0 +1,18 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "level": 1,
+      "name": "monster",
+      "maxHp": 100,
+      "attack": 10,
+      "defense": 10,
+      "rewardExp": 5,
+      "speed": 200,
+      "searchRange": 1000,
+      "maxSearchRange": 1000,
+      "attackRange": 100,
+      "attackDelayMs": 500
+    }
+  ]
+}

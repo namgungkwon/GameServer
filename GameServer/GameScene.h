@@ -23,6 +23,9 @@ private:
 	void HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef newZone);
 
 public:
+	EntityRef FindNearestPlayer(Vector<ZoneRef> zones, Vector3 location, float searchRange);
+
+public:
 	void AddZone(ZoneRef zone) { _zones.push_back(zone); }
 
 private:
@@ -34,7 +37,5 @@ private:
 
 private:
 	uint64 _lastUpdateTick = 0;
-	uint64 _accumulatedTick = 0;
-	uint64 _currentTick = 0;
 };
 

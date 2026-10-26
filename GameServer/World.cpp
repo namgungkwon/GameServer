@@ -2,9 +2,11 @@
 #include <algorithm>
 #include "World.h"
 
+#include "GameData.h"
 #include "GameScene.h"
 #include "Zone.h"
 #include "player.h"
+#include "Monster.h"
 #include "GameSession.h"
 #include "Protocol.pb.h"
 #include "ClientPacketHandler.h"
@@ -21,6 +23,8 @@ void World::Start()
 {
     for (GameSceneRef& scene : _scenes)
         scene->StartUpdate();
+
+    SpawnMonster();
 }
 
 void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load)
@@ -218,6 +222,23 @@ void World::CreateMoveTable()
             if (oldId == newId) continue;
             _moveTable[oldId][newId] = CalculateMoveResult(oldZone, newZone);
         }
+    }
+}
+
+void World::SpawnMonster()
+{
+    Vector<SpawnData>& spawnDataList = GGameData->GetSpawnData();
+
+    for (const SpawnData& spawnData : spawnDataList)
+    {
+        MonsterData* monsterData = GGameData->GetMonsterData(spawnData.monsterId);
+
+        if (monsterData == nullptr)
+            return;
+
+        MonsterRef monster = MakeShared<Monster>();
+        monster->Init(spawnData, *monsterData);
+        EnterEntity(monster);
     }
 }
 

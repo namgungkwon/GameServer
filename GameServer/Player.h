@@ -8,13 +8,17 @@ class Player : public Entity
 {
 public:
 	bool Init(PlayerSummaryData& summary, PlayerLoadData& load);
+	void Respawn(uint64 nowMs) override;
 
-	PlayerLoadData MakeLoadData();
-
+public:
 	void Send(SendBufferRef& sendBuffer);
 
+public:
+	PlayerLoadData MakeLoadData();
+
+private:
 	GETSET_WEAK(GameSession, _ownerSession, Session);
 	GETSET(uint64, _playerDBId, DBId);
-	GETSET(int32, _requiredExp, RequiredExp);
+	GET(int32, _requiredExp, RequiredExp);
 };
 

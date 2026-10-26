@@ -3,14 +3,17 @@
 
 #include "entity.h"
 #include "player.h"
+#include "Monster.h"
 #include "ClientPacketHandler.h"
 
 #include "MovementSystem.h"
+#include "AISystem.h"
 
 void Zone::Update(uint64 now, uint64 deltaTime)
 {
 	_movingEntity.clear();
 	MovementSystem::Update(shared_from_this(), now, deltaTime, OUT _movingEntity);
+	AISystem::Update(shared_from_this(), now, deltaTime, OUT _movingEntity);
 }
 
 void Zone::EnterZone(EntityRef entity)
@@ -28,8 +31,12 @@ void Zone::EnterZone(EntityRef entity)
 		_players[objectId] = player;
 		break;
 	}
-	// Todo 
-	// 타입 추가
+	case Protocol::OBJECT_CATEGORY_MONSTER:
+	{
+		MonsterRef monster = static_pointer_cast<Monster>(entity);
+		_monsters[objectId] = monster;
+		break;
+	}
 	default:
 		break;
 	}
@@ -49,8 +56,11 @@ void Zone::LeaveZone(EntityRef entity)
 		_players.erase(objectId);
 		break;
 	}
-	// Todo 
-	// 타입 추가
+	case Protocol::OBJECT_CATEGORY_MONSTER:
+	{
+		_monsters.erase(objectId);
+		break;
+	}
 	default:
 		break;
 	}
@@ -75,7 +85,7 @@ void Zone::SpawnPktToEnterPlayer(PlayerRef player)
 	}
 }
 
-void Zone::DespawnPtkToLeavePlayer(PlayerRef player)
+void Zone::DespawnPtkAboutLeavePlayer(PlayerRef player)
 {
 	Protocol::GC_DESPAWN pkt;
 	for (auto& [id, object] : _players)

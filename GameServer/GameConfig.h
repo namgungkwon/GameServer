@@ -13,4 +13,10 @@ namespace Config
 	{
 		static constexpr uint64 WORLD_UPDATE_TICK = 50;
 	}
+
+	namespace AI
+	{
+		static constexpr uint64 PLAYER_FIND_TICK = 500;
+		static constexpr uint64 PATH_FIND_TICK = 500;
+	}
 };

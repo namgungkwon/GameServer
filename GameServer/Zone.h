@@ -16,11 +16,11 @@ public:
 	void EnterZone(EntityRef entity);
 	void LeaveZone(EntityRef entity);
 	void SpawnPktToEnterPlayer(PlayerRef player);
-	void DespawnPtkToLeavePlayer(PlayerRef player);
+	void DespawnPtkAboutLeavePlayer(PlayerRef player);
 
 public:
 	HashMap<uint64, PlayerRef> GetPlayers() { return _players; }
-	HashMap<uint64, EntityRef> GetMonsters() { return _monsters; }
+	HashMap<uint64, MonsterRef> GetMonsters() { return _monsters; }
 	Vector<EntityRef>& GetMovingEntity() { return _movingEntity; }
 
 public:
@@ -47,7 +47,7 @@ private:
 
 private:
 	HashMap<uint64, PlayerRef> _players;
-	HashMap<uint64, EntityRef> _monsters;
+	HashMap<uint64, MonsterRef> _monsters;
 
 private:
 	Vector<EntityRef> _pendingSpawns;

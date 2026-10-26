@@ -22,7 +22,7 @@ public:
 	virtual void OnAttach(Entity& owner) {}
 	virtual void OnDetach(Entity& owner) {}
 
-private:
+protected:
 	std::weak_ptr<Entity> _owner;
 };
 
@@ -41,6 +41,9 @@ public:
 	T* AddComponent(EntityRef owner);
 	template<typename T>
 	T* GetComponent();
+
+public:
+	virtual void Respawn(uint64 nowMs);
 
 public:
 	void MakePkt(OUT Protocol::ObjectData& objectData);

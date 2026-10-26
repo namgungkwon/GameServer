@@ -6,7 +6,7 @@ public:
 	bool Init(const char* path);
 
 public:
-	bool FindPath(Vector3& from, Vector3& to, Vector<Vector3>& outPath);
+	bool FindPath(const Vector3& from, const Vector3& to, Vector<Vector3>& outPath);
 	bool CanGo(Vector3& to);
 
 

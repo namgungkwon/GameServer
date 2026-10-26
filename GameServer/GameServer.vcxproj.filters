@@ -87,6 +87,10 @@
     </ClInclude>
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="MovementSystem.h" />
+    <ClInclude Include="Monster.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="AISystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -172,6 +176,10 @@
     </ClCompile>
     <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
+    <ClCompile Include="Monster.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="AISystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pch">
@@ -198,6 +206,9 @@
     <Filter Include="Entity\Components">
       <UniqueIdentifier>{a770f3c2-3fbb-48bc-9ef9-bb338c841236}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\json">
+      <UniqueIdentifier>{97cb415a-2ca4-428f-9eb0-3e4633ac5a34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\Protobuf\Protocol.proto">
@@ -209,14 +220,20 @@
     <None Include="..\Common\Protobuf\Enum.proto">
       <Filter>Packet\Proto</Filter>
     </None>
-    <None Include="server.json">
-      <Filter>Data</Filter>
+    <None Include="..\GameData\SpawnData.json">
+      <Filter>Data\json</Filter>
     </None>
-    <None Include="..\GameData\PlayerData.json">
-      <Filter>Data</Filter>
+    <None Include="server.json">
+      <Filter>Data\json</Filter>
     </None>
     <None Include="..\GameData\SkillData.json">
-      <Filter>Data</Filter>
+      <Filter>Data\json</Filter>
+    </None>
+    <None Include="..\GameData\PlayerData.json">
+      <Filter>Data\json</Filter>
+    </None>
+    <None Include="..\GameData\MonsterData.json">
+      <Filter>Data\json</Filter>
     </None>
   </ItemGroup>
 </Project>

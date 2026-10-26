@@ -31,6 +31,8 @@ bool LoadJsonArray(const char* path, json& outArray)
 bool GameData::LoadData()
 {
 	if (LoadPlayerData() == false) return false;
+    if (LoadMonsterSpawnData() == false) return false;
+    if (LoadMonsterData() == false) return false;
 
 	return true;
 }
@@ -62,7 +64,7 @@ bool GameData::LoadPlayerData()
 
 bool GameData::LoadSkillData()
 {
-    _playerData.clear();
+    _skillData.clear();
 
     json data;
     if (!LoadJsonArray("../GameData/SkillData.json", data))
@@ -84,14 +86,72 @@ bool GameData::LoadSkillData()
     return true;
 }
 
+bool GameData::LoadMonsterSpawnData()
+{
+    _spawnData.clear();
+
+    json data;
+    if (!LoadJsonArray("../GameData/SpawnData.json", data))
+        return false;
+    
+    for (const auto& item : data)
+    {
+        SpawnData data;
+        data.monsterId = item["monsterId"];
+        data.location.x = item["xLocation"];
+        data.location.y = item["yLocation"];
+        data.respawnMs = item["respawnMs"];
+        data.spawnCount = item["spawnCount"];
+        data.patrolRadius = item["patrolRadius"];
+
+        _spawnData.push_back(std::move(data));
+    }
+    return true;
+}
+
+bool GameData::LoadMonsterData()
+{
+    _monsterData.clear();
+
+    json data;
+    if (!LoadJsonArray("../GameData/MonsterData.json", data))
+        return false;
+
+    for (const auto& item : data)
+    {
+        MonsterData data;
+        data.id = item["id"];
+        data.level = item["level"];
+        data.name = Utils::ToWString(item["name"].get<string>());
+        data.maxHp = item["maxHp"];
+        data.attack = item["attack"];
+        data.defense = item["defense"];
+        data.rewardExp = item["rewardExp"];
+        data.speed = item["speed"];
+        data.searchRange = item["searchRange"];
+        data.maxSearchRange = item["maxSearchRange"];
+        data.attackRange = item["attackRange"];
+        data.attackDelayMs = item["attackDelayMs"];
+
+        _monsterData[data.id] = std::move(data);
+    }
+    return true;
+}
+
 PlayerData* GameData::GetPlayerData(int32 level)
 {
     auto it = _playerData.find(level);
     return it != _playerData.end() ? &it->second : nullptr;
 }
 
-SkillData* GameData::GetSkillData(int32 skillId, int32 skillLevel)
+SkillData* GameData::GetSkillData(uint64 skillId, int32 skillLevel)
 {
     auto it = _skillData.find({ skillId, skillLevel });
     return it != _skillData.end() ? &it->second : nullptr;
+}
+
+MonsterData* GameData::GetMonsterData(uint64 monsterId)
+{
+    auto it = _monsterData.find(monsterId);
+    return it != _monsterData.end() ? &it->second : nullptr;
 }

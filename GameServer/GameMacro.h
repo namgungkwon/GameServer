@@ -42,3 +42,15 @@ public:																\
 	const type##& Get##funcName() const { return name; }			\
 private:															\
 	type name;
+
+#define GET(type, name, funcName)								\
+public:															\
+	type Get##funcName() const { return name; }					\
+private:														\
+	type name;
+
+#define GET_REF(type, name, funcName)								\
+public:																\
+	const type##& Get##funcName() const { return name; }			\
+private:															\
+	type name;

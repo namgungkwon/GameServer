@@ -51,7 +51,7 @@ bool GridMap::Init(const char* path)
 	return true;
 }
 
-bool GridMap::FindPath(Vector3& from, Vector3& to, Vector<Vector3>& outPath)
+bool GridMap::FindPath(const Vector3& from, const Vector3& to, Vector<Vector3>& outPath)
 {
     outPath.clear();
     if (_cells.empty()) return false;
