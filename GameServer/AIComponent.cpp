@@ -5,6 +5,8 @@
 #include "GameScene.h"
 #include "GridMap.h"
 
+#include "MovementComponent.h"
+
 void AIComponent::Respawn(uint64 nowMs)
 {
 	if (CanRespawn(nowMs) == false)
@@ -33,6 +35,9 @@ void AIComponent::Update(uint64 nowMs, uint64 deltaTime)
 	case EntityState::Chase:
 		UpdateChase(nowMs, deltaTime);
 		break;
+	case EntityState::Patrol:
+		UpdatePatrol(nowMs, deltaTime);
+		break;
 	case EntityState::Attack:
 		UpdateAttack(nowMs, deltaTime);
 		break;
@@ -44,7 +49,108 @@ void AIComponent::Update(uint64 nowMs, uint64 deltaTime)
 	_entity = nullptr;
 }
 
+void AIComponent::ResetPath()
+{
+	_path.clear();
+	_pathIndex = 0;
+	_lastTargetLocation = Vector3();
+}
+
 void AIComponent::UpdateIdle(uint64 nowMs, uint64 deltaTime)
+{
+	FindPlayer(nowMs);
+}
+
+void AIComponent::UpdatePatrol(uint64 nowMs, uint64 deltaTime)
+{
+	if (_path.size() == 0)
+	{
+		Vector3 rndLocation = GetRandomLocationInPatrol();
+
+		if (GGridMap->CanGo(rndLocation))
+		{
+			_path.push_back(rndLocation);
+			_pathIndex = 0;
+		}
+	}
+
+	FindPlayer(nowMs);
+}
+
+void AIComponent::UpdateChase(uint64 nowMs, uint64 deltaTime)
+{
+	bool isReturn = true;
+
+	do {
+		EntityRef target = _target.lock();
+		if (target == nullptr)
+		{
+			break;
+		}
+
+		if (target->GetState() == EntityState::Dead)
+		{
+			break;
+		}
+
+		Vector3 location = _entity->GetLocation();
+		Vector3 targetLocation = target->GetLocation();
+
+		float maxSearchRangeSq = _maxSearchRange * _maxSearchRange;
+		if (targetLocation.DistanceSq(_spawnLocation) > maxSearchRangeSq)
+		{
+			LOG_INFO(L"target Out Of ChaseRange");
+			break;
+		}
+
+		isReturn = false;
+		// TODO 거리가 공격거리 안이면 attack으로 전환
+
+		if (_path.size() == 0 || (_nextPathFindTick < nowMs && _lastTargetLocation.DistanceSq(targetLocation) > 10.f))
+		{
+			ResetPath();
+			_nextPathFindTick = Config::AI::PATH_FIND_TICK + nowMs;
+
+			if (GGridMap->FindPath(location, targetLocation, _path))
+			{
+				_lastTargetLocation = target->GetLocation();
+
+				if (_path.back().DistanceSq(targetLocation) > 0.1f)
+					_path.back() = targetLocation;
+			}
+			else
+			{
+				isReturn = true;
+			}
+		}
+	} while (false);
+
+	if (isReturn)
+	{
+		ResetPath();
+		_entity->SetState(EntityState::Idle);
+		return;
+	}
+
+}
+
+void AIComponent::UpdateAttack(uint64 nowMs, uint64 deltaTime)
+{}
+
+void AIComponent::UpdateDead(uint64 nowMs, uint64 deltaTime)
+{}
+
+Vector3 AIComponent::GetRandomLocationInPatrol()
+{
+	Vector3 ret = _spawnLocation;
+	int64 patrolRadiusHalf = static_cast<int64>(_patrolRadius) / 2;
+	ret.x += UtilMath::GetRandom(-patrolRadiusHalf, patrolRadiusHalf);
+	ret.y += UtilMath::GetRandom(-patrolRadiusHalf, patrolRadiusHalf);
+
+	return ret;
+}
+
+void AIComponent::FindPlayer(uint64 nowMs)
 {
 	if (nowMs < _nextPlayerFindTick)
 		return;
@@ -60,36 +166,45 @@ void AIComponent::UpdateIdle(uint64 nowMs, uint64 deltaTime)
 		return;
 
 
-	auto fn = [](EntityRef entity, Vector3 entityLocation, EntityRef target) 
+	auto fn = [](EntityRef entity, Vector3 entityLocation, EntityRef newTarget)
 		{
 			AIComponent* ai = entity->GetComponent<AIComponent>();
 
 			ai->_leftTargetGahterSceneCount--;
 
 			do {
-				if (target == nullptr)
+				if (newTarget == nullptr)
 					break;
 
-				if (ai->_target == nullptr)
+				EntityRef target = ai->_target.lock();
+				if (target == nullptr)
 				{
-					ai->_target = target;
+					ai->_target = newTarget;
 					break;
 				}
 
-				float currentDistSq = entityLocation.DistanceSq(ai->_target->GetLocation());
-				float newDistSq = entityLocation.DistanceSq(target->GetLocation());
+				float currentDistSq = entityLocation.DistanceSq(target->GetLocation());
+				float newDistSq = entityLocation.DistanceSq(newTarget->GetLocation());
 
 				if (newDistSq < currentDistSq)
-					ai->_target = target;
+					ai->_target = newTarget;
 
 			} while (false);
-			
+
 			if (ai->_leftTargetGahterSceneCount == 0)
 			{
 				float searchRangeSq = ai->_maxSearchRange * ai->_maxSearchRange;
-				if (ai->_target || ai->_spawnLocation.DistanceSq(ai->_target->GetLocation()) < searchRangeSq)
+				EntityRef target = ai->_target.lock();
+				if (target && ai->_spawnLocation.DistanceSq(target->GetLocation()) < searchRangeSq)
 				{
+					ai->_lastTargetLocation = target->GetLocation();
+					ai->ResetPath();
 					entity->SetState(EntityState::Chase);
+					LOG_INFO(L"Find Target");
+				}
+				else
+				{
+					entity->SetState(EntityState::Patrol);
 				}
 			}
 		};
@@ -112,7 +227,7 @@ void AIComponent::UpdateIdle(uint64 nowMs, uint64 deltaTime)
 		{
 			EntityRef nearestPlayer = mainScene->FindNearestPlayer(zones, location, _searchRange);
 			fn(_entity, location, nearestPlayer);
-		}			
+		}
 		else
 		{
 			GameSceneRef targetScene = zones[0]->GetScene();
@@ -120,60 +235,9 @@ void AIComponent::UpdateIdle(uint64 nowMs, uint64 deltaTime)
 			targetScene->DoAsync([mainScene, targetScene, zones, owner, location, searchRange = _searchRange, fn]()
 				{
 					EntityRef nearestPlayer = targetScene->FindNearestPlayer(zones, location, searchRange);
-					
+
 					mainScene->DoAsync([owner, location, nearestPlayer, fn]() { fn(owner, location, nearestPlayer); });
 				});
 		}
 	}
-}
-
-void AIComponent::UpdateChase(uint64 nowMs, uint64 deltaTime)
-{
-	Vector3 location = _entity->GetLocation();
-	Vector3 targetLocation = _target->GetLocation();
-
-	bool isReturn = false;
-
-	do {
-		if (_target->GetState() == EntityState::Dead)
-		{
-			isReturn = true;
-			break;
-		}
-
-		if (_path.size() == 0 || (_nextPathFindTick < nowMs && _lastTargetLocation.DistanceSq(targetLocation) > 10.f))
-		{
-			bool isFindPath = GGridMap->FindPath(location, targetLocation, _path);
-			_nextPathFindTick = Config::AI::PATH_FIND_TICK;
-
-			if (isFindPath == false)
-			{
-				isReturn = true;
-				break;
-			}
-		}
-	} while (false)
-
-	
-
-	if (isReturn)
-	{
-
-	}
-}
-
-void AIComponent::UpdateAttack(uint64 nowMs, uint64 deltaTime)
-{}
-
-void AIComponent::UpdateDead(uint64 nowMs, uint64 deltaTime)
-{}
-
-Vector3 AIComponent::GetRandomLocationInPatrol()
-{
-	Vector3 ret = _spawnLocation;
-	int64 patrolRadiusHalf = static_cast<int64>(_patrolRadius) / 2;
-	ret.x += UtilMath::GetRandom(-patrolRadiusHalf, patrolRadiusHalf);
-	ret.y += UtilMath::GetRandom(-patrolRadiusHalf, patrolRadiusHalf);
-
-	return ret;
 }

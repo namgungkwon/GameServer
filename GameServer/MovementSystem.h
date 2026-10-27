@@ -10,5 +10,5 @@ public:
 	static bool UpdateEntityMove(EntityRef entity, uint64 nowTick, uint64 deltaTime);
 
 private:
-	static Vector3 GetNextPos(EntityRef entity, MoveJob& job, uint64 nowTick);
+	static Vector3 GetNextPos(EntityRef entity, MoveJob& job, uint64 deltaTime);
 };

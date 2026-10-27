@@ -3,7 +3,9 @@
 
 #include <random>
 
-inline int64 UtilMath::GetRandom(int64 min, int64 max)
+
+
+int64 UtilMath::GetRandom(int64 min, int64 max)
 {
 	if (min > max)
 		return 0;

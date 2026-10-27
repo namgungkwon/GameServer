@@ -7,7 +7,7 @@
 enum EntityState
 {
 	Idle,
-	Move,
+	Patrol,
 	Chase,
 	Attack,
 	Dead,

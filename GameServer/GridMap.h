@@ -12,7 +12,7 @@ public:
 
 private:
 	bool Validation(int32 xIdx, int32 yIdx) { return xIdx >= 0 && xIdx < _xSize && yIdx >= 0 && yIdx < _ySize; }
-	void ToCell(Vector3& location, int32* xIdx, int32* yIdx);
+	void ToCell(const Vector3& location, int32* xIdx, int32* yIdx);
 	bool CellWalkable(int32 xIdx, int32 yIdx) {	return Validation(xIdx, yIdx) && (_cells[yIdx * _xSize + xIdx] == false); }
 	Vector3 CellCenter(int32 cx, int32 cz);
 	bool LineOfSight(int32 x0, int32 y0, int32 x1, int32 y1);

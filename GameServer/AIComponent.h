@@ -9,11 +9,15 @@ public:
 	void Init(Vector3 spawnLocation, float patrolRaduis, float searchRange, float maxSearchRange, float attackRange, uint64 attackDelayMs, uint64 respawnMs)
 	{
 		_spawnLocation = spawnLocation;
-		_patrolRadius = 
+		_patrolRadius = patrolRaduis;
 		_searchRange = searchRange;
 		_maxSearchRange = maxSearchRange;
 		_attackRange = attackRange;
 		_attackDelayMs = attackDelayMs;
+
+		_path.clear();
+		_pathIndex = -1;
+		_lastTargetLocation = Vector3();
 	}
 
 	bool CanAttack(uint64 nowMs) { return nowMs > _nextAttackTick; }
@@ -24,15 +28,19 @@ public:
 
 public:
 	void Update(uint64 nowMs, uint64 deltaTime);
+	void ResetPath();
 
 private:
 	virtual void UpdateIdle(uint64 nowMs, uint64 deltaTime);
+	virtual void UpdatePatrol(uint64 nowMs, uint64 deltaTime);
 	virtual void UpdateChase(uint64 nowMs, uint64 deltaTime);
 	virtual void UpdateAttack(uint64 nowMs, uint64 deltaTime);
 	virtual void UpdateDead(uint64 nowMs, uint64 deltaTime);
 
 private:
 	Vector3 GetRandomLocationInPatrol();
+	void MoveTick(Vector3 targetPos);
+	void FindPlayer(uint64 nowMs);
 
 private:
 	GET(Vector3, _spawnLocation, SpawnLocation);
@@ -51,12 +59,12 @@ private:
 
 private:
 	EntityRef _entity;
-	EntityRef _target = nullptr;
-	uint64 _leftTargetGahterSceneCount = 0;
+	std::weak_ptr<Entity> _target;
+	int64 _leftTargetGahterSceneCount = 0;
 
 private:
 	/* path */
-	Vector<Vector3> _path;
-	uint64 _pathIndex;
+	GET_REF(Vector<Vector3>, _path, Path);
+	GETSET(int32, _pathIndex, PathIndex);
 	Vector3 _lastTargetLocation;
 };

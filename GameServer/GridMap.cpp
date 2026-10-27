@@ -178,7 +178,7 @@ bool GridMap::CanGo(Vector3& to)
     return CellWalkable(xIdx, yIdx);
 }
 
-void GridMap::ToCell(Vector3& location, int32* xIdx, int32* yIdx)
+void GridMap::ToCell(const Vector3& location, int32* xIdx, int32* yIdx)
 {
     *xIdx = static_cast<int32>(std::floor((location.x - _origin.x) / _cellWidth));
     *yIdx = static_cast<int32>(std::floor((location.y - _origin.y) / _cellWidth));

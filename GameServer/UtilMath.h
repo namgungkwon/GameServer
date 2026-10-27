@@ -1,5 +1,7 @@
 #pragma once
 
+#define PI (3.1415926535)
+
 class UtilMath
 {
 public:
@@ -15,5 +17,20 @@ public:
 	template<typename T>
 	static inline T Clamp(T a, T min, T max) { if (a < min) return a; if (a > max) return max; return a; }
 
-	static inline int64 GetRandom(int64 min, int64 max);
+	static int64 GetRandom(int64 min, int64 max);
+
+	static inline float GetYawFromVector(Vector3 vector)
+	{
+		if (vector.IsZero())
+			return 0.f;
+
+		const float yawRadian = std::atan2(vector.y, vector.x);
+
+		float yawDegree = yawRadian * (180 / PI);
+
+		if (yawDegree < 0.f)
+			yawDegree += 360.f;
+
+		return yawDegree;
+	}
 };
