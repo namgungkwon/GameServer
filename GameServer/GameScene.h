@@ -1,6 +1,7 @@
 #pragma once
 
 #include "jobQueue.h"
+#include "SceneRequest.h"
 #include "job.h"
 
 enum VISION_TYPE
@@ -27,6 +28,9 @@ public:
 
 public:
 	void AddZone(ZoneRef zone) { _zones.push_back(zone); }
+	void Request(SceneRequestRef request) { request->Execute(static_pointer_cast<GameScene>(shared_from_this()), _lastUpdateTick); }
+
+	void BroadCastAdjacentZone(ZoneRef zone, SendBufferRef& sendBuffer, uint64 exceptId = -1);
 
 private:
 	void BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type);

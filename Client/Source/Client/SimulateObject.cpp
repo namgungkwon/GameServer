@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SimulateObject.h"
 
 void ASimulateObject::Tick(float DeltaTime)
@@ -41,4 +40,12 @@ void ASimulateObject::SimulateMovement(float DeltaTime)
 	NextLocation.Y = FMath::Clamp(NextLocation.Y, 0.f, 100000.f);
 
 	SetActorLocation(NextLocation, true);
+}
+
+
+void ASimulateObject::SkillPkt(uint64 skillId)
+{
+	AGameObject::SkillPkt(skillId);
+	
+	abp_isAttack = true;
 }

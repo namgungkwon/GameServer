@@ -28,6 +28,8 @@ public:
 	void Handle(const Protocol::GC_SPAWN& pkt);
 	void Handle(const Protocol::GC_DESPAWN& pkt);
 	void Handle(const Protocol::GC_MOVE& pkt);
+	void Handle(const Protocol::GC_ATTACK& pkt);
+	void Handle(const Protocol::GC_DAMAGE& pkt);
 	//void Spawn(const Protocol::GC_SPAWN_OBJECTS& Pkt);
 	//void Spawn(const Protocol::GC_SPAWN_PLAYERS& Pkt);
 	//void Spawn(const Protocol::GC_SPAWN_HERO& Pkt);

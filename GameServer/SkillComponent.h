@@ -36,6 +36,11 @@ public:
 		return skillData->moveDelayMs;
 	}
 
+	SkillData* GetSkill(uint64 skillId)
+	{
+		return GGameData->GetSkillData(skillId, _skills[skillId].skillLevel);
+	}
+
 	bool CooldownReady(uint64 skillId, uint64 now)
 	{
 		if (HasSkill(skillId) == false)

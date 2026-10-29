@@ -151,3 +151,26 @@ void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VI
 		}
 	}
 }
+
+void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef& sendBuffer, uint64 exceptId)
+{
+	HashMap<GameScene*, Vector<ZoneRef>> adjacentZoneInfo;
+	zone->GetAdjacentZoneInfo(OUT adjacentZoneInfo);
+
+
+	for (auto& [scene, zones] : adjacentZoneInfo)
+	{
+		if (scene == this)
+		{
+			for (ZoneRef& zone : zones)
+				zone->BroadCastBuffer(sendBuffer, exceptId);
+		}
+		else
+		{
+			scene->DoAsync([scene, zones, sendBuffer, exceptId]() {
+				for (const ZoneRef& zone : zones)
+					zone->BroadCastBuffer(sendBuffer, exceptId);
+				});
+		}
+	}
+}

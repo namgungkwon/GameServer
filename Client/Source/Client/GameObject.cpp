@@ -56,4 +56,16 @@ void AGameObject::MovePkt(const Protocol::ObjectPosData& Pkt)
 	serverPos = FVector(Pkt.location().x(), Pkt.location().y(), Pkt.location().z() + 90.f);
 }
 
+void AGameObject::Damaged(uint64 damage)
+{
+	if (damage > Hp)
+		Hp = 0;
+	else
+	{
+		Hp -= damage;
+	}
+	HpChanged();
+}
+
+
 

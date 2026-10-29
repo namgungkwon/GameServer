@@ -86,11 +86,17 @@
       <Filter>Packet</Filter>
     </ClInclude>
     <ClInclude Include="GameConfig.h" />
-    <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="Monster.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="AISystem.h" />
+    <ClInclude Include="MovementSystem.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="AISystem.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneRequest.h" />
+    <ClInclude Include="CombatSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -175,11 +181,17 @@
       <Filter>Packet</Filter>
     </ClCompile>
     <ClCompile Include="GameConfig.cpp" />
-    <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="Monster.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="AISystem.cpp" />
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="AISystem.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneRequest.cpp" />
+    <ClCompile Include="CombatSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pch">
@@ -208,6 +220,12 @@
     </Filter>
     <Filter Include="Data\json">
       <UniqueIdentifier>{97cb415a-2ca4-428f-9eb0-3e4633ac5a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World\System">
+      <UniqueIdentifier>{27a81128-527d-4ca9-98ae-0b75ce5beda4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World\Command">
+      <UniqueIdentifier>{7d307b0b-cc3b-4bb7-9640-e43bb8f5c170}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

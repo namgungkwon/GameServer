@@ -51,6 +51,9 @@ void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	attackdelay -= DeltaTime;
+	movedelay -= DeltaTime;
+	
 	MoveTick(DeltaTime);
 }
 
@@ -65,11 +68,16 @@ void AMyPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AMyPlayer::Move);
 		
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMyPlayer::Look);
+		
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMyPlayer::Attack);
 	}
 }
 
 void AMyPlayer::MoveTick(float DeltaTime)
 {
+	if (movedelay > 0.f)
+		return;
+	
 	MovePacketTimer -= DeltaTime;
 
 	if (MovePacketTimer <= 0)
@@ -142,7 +150,6 @@ void AMyPlayer::SpawnPkt(const Protocol::ObjectData& Pkt)
 	SpawnPktReceived();
 }
 
-
 void AMyPlayer::SendMovePkt()
 {
 	Protocol::CG_MOVE Pkt;
@@ -173,6 +180,29 @@ void AMyPlayer::SendMovePkt()
 	MovePacketTimer = MOVEPKT_DELAY;
 }
 
+void AMyPlayer::SendAttackPkt(TArray<AGameObject*> targets, int32 skillId)
+{
+	Protocol::CG_ATTACK Pkt;
+	FVector ActorLocation = GetActorLocation();
+
+	Protocol::ObjectPosData* PosData = Pkt.mutable_posdata();
+	PosData->set_objectid(GetObjectId());
+	Protocol::Vector3* pos = PosData->mutable_location();
+	pos->set_x(ActorLocation.X);
+	pos->set_y(ActorLocation.Y);
+	pos->set_z(ActorLocation.Z - 90.f);
+	PosData->set_yaw(GetActorRotation().Yaw);
+
+	Pkt.set_skillid(0);
+
+	for (TObjectPtr<AGameObject> target : targets)
+	{
+		Pkt.add_targets(target->GetObjectId());
+	}
+	
+	SEND_PACKET(Pkt);
+}
+
 void AMyPlayer::Move(const FInputActionValue& Value)
 {
 	CurrentInput = FVector(Value.Get<FVector2D>().X, Value.Get<FVector2D>().Y, 0.0f);
@@ -201,6 +231,6 @@ void AMyPlayer::Look(const FInputActionValue& Value)
 }
 
 void AMyPlayer::Attack(const FInputActionValue& Value)
-{
-	
+{	
+	AttackInputPressed();
 }

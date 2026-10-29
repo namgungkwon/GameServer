@@ -66,10 +66,6 @@ class DamageInfo;
 struct DamageInfoDefaultTypeInternal;
 extern DamageInfoDefaultTypeInternal _DamageInfo_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull DamageInfo_class_data_;
-class MoveInfo;
-struct MoveInfoDefaultTypeInternal;
-extern MoveInfoDefaultTypeInternal _MoveInfo_default_instance_;
-extern const ::google::protobuf::internal::ClassDataFull MoveInfo_class_data_;
 class ObjectData;
 struct ObjectDataDefaultTypeInternal;
 extern ObjectDataDefaultTypeInternal _ObjectData_default_instance_;
@@ -94,10 +90,6 @@ class ServerInfo;
 struct ServerInfoDefaultTypeInternal;
 extern ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull ServerInfo_class_data_;
-class SpawnInfo;
-struct SpawnInfoDefaultTypeInternal;
-extern SpawnInfoDefaultTypeInternal _SpawnInfo_default_instance_;
-extern const ::google::protobuf::internal::ClassDataFull SpawnInfo_class_data_;
 class Vector3;
 struct Vector3DefaultTypeInternal;
 extern Vector3DefaultTypeInternal _Vector3_default_instance_;
@@ -170,7 +162,7 @@ class Vector3 final : public ::google::protobuf::Message
     return *reinterpret_cast<const Vector3*>(
         &_Vector3_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 3;
   friend void swap(Vector3& a, Vector3& b) { a.Swap(&b); }
   inline void Swap(Vector3* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -327,244 +319,6 @@ class Vector3 final : public ::google::protobuf::Message
 };
 
 extern const ::google::protobuf::internal::ClassDataFull Vector3_class_data_;
-// -------------------------------------------------------------------
-
-class SpawnInfo final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:Protocol.SpawnInfo) */ {
- public:
-  inline SpawnInfo() : SpawnInfo(nullptr) {}
-  ~SpawnInfo() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(SpawnInfo* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(SpawnInfo));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR SpawnInfo(::google::protobuf::internal::ConstantInitialized);
-
-  inline SpawnInfo(const SpawnInfo& from) : SpawnInfo(nullptr, from) {}
-  inline SpawnInfo(SpawnInfo&& from) noexcept
-      : SpawnInfo(nullptr, ::std::move(from)) {}
-  inline SpawnInfo& operator=(const SpawnInfo& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline SpawnInfo& operator=(SpawnInfo&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const SpawnInfo& default_instance() {
-    return *reinterpret_cast<const SpawnInfo*>(
-        &_SpawnInfo_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 2;
-  friend void swap(SpawnInfo& a, SpawnInfo& b) { a.Swap(&b); }
-  inline void Swap(SpawnInfo* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(SpawnInfo* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  SpawnInfo* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<SpawnInfo>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const SpawnInfo& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const SpawnInfo& from) { SpawnInfo::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
-                        const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(SpawnInfo* PROTOBUF_NONNULL other);
- private:
-  template <typename T>
-  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "Protocol.SpawnInfo"; }
-
-  explicit SpawnInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  SpawnInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const SpawnInfo& from);
-  SpawnInfo(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, SpawnInfo&& from) noexcept
-      : SpawnInfo(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
-  static void* PROTOBUF_NONNULL PlacementNew_(
-      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static constexpr auto InternalNewImpl_();
-
- public:
-  static constexpr auto InternalGenerateClassData_();
-
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kObjectIdFieldNumber = 1,
-    kXFieldNumber = 2,
-    kYFieldNumber = 3,
-    kHpFieldNumber = 4,
-    kMaxHpFieldNumber = 5,
-  };
-  // uint64 objectId = 1;
-  void clear_objectid() ;
-  ::uint64_t objectid() const;
-  void set_objectid(::uint64_t value);
-
-  private:
-  ::uint64_t _internal_objectid() const;
-  void _internal_set_objectid(::uint64_t value);
-
-  public:
-  // float x = 2;
-  void clear_x() ;
-  float x() const;
-  void set_x(float value);
-
-  private:
-  float _internal_x() const;
-  void _internal_set_x(float value);
-
-  public:
-  // float y = 3;
-  void clear_y() ;
-  float y() const;
-  void set_y(float value);
-
-  private:
-  float _internal_y() const;
-  void _internal_set_y(float value);
-
-  public:
-  // int32 hp = 4;
-  void clear_hp() ;
-  ::int32_t hp() const;
-  void set_hp(::int32_t value);
-
-  private:
-  ::int32_t _internal_hp() const;
-  void _internal_set_hp(::int32_t value);
-
-  public:
-  // int32 maxHp = 5;
-  void clear_maxhp() ;
-  ::int32_t maxhp() const;
-  void set_maxhp(::int32_t value);
-
-  private:
-  ::int32_t _internal_maxhp() const;
-  void _internal_set_maxhp(::int32_t value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:Protocol.SpawnInfo)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
-                                   0, 0,
-                                   2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-        const SpawnInfo& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::uint64_t objectid_;
-    float x_;
-    float y_;
-    ::int32_t hp_;
-    ::int32_t maxhp_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_Struct_2eproto;
-};
-
-extern const ::google::protobuf::internal::ClassDataFull SpawnInfo_class_data_;
 // -------------------------------------------------------------------
 
 class ServerInfo final : public ::google::protobuf::Message
@@ -894,7 +648,7 @@ class ObjectSummaryData final : public ::google::protobuf::Message
     return *reinterpret_cast<const ObjectSummaryData*>(
         &_ObjectSummaryData_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 7;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(ObjectSummaryData& a, ObjectSummaryData& b) { a.Swap(&b); }
   inline void Swap(ObjectSummaryData* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1137,7 +891,7 @@ class ObjectStatData final : public ::google::protobuf::Message
     return *reinterpret_cast<const ObjectStatData*>(
         &_ObjectStatData_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 7;
   friend void swap(ObjectStatData& a, ObjectStatData& b) { a.Swap(&b); }
   inline void Swap(ObjectStatData* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1308,220 +1062,6 @@ class ObjectStatData final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull ObjectStatData_class_data_;
 // -------------------------------------------------------------------
 
-class MoveInfo final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:Protocol.MoveInfo) */ {
- public:
-  inline MoveInfo() : MoveInfo(nullptr) {}
-  ~MoveInfo() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(MoveInfo* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(MoveInfo));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR MoveInfo(::google::protobuf::internal::ConstantInitialized);
-
-  inline MoveInfo(const MoveInfo& from) : MoveInfo(nullptr, from) {}
-  inline MoveInfo(MoveInfo&& from) noexcept
-      : MoveInfo(nullptr, ::std::move(from)) {}
-  inline MoveInfo& operator=(const MoveInfo& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline MoveInfo& operator=(MoveInfo&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const MoveInfo& default_instance() {
-    return *reinterpret_cast<const MoveInfo*>(
-        &_MoveInfo_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 3;
-  friend void swap(MoveInfo& a, MoveInfo& b) { a.Swap(&b); }
-  inline void Swap(MoveInfo* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(MoveInfo* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  MoveInfo* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<MoveInfo>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const MoveInfo& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const MoveInfo& from) { MoveInfo::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
-                        const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(MoveInfo* PROTOBUF_NONNULL other);
- private:
-  template <typename T>
-  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "Protocol.MoveInfo"; }
-
-  explicit MoveInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  MoveInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const MoveInfo& from);
-  MoveInfo(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, MoveInfo&& from) noexcept
-      : MoveInfo(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
-  static void* PROTOBUF_NONNULL PlacementNew_(
-      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static constexpr auto InternalNewImpl_();
-
- public:
-  static constexpr auto InternalGenerateClassData_();
-
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kObjectIdFieldNumber = 1,
-    kXFieldNumber = 2,
-    kYFieldNumber = 3,
-  };
-  // uint64 objectId = 1;
-  void clear_objectid() ;
-  ::uint64_t objectid() const;
-  void set_objectid(::uint64_t value);
-
-  private:
-  ::uint64_t _internal_objectid() const;
-  void _internal_set_objectid(::uint64_t value);
-
-  public:
-  // float x = 2;
-  void clear_x() ;
-  float x() const;
-  void set_x(float value);
-
-  private:
-  float _internal_x() const;
-  void _internal_set_x(float value);
-
-  public:
-  // float y = 3;
-  void clear_y() ;
-  float y() const;
-  void set_y(float value);
-
-  private:
-  float _internal_y() const;
-  void _internal_set_y(float value);
-
-  public:
-  // @@protoc_insertion_point(class_scope:Protocol.MoveInfo)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<2, 3,
-                                   0, 0,
-                                   2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-        const MoveInfo& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::uint64_t objectid_;
-    float x_;
-    float y_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_Struct_2eproto;
-};
-
-extern const ::google::protobuf::internal::ClassDataFull MoveInfo_class_data_;
-// -------------------------------------------------------------------
-
 class DamageInfo final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:Protocol.DamageInfo) */ {
  public:
@@ -1577,7 +1117,7 @@ class DamageInfo final : public ::google::protobuf::Message
     return *reinterpret_cast<const DamageInfo*>(
         &_DamageInfo_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(DamageInfo& a, DamageInfo& b) { a.Swap(&b); }
   inline void Swap(DamageInfo* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2034,7 +1574,7 @@ class AttackInfo final : public ::google::protobuf::Message
     return *reinterpret_cast<const AttackInfo*>(
         &_AttackInfo_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 2;
   friend void swap(AttackInfo& a, AttackInfo& b) { a.Swap(&b); }
   inline void Swap(AttackInfo* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2269,7 +1809,7 @@ class ObjectPosData final : public ::google::protobuf::Message
     return *reinterpret_cast<const ObjectPosData*>(
         &_ObjectPosData_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 6;
   friend void swap(ObjectPosData& a, ObjectPosData& b) { a.Swap(&b); }
   inline void Swap(ObjectPosData* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2488,7 +2028,7 @@ class ObjectMoveData final : public ::google::protobuf::Message
     return *reinterpret_cast<const ObjectMoveData*>(
         &_ObjectMoveData_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 11;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(ObjectMoveData& a, ObjectMoveData& b) { a.Swap(&b); }
   inline void Swap(ObjectMoveData* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2578,7 +2118,6 @@ class ObjectMoveData final : public ::google::protobuf::Message
     kLocationFieldNumber = 2,
     kVelocityFieldNumber = 3,
     kObjectIdFieldNumber = 1,
-    kSendServerTickFieldNumber = 5,
     kYawFieldNumber = 4,
   };
   // .Protocol.Vector3 location = 2;
@@ -2621,16 +2160,6 @@ class ObjectMoveData final : public ::google::protobuf::Message
   void _internal_set_objectid(::uint64_t value);
 
   public:
-  // uint64 sendServerTick = 5;
-  void clear_sendservertick() ;
-  ::uint64_t sendservertick() const;
-  void set_sendservertick(::uint64_t value);
-
-  private:
-  ::uint64_t _internal_sendservertick() const;
-  void _internal_set_sendservertick(::uint64_t value);
-
-  public:
   // float yaw = 4;
   void clear_yaw() ;
   float yaw() const;
@@ -2645,7 +2174,7 @@ class ObjectMoveData final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
+  static const ::google::protobuf::internal::TcParseTable<2, 4,
                                    2, 0,
                                    2>
       _table_;
@@ -2670,7 +2199,6 @@ class ObjectMoveData final : public ::google::protobuf::Message
     ::Protocol::Vector3* PROTOBUF_NULLABLE location_;
     ::Protocol::Vector3* PROTOBUF_NULLABLE velocity_;
     ::uint64_t objectid_;
-    ::uint64_t sendservertick_;
     float yaw_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -2736,7 +2264,7 @@ class ObjectData final : public ::google::protobuf::Message
     return *reinterpret_cast<const ObjectData*>(
         &_ObjectData_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 8;
   friend void swap(ObjectData& a, ObjectData& b) { a.Swap(&b); }
   inline void Swap(ObjectData* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3297,214 +2825,6 @@ inline ::uint32_t ClientInfo::_internal_port() const {
 inline void ClientInfo::_internal_set_port(::uint32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.port_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// SpawnInfo
-
-// uint64 objectId = 1;
-inline void SpawnInfo::clear_objectid() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.objectid_ = ::uint64_t{0u};
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
-}
-inline ::uint64_t SpawnInfo::objectid() const {
-  // @@protoc_insertion_point(field_get:Protocol.SpawnInfo.objectId)
-  return _internal_objectid();
-}
-inline void SpawnInfo::set_objectid(::uint64_t value) {
-  _internal_set_objectid(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  // @@protoc_insertion_point(field_set:Protocol.SpawnInfo.objectId)
-}
-inline ::uint64_t SpawnInfo::_internal_objectid() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.objectid_;
-}
-inline void SpawnInfo::_internal_set_objectid(::uint64_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.objectid_ = value;
-}
-
-// float x = 2;
-inline void SpawnInfo::clear_x() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.x_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline float SpawnInfo::x() const {
-  // @@protoc_insertion_point(field_get:Protocol.SpawnInfo.x)
-  return _internal_x();
-}
-inline void SpawnInfo::set_x(float value) {
-  _internal_set_x(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_set:Protocol.SpawnInfo.x)
-}
-inline float SpawnInfo::_internal_x() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.x_;
-}
-inline void SpawnInfo::_internal_set_x(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.x_ = value;
-}
-
-// float y = 3;
-inline void SpawnInfo::clear_y() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.y_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
-}
-inline float SpawnInfo::y() const {
-  // @@protoc_insertion_point(field_get:Protocol.SpawnInfo.y)
-  return _internal_y();
-}
-inline void SpawnInfo::set_y(float value) {
-  _internal_set_y(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
-  // @@protoc_insertion_point(field_set:Protocol.SpawnInfo.y)
-}
-inline float SpawnInfo::_internal_y() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.y_;
-}
-inline void SpawnInfo::_internal_set_y(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.y_ = value;
-}
-
-// int32 hp = 4;
-inline void SpawnInfo::clear_hp() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.hp_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::int32_t SpawnInfo::hp() const {
-  // @@protoc_insertion_point(field_get:Protocol.SpawnInfo.hp)
-  return _internal_hp();
-}
-inline void SpawnInfo::set_hp(::int32_t value) {
-  _internal_set_hp(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:Protocol.SpawnInfo.hp)
-}
-inline ::int32_t SpawnInfo::_internal_hp() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.hp_;
-}
-inline void SpawnInfo::_internal_set_hp(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.hp_ = value;
-}
-
-// int32 maxHp = 5;
-inline void SpawnInfo::clear_maxhp() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.maxhp_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline ::int32_t SpawnInfo::maxhp() const {
-  // @@protoc_insertion_point(field_get:Protocol.SpawnInfo.maxHp)
-  return _internal_maxhp();
-}
-inline void SpawnInfo::set_maxhp(::int32_t value) {
-  _internal_set_maxhp(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  // @@protoc_insertion_point(field_set:Protocol.SpawnInfo.maxHp)
-}
-inline ::int32_t SpawnInfo::_internal_maxhp() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.maxhp_;
-}
-inline void SpawnInfo::_internal_set_maxhp(::int32_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.maxhp_ = value;
-}
-
-// -------------------------------------------------------------------
-
-// MoveInfo
-
-// uint64 objectId = 1;
-inline void MoveInfo::clear_objectid() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.objectid_ = ::uint64_t{0u};
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
-}
-inline ::uint64_t MoveInfo::objectid() const {
-  // @@protoc_insertion_point(field_get:Protocol.MoveInfo.objectId)
-  return _internal_objectid();
-}
-inline void MoveInfo::set_objectid(::uint64_t value) {
-  _internal_set_objectid(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  // @@protoc_insertion_point(field_set:Protocol.MoveInfo.objectId)
-}
-inline ::uint64_t MoveInfo::_internal_objectid() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.objectid_;
-}
-inline void MoveInfo::_internal_set_objectid(::uint64_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.objectid_ = value;
-}
-
-// float x = 2;
-inline void MoveInfo::clear_x() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.x_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline float MoveInfo::x() const {
-  // @@protoc_insertion_point(field_get:Protocol.MoveInfo.x)
-  return _internal_x();
-}
-inline void MoveInfo::set_x(float value) {
-  _internal_set_x(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_set:Protocol.MoveInfo.x)
-}
-inline float MoveInfo::_internal_x() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.x_;
-}
-inline void MoveInfo::_internal_set_x(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.x_ = value;
-}
-
-// float y = 3;
-inline void MoveInfo::clear_y() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.y_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
-}
-inline float MoveInfo::y() const {
-  // @@protoc_insertion_point(field_get:Protocol.MoveInfo.y)
-  return _internal_y();
-}
-inline void MoveInfo::set_y(float value) {
-  _internal_set_y(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
-  // @@protoc_insertion_point(field_set:Protocol.MoveInfo.y)
-}
-inline float MoveInfo::_internal_y() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.y_;
-}
-inline void MoveInfo::_internal_set_y(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.y_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -4803,7 +4123,7 @@ inline void ObjectMoveData::clear_yaw() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.yaw_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000008U);
 }
 inline float ObjectMoveData::yaw() const {
   // @@protoc_insertion_point(field_get:Protocol.ObjectMoveData.yaw)
@@ -4811,7 +4131,7 @@ inline float ObjectMoveData::yaw() const {
 }
 inline void ObjectMoveData::set_yaw(float value) {
   _internal_set_yaw(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:Protocol.ObjectMoveData.yaw)
 }
 inline float ObjectMoveData::_internal_yaw() const {
@@ -4821,31 +4141,6 @@ inline float ObjectMoveData::_internal_yaw() const {
 inline void ObjectMoveData::_internal_set_yaw(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.yaw_ = value;
-}
-
-// uint64 sendServerTick = 5;
-inline void ObjectMoveData::clear_sendservertick() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.sendservertick_ = ::uint64_t{0u};
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline ::uint64_t ObjectMoveData::sendservertick() const {
-  // @@protoc_insertion_point(field_get:Protocol.ObjectMoveData.sendServerTick)
-  return _internal_sendservertick();
-}
-inline void ObjectMoveData::set_sendservertick(::uint64_t value) {
-  _internal_set_sendservertick(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:Protocol.ObjectMoveData.sendServerTick)
-}
-inline ::uint64_t ObjectMoveData::_internal_sendservertick() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.sendservertick_;
-}
-inline void ObjectMoveData::_internal_set_sendservertick(::uint64_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.sendservertick_ = value;
 }
 
 #ifdef __GNUC__

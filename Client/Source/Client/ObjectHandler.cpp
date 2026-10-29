@@ -6,6 +6,7 @@
 #include "IDetailTreeNode.h"
 #include "Utils.h"
 #include "GameObject.h"
+#include "IMovieSceneTracksModule.h"
 #include "MyPlayer.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -114,6 +115,26 @@ void UObjectHandler::Handle(const Protocol::GC_MOVE& pkt)
 		{
 			SpawnedObjects[data.objectid()]->MovePkt(data);
 		}	
+	}
+}
+
+void UObjectHandler::Handle(const Protocol::GC_ATTACK& pkt)
+{
+	Protocol::ObjectPosData PosData = pkt.posdata();
+
+	if (SpawnedObjects.Find(PosData.objectid()) != nullptr)
+	{
+		AGameObject* targetObject = SpawnedObjects[PosData.objectid()];
+		targetObject->MovePkt(PosData);
+		targetObject->SkillPkt(pkt.skillid());
+	}
+}
+
+void UObjectHandler::Handle(const Protocol::GC_DAMAGE& pkt)
+{
+	if (SpawnedObjects.Find(pkt.objectid()) != nullptr)
+	{
+		SpawnedObjects[pkt.objectid()]->Damaged(pkt.damage());
 	}
 }
 

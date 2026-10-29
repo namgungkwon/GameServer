@@ -23,16 +23,22 @@ protected:
 public:
 	virtual void SpawnPkt(const Protocol::ObjectData& Pkt);
 	virtual void MovePkt(const Protocol::ObjectPosData& Pkt);
+	virtual void SkillPkt(uint64 skillId) {};
 	
 	virtual void ApplyServerPosition(float x, float y) {};
 	virtual void SetHP(float currentHp, float currentMp) {};
+	virtual void Damaged(uint64 damage);
+	UFUNCTION(BlueprintImplementableEvent)
+	void HpChanged();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool abp_isMoving = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool abp_isAttack = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector abp_MoveDirection;
-	
+
 public:
 	uint64 ObjectId = 0;
 	uint64 TemplateId = 0;

@@ -84,11 +84,7 @@ bool World::EnterEntity(EntityRef entity)
     entity->SetScene(mainScene);
 
 
-    Vector<ZoneRef> adjacentZone = mainZone->GetAdjacentZones();
-
-    _enterSceneGroups.clear();
-    for (const ZoneRef& zone : adjacentZone)
-        _enterSceneGroups[zone->GetScene().get()].push_back(zone);
+    mainZone->GetAdjacentZoneInfo(OUT _enterSceneGroups);
 
     for (auto& [scene, zones] : _enterSceneGroups)
     {
@@ -118,11 +114,7 @@ void World::LeaveEntity(EntityRef entity)
     entity->SetZone(nullptr);
     entity->SetScene(nullptr);
 
-    Vector<ZoneRef> adjacentZone = mainZone->GetAdjacentZones();
-
-    _leaveSceneGroups.clear();
-    for (const ZoneRef& zone : adjacentZone)
-        _leaveSceneGroups[zone->GetScene().get()].push_back(zone);
+    mainZone->GetAdjacentZoneInfo(OUT _leaveSceneGroups);
 
     for (auto& [scene, zones] : _leaveSceneGroups)
     {
@@ -239,6 +231,7 @@ void World::SpawnMonster()
         MonsterRef monster = MakeShared<Monster>();
         monster->Init(spawnData, *monsterData);
         EnterEntity(monster);
+        _monsters[monster->GetObjectId()]= monster;
     }
 }
 

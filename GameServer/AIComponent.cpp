@@ -211,12 +211,8 @@ void AIComponent::FindPlayer(uint64 nowMs)
 
 
 	HashMap<GameScene*, Vector<ZoneRef>> sceneGroups;
-	for (const ZoneRef& zone : mainZone->GetAdjacentZones())
-	{
-		GameSceneRef scene = zone->GetScene();
-		if (scene)
-			sceneGroups[scene.get()].push_back(zone);
-	}
+	mainZone->GetAdjacentZoneInfo(OUT sceneGroups);
+
 	_leftTargetGahterSceneCount = sceneGroups.size();
 	Vector3 location = _entity->GetLocation();
 	EntityRef owner = _entity;

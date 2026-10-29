@@ -18,3 +18,17 @@ int64 UtilMath::GetRandom(int64 min, int64 max)
 	int64 rnd = dist(rd) % range;
 	return rnd + min;
 }
+
+Vector3 UtilMath::ToServerLocation(const Protocol::Vector3& from)
+{
+	return Vector3{ from.x(), from.y(), from.z() - 90.f };
+}
+
+Protocol::Vector3 UtilMath::ToProtoLocation(const Vector3& from)
+{
+	Protocol::Vector3 to;
+	to.set_x(from.x);
+	to.set_y(from.y);
+	to.set_z(from.z + 90.f);
+	return to;
+}

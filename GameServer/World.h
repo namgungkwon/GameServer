@@ -21,6 +21,9 @@ public:
 	void LeaveEntity(EntityRef entity);
 
 public:
+	MonsterRef FindMonster(uint64 objectId) { return (_monsters.find(objectId) != _monsters.end()) ? _monsters[objectId] : nullptr; }
+
+public:
 	ZoneRef         GetZoneByPos(Vector3 pos);
 	ZoneRef         GetZoneById(int32 id);
 	MoveResultRef	GetMoveResult(ZoneRef oldZone, ZoneRef newZone);
@@ -39,7 +42,8 @@ private:
 
 private:
 	Vector<GameSceneRef> _scenes;
-	vector<ZoneRef> _zones;
+	Vector<ZoneRef> _zones;
+	HashMap<uint64, MonsterRef> _monsters;
 
 	HashMap<GameScene*, Vector<ZoneRef>> _enterSceneGroups;
 	HashMap<GameScene*, Vector<ZoneRef>> _leaveSceneGroups;

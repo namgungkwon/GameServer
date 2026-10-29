@@ -5,7 +5,7 @@
       "level": 1,
       "maxHp": 200,
       "maxMp": 100,
-      "attack": 10,
+      "attack": 20,
       "defense": 5,
       "requireExp": 10,
       "speed": 100.0
@@ -15,7 +15,7 @@
       "level": 2,
       "maxHp": 300,
       "maxMp": 150,
-      "attack": 15,
+      "attack": 25,
       "defense": 7,
       "requireExp": 30,
       "speed": 300.0
@@ -25,7 +25,7 @@
       "level": 3,
       "maxHp": 400,
       "maxMp": 200,
-      "attack": 20,
+      "attack": 30,
       "defense": 10,
       "requireExp": 60,
       "speed": 300.0
@@ -35,7 +35,7 @@
       "level": 4,
       "maxHp": 500,
       "maxMp": 250,
-      "attack": 25,
+      "attack": 35,
       "defense": 13,
       "requireExp": 100,
       "speed": 300.0
@@ -45,7 +45,7 @@
       "level": 5,
       "maxHp": 600,
       "maxMp": 300,
-      "attack": 30,
+      "attack": 40,
       "defense": 15,
       "requireExp": 999999,
       "speed": 300.0

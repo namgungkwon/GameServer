@@ -29,7 +29,7 @@ public:
 	void SetMoveSpeed(float moveSpeed) { _moveSpeed = UtilMath::Max(moveSpeed, 0.f); }
 	float GetMoveSpeed() { return _moveSpeed; }
 
-	void SetMoveDelayEndTick(uint64 endTick) { _moveDelayEndTick = endTick; }
+	void SetMoveDelayEndTick(uint64 endTick) { if (endTick > _moveDelayEndTick) _moveDelayEndTick = endTick; }
 	uint64 GetMoveDelayEndTick() { return _moveDelayEndTick; }
 
 private:

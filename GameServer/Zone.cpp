@@ -7,6 +7,7 @@
 #include "ClientPacketHandler.h"
 
 #include "MovementSystem.h"
+#include "CombatSystem.h"
 #include "AISystem.h"
 
 void Zone::Update(uint64 now, uint64 deltaTime)
@@ -102,6 +103,24 @@ void Zone::DespawnPtkAboutLeavePlayer(PlayerRef player)
 		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 		player->Send(sendBuffer);
 	}
+}
+
+EntityRef Zone::FindEntity(uint64 objectId)
+{
+	if (_players.find(objectId) != _players.end())
+		return _players[objectId];
+
+	if (_monsters.find(objectId) != _monsters.end())
+		return _monsters[objectId];
+}
+
+void Zone::GetAdjacentZoneInfo(OUT HashMap<GameScene*, Vector<ZoneRef>>& info)
+{
+	Vector<ZoneRef> adjacentZone = GetAdjacentZones();
+
+	info.clear();
+	for (const ZoneRef& zone : adjacentZone)
+		info[zone->GetScene().get()].push_back(zone);
 }
 
 void Zone::ClearPengingJobs()

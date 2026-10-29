@@ -65,7 +65,25 @@ message GC_MOVE
 ///////////////////////////////////////////////////////
 //	<	Attack	>
 ///////////////////////////////////////////////////////
+message CG_ATTACK
+{
+	ObjectPosData posData = 1;
+	repeated uint64 targets = 2;
+	uint64 skillId = 3;
+}
 
+message GC_ATTACK
+{
+	ObjectPosData posData = 1;
+	uint64 skillId = 2;
+}
+
+message GC_DAMAGE
+{
+	uint64 objectId = 1;
+	uint64 damage = 2;
+	bool isDead = 3;
+}
 
 ///////////////////////////////////////////////////////
 //	<	gameServerList >

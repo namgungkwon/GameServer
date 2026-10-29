@@ -68,3 +68,23 @@ bool Handle_GC_MOVE(PacketSessionRef& session, Protocol::GC_MOVE& pkt)
 	
 	return true;
 }
+
+bool Handle_GC_ATTACK(PacketSessionRef& session, Protocol::GC_ATTACK& pkt)
+{
+	UObjectHandler* Handler = GetObjectHandler(session);
+
+	if (Handler)
+		Handler->Handle(pkt);
+	
+	return true;
+}
+
+bool Handle_GC_DAMAGE(PacketSessionRef& session, Protocol::GC_DAMAGE& pkt)
+{
+	UObjectHandler* Handler = GetObjectHandler(session);
+
+	if (Handler)
+		Handler->Handle(pkt);
+	
+	return true;
+}

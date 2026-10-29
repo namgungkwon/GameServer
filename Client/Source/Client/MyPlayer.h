@@ -33,10 +33,16 @@ public:
 
 public:
 	void SendMovePkt();
-protected:
+
+	UFUNCTION(BlueprintCallable)
+	void SendAttackPkt(TArray<AGameObject*> targets, int32 skillId);
+	
+public:
 	void 							Move(const FInputActionValue& Value);
 	void							Look(const FInputActionValue& Value);
 	void 							Attack(const FInputActionValue& Value);
+	UFUNCTION(BlueprintImplementableEvent)
+	void AttackInputPressed();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -44,7 +50,17 @@ public:
 	FVector LastSentInput;
 	const float MOVEPKT_DELAY = 0.2f;
 	float MovePacketTimer = MOVEPKT_DELAY;
-	float SnapThreshold = moveSpeed * 0.5f;
+	float SnapThreshold = moveSpeed * 1.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MOVE_DELAY = 0.5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float movedelay = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ATTACK_DELAY = 0.5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float attackdelay = 0.f;
 
 
 public:
@@ -67,4 +83,8 @@ public:
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
+
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* AttackAction;
 };

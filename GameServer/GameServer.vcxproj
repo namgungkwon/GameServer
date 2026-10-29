@@ -171,6 +171,8 @@
     <ClInclude Include="AISystem.h" />
     <ClInclude Include="ClientPacketHandler.h" />
     <ClInclude Include="CombatComponent.h" />
+    <ClInclude Include="CombatSystem.h" />
+    <ClInclude Include="SceneRequest.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="DBManager.h" />
     <ClInclude Include="Entity.h" />
@@ -205,6 +207,8 @@
     <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="ClientPacketHandler.cpp" />
     <ClCompile Include="CombatComponent.cpp" />
+    <ClCompile Include="CombatSystem.cpp" />
+    <ClCompile Include="SceneRequest.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="DBManager.cpp" />
     <ClCompile Include="Entity.cpp" />

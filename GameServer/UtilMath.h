@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Protocol.pb.h"
 #define PI (3.1415926535)
 
 class UtilMath
@@ -33,4 +34,12 @@ public:
 
 		return yawDegree;
 	}
+
+	static inline Vector3 GetForwardFromYaw(float yaw)
+	{
+		return Vector3{ std::cos(yaw), std::sin(yaw), 0.f };
+	}
+
+	static Vector3 ToServerLocation(const Protocol::Vector3& from);
+	static Protocol::Vector3 ToProtoLocation(const Vector3& from);
 };

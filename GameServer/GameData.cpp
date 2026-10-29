@@ -33,6 +33,7 @@ bool GameData::LoadData()
 	if (LoadPlayerData() == false) return false;
     if (LoadMonsterSpawnData() == false) return false;
     if (LoadMonsterData() == false) return false;
+    if (LoadSkillData() == false) return false;
 
 	return true;
 }

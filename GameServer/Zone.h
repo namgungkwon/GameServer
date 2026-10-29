@@ -21,7 +21,9 @@ public:
 public:
 	HashMap<uint64, PlayerRef> GetPlayers() { return _players; }
 	HashMap<uint64, MonsterRef> GetMonsters() { return _monsters; }
+	EntityRef FindEntity(uint64 objectId);
 	Vector<EntityRef>& GetMovingEntity() { return _movingEntity; }
+	void GetAdjacentZoneInfo(OUT HashMap<GameScene*, Vector<ZoneRef>>& info);
 
 public:
 	void AddPendingSpawn(EntityRef entity) { _pendingSpawns.push_back(entity); }
@@ -30,15 +32,21 @@ public:
 
 public:
 	template<typename T>
-	void BroadCast(T& pkt)
+	void BroadCast(T& pkt, uint64 expectId = -1)
 	{
 		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+		BroadCastBuffer(sendBuffer);
+	}
+
+	void BroadCastBuffer(SendBufferRef sendBuffer, uint64 expectId = -1)
+	{
 		for (auto& [id, player] : _players)
 		{
+			if (expectId == id)
+				continue;
 			player->Send(sendBuffer);
 		}
 	}
-
 
 private:
 	GETSET(int32,					_zoneId,		ZoneId);

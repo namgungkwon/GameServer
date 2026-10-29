@@ -12,6 +12,7 @@ struct Vector3
     Vector3 operator+(const Vector3& rhs) const { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
     Vector3 operator-(const Vector3& rhs) const { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
     Vector3 operator*(float s)          const { return { x * s,   y * s,   z * s }; }
+    Vector3 operator/(float s)          const { return { x / s, y / s, z / s }; }
     bool    operator==(const Vector3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
     float LengthSq() const { return x * x + y * y + z * z; }
@@ -28,6 +29,8 @@ struct Vector3
     }
 
     bool IsZero() const { return LengthSq() < 1e-12f; }
+
+    float Dot(const Vector3& o) const { return x * o.x + y * o.y + z * o.z; }
 };
 
 struct PlayerSummaryData
