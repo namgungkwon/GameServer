@@ -87,9 +87,9 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vec
 	Vector<EntityRef> ret;
 
 	Vector3 attackerLocation = attacker->GetLocation();
-	Vector3 forwardVector = UtilMath::GetForwardFromYaw(attacker->GetYaw());
+	Vector3 forwardVector = UtilMath::GetForwardVectorFromYaw(attacker->GetYaw());
 
-	const float halfAngleRadians = AttackAngle * PI / 180.f;
+	const float halfAngleRadians = AttackAngle * 0.5f * PI / 180.f;
 
 	const float minDot = std::cos(halfAngleRadians);
 	const float attackRangeSq = AttackRange * AttackRange;
@@ -107,15 +107,22 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vec
 		if (distanceSq > attackRangeSq)
 			continue;
 
+		LOG_INFO(L"distance In");
 		const float distance =  ::sqrt(distanceSq);
+		if (distance <= 0.01f)
+		{
+			ret.push_back(target);
+			continue;
+		}
 
-		const Vector3 toTarget = targetLocation / distance;
+		const Vector3 toTarget = (targetLocation - attackerLocation) / distance;
 
 		// 각도
 		const float AngleDot = forwardVector.Dot(toTarget);
 
 		if (AngleDot >= minDot)
 		{
+			LOG_INFO(L"Angle In");
 			ret.push_back(target);
 		}
 	}

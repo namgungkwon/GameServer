@@ -11,6 +11,7 @@ useRef(SceneRequest)
 
 useRef(Entity)
 useRef(Player)
+useRef(NPC)
 useRef(Monster)
 
 
@@ -40,7 +41,7 @@ private:														\
 #define GETSET_REF(type, name, funcName)							\
 public:																\
 	void Set##funcName(const type##& name) { this->name = name; }	\
-	const type##& Get##funcName() const { return name; }			\
+	type##& Get##funcName() { return name; }			\
 private:															\
 	type name;
 
@@ -52,6 +53,6 @@ private:														\
 
 #define GET_REF(type, name, funcName)								\
 public:																\
-	const type##& Get##funcName() const { return name; }			\
+	type##& Get##funcName() { return name; }			\
 private:															\
 	type name;

@@ -79,8 +79,7 @@ bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
     MoveJob job;
     Protocol::Vector3 rawVelocity = pkt.movedata().velocity();
     job.velocity = Vector3(rawVelocity.x(), rawVelocity.y(), rawVelocity.z());
-    Protocol::Vector3 rawLocation = pkt.movedata().location();
-    job.location = Vector3(rawLocation.x(), rawLocation.y(), rawLocation.z());
+    job.location = UtilMath::ToServerLocation(pkt.movedata().location());
     job.yaw = pkt.movedata().yaw();
 
     player->GetComponent<MovementComponent>()->SetPendingJob(job);

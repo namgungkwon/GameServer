@@ -61,9 +61,6 @@
     <ClInclude Include="SkillComponent.h">
       <Filter>Entity\Components</Filter>
     </ClInclude>
-    <ClInclude Include="AIComponent.h">
-      <Filter>Entity\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Entity</Filter>
     </ClInclude>
@@ -97,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="SceneRequest.h" />
     <ClInclude Include="CombatSystem.h" />
+    <ClInclude Include="NPC.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -156,9 +156,6 @@
     <ClCompile Include="SkillComponent.cpp">
       <Filter>Entity\Components</Filter>
     </ClCompile>
-    <ClCompile Include="AIComponent.cpp">
-      <Filter>Entity\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
@@ -192,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="SceneRequest.cpp" />
     <ClCompile Include="CombatSystem.cpp" />
+    <ClCompile Include="NPC.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pch">

@@ -3,19 +3,15 @@
 
 #include "Zone.h"
 #include "Monster.h"
-#include "AIComponent.h"
 #include "MovementComponent.h"
 
 void AISystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT Vector<EntityRef>& movingEntity)
 {
 	for (auto& [id, monster] : zone->GetMonsters())
 	{
-		AIComponent* ai = monster->GetComponent<AIComponent>();
-		if (ai == nullptr)
-			return;
-		ai->Update(nowTick, deltaTime);
+		monster->Update(nowTick, deltaTime);
 
-		if (ai->GetPath().size() != 0)
+		if (monster->GetPath().size() != 0)
 		{
 			if (UpdateAIMove(monster, nowTick, deltaTime))
 				movingEntity.push_back(monster);
@@ -23,26 +19,25 @@ void AISystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT Vector
 	}
 }
 
-bool AISystem::UpdateAIMove(EntityRef entity, uint64 nowTick, uint64 deltaTIme)
+bool AISystem::UpdateAIMove(NPCRef npc, uint64 nowTick, uint64 deltaTIme)
 {
-	if (entity == nullptr)
+	if (npc == nullptr)
 		return false;
 
-	if (entity->GetState() == EntityState::Dead)
+	if (npc->GetState() == EntityState::Dead)
 		return false;
 
-	AIComponent* ai = entity->GetComponent<AIComponent>();
-	MovementComponent* mc = entity->GetComponent<MovementComponent>();
+	MovementComponent* mc = npc->GetComponent<MovementComponent>();
 
-	if (ai == nullptr || mc == nullptr)
+	if (mc == nullptr)
 		return false;
 
 	if (mc->CanMove(nowTick) == false)
 		return false;
 
-	Vector3 location = entity->GetLocation();
-	Vector<Vector3> path = ai->GetPath();
-	int32 pathIndex = ai->GetPathIndex();
+	Vector3 location = npc->GetLocation();
+	Vector<Vector3>& path = npc->GetPath();
+	int32 pathIndex = npc->GetPathIndex();
 
 
 	if (location.DistanceSq(path[pathIndex]) <= 0.1f)
@@ -50,7 +45,7 @@ bool AISystem::UpdateAIMove(EntityRef entity, uint64 nowTick, uint64 deltaTIme)
 
 	if (path.size() <= pathIndex)
 	{
-		ai->ResetPath();
+		npc->ResetPath();
 		return false;
 	}
 
@@ -62,9 +57,9 @@ bool AISystem::UpdateAIMove(EntityRef entity, uint64 nowTick, uint64 deltaTIme)
 	Vector3 normalVector = dirVector.Normalized();
 	Vector3 nextLocation = location + (normalVector * maxDistance);
 
-	entity->SetYaw(UtilMath::GetYawFromVector(dirVector));
-	entity->SetLocation(nextLocation);
-	ai->SetPathIndex(pathIndex);
+	npc->SetYaw(UtilMath::GetYawFromVector(dirVector));
+	npc->SetLocation(nextLocation);
+	npc->SetPathIndex(pathIndex);
 
 	return true;
 }

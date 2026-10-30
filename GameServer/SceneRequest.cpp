@@ -91,6 +91,7 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 
 	for (EntityRef finalTarget : finalTargets)
 	{
+		LOG_INFO(L"AttackSuccess!");
 		GameSceneRef targetScene = finalTarget->GetScene();
 		ZoneRef targetZone = finalTarget->GetZone();
 		DamageEvent event = CombatSystem::MakeDamageEvent(player, finalTarget, skillId, player->GetYaw());

@@ -32,7 +32,7 @@ void AGameObject::SpawnPkt(const Protocol::ObjectData& Pkt)
 	Level = Pkt.summary().level();
 	Type = Pkt.summary().objecttype();
 
-	serverPos = FVector(Pkt.pos().location().x(), Pkt.pos().location().y(), Pkt.pos().location().z() + 90.f);
+	serverPos = FVector(Pkt.pos().location().x(), Pkt.pos().location().y(), Pkt.pos().location().z());
 	Yaw = Pkt.pos().yaw();
 
 	Hp = Pkt.stat().hp();

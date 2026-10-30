@@ -36,10 +36,7 @@ void Entity::MakePkt(Protocol::ObjectSummaryData& summary)
 void Entity::MakePkt(Protocol::ObjectPosData& pos)
 {
 	pos.set_objectid(_objectId);
-	Protocol::Vector3* vec = pos.mutable_location();
-	vec->set_x(_location.x);
-	vec->set_y(_location.y);
-	vec->set_z(_location.z);
+	*pos.mutable_location() = UtilMath::ToProtoLocation(_location);
 	pos.set_yaw(_yaw);
 }
 

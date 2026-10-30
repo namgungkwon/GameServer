@@ -35,9 +35,10 @@ public:
 		return yawDegree;
 	}
 
-	static inline Vector3 GetForwardFromYaw(float yaw)
+	static inline Vector3 GetForwardVectorFromYaw(float yaw)
 	{
-		return Vector3{ std::cos(yaw), std::sin(yaw), 0.f };
+		const float yawRadian = yaw * (PI / 180);
+		return Vector3{ std::cos(yawRadian), std::sin(yawRadian), 0.f };
 	}
 
 	static Vector3 ToServerLocation(const Protocol::Vector3& from);

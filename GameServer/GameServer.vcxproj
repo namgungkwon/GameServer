@@ -167,11 +167,11 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AIComponent.h" />
     <ClInclude Include="AISystem.h" />
     <ClInclude Include="ClientPacketHandler.h" />
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="CombatSystem.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="SceneRequest.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="DBManager.h" />
@@ -203,11 +203,11 @@
     <ClInclude Include="Zone.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="ClientPacketHandler.cpp" />
     <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="CombatSystem.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="SceneRequest.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="DBManager.cpp" />
