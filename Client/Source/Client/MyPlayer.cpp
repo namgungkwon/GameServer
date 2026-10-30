@@ -161,7 +161,7 @@ void AMyPlayer::SendMovePkt()
 	FVector ActorLocation = GetActorLocation();
 	Location->set_x(ActorLocation.X);
 	Location->set_y(ActorLocation.Y);
-	Location->set_z(ActorLocation.Z - 90.f);
+	Location->set_z(ActorLocation.Z);
 
 	Protocol::Vector3* vec = moveData->mutable_velocity();
 	vec->set_x(CurrentInput.X);
@@ -190,7 +190,7 @@ void AMyPlayer::SendAttackPkt(TArray<AGameObject*> targets, int32 skillId)
 	Protocol::Vector3* pos = PosData->mutable_location();
 	pos->set_x(ActorLocation.X);
 	pos->set_y(ActorLocation.Y);
-	pos->set_z(ActorLocation.Z - 90.f);
+	pos->set_z(ActorLocation.Z);
 	PosData->set_yaw(GetActorRotation().Yaw);
 
 	Pkt.set_skillid(0);

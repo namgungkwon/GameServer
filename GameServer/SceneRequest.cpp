@@ -85,7 +85,7 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 			res.set_damage(result.damage);
 			res.set_isdead(target->GetState() == EntityState::Dead);
 			SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
-			scene->BroadCastAdjacentZone(attacker->GetZone(), sendBuffer, attacker->GetObjectId());
+			scene->BroadCastAdjacentZone(attacker->GetZone(), sendBuffer);
 		}
 		};
 

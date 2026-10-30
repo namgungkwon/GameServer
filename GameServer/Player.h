@@ -8,7 +8,7 @@ class Player : public Entity
 {
 public:
 	bool Init(PlayerSummaryData& summary, PlayerLoadData& load);
-	void Respawn(uint64 nowMs) override;
+	void Respawn() override;
 
 public:
 	void Send(SendBufferRef& sendBuffer);

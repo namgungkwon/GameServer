@@ -6,9 +6,8 @@ class Monster : public NPC
 {
 public:
 	void Init(const SpawnData& spawnData, MonsterData& data);
+	virtual void Respawn() override;
 	virtual void Update(uint64 nowMs, uint64 deltaTime) override;
-
-	virtual void Respawn(uint64 nowMs) override;
 
 protected:
 	virtual void UpdateIdle(uint64 nowMs, uint64 deltaTime) override;
@@ -16,6 +15,9 @@ protected:
 	virtual void UpdateChase(uint64 nowMs, uint64 deltaTime) override;
 	virtual void UpdateAttack(uint64 nowMs, uint64 deltaTime) override;
 	virtual void UpdateDead(uint64 nowMs, uint64 deltaTime) override;
+
+protected:
+	virtual void EnterDead(uint64 nowMs, uint64 deltaTime);
 
 protected:
 	virtual void FindPlayer(uint64 nowMs);
@@ -37,5 +39,6 @@ protected:
 
 protected:
 	Vector3 _lastTargetLocation;
+	EntityState _lastState;
 };
 

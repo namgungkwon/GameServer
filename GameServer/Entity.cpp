@@ -6,7 +6,7 @@
 
 Atomic<uint64> IdGenerator::id = 0;
 
-void Entity::Respawn(uint64 nowMs)
+void Entity::Respawn()
 {
 	SetYaw(0);
 

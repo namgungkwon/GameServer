@@ -15,6 +15,8 @@ void GameScene::Update()
 	uint64 deltaTime = now - _lastUpdateTick;
 	_lastUpdateTick = now;
 
+	DoTimer(Config::World::WORLD_UPDATE_TICK, &GameScene::Update);
+
 	for (ZoneRef& zone : _zones)
 	{
 		zone->Update(_lastUpdateTick, deltaTime);
@@ -26,8 +28,6 @@ void GameScene::Update()
 	{
 		zone->ClearPengingJobs();
 	}
-
-	DoTimer(Config::World::WORLD_UPDATE_TICK, &GameScene::Update);
 }
 
 void GameScene::ProcessMovingEntity()

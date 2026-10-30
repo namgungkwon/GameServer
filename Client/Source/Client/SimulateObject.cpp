@@ -21,8 +21,6 @@ void ASimulateObject::SimulateMovement(float DeltaTime)
 	FVector Location = GetActorLocation();
 	FVector MoveDir = (serverPos - Location);
 
-	//SetActorRotation(FRotator(0.f, Yaw, 0.f));
-
 	const float DistToDest = MoveDir.Length();
 	if (DistToDest <= KINDA_SMALL_NUMBER)
 	{

@@ -103,6 +103,7 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vec
 		
 		float distanceSq = targetLocation.DistanceSq(attackerLocation);
 
+		LOG_INFO(L"DistanceSq : " + std::to_wstring(distanceSq));
 		// 사거리
 		if (distanceSq > attackRangeSq)
 			continue;
@@ -119,7 +120,8 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vec
 
 		// 각도
 		const float AngleDot = forwardVector.Dot(toTarget);
-
+		const float Angle = std::acos(AngleDot) * 180 / PI;
+		LOG_INFO(L"Angle : " + std::to_wstring(Angle));
 		if (AngleDot >= minDot)
 		{
 			LOG_INFO(L"Angle In");

@@ -44,9 +44,9 @@ bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 	AddComponent<SkillComponent>(shared_from_this())->Init(skills);
 }
 
-void Player::Respawn(uint64 nowMs)
+void Player::Respawn()
 {
-	Entity::Respawn(nowMs);
+	Entity::Respawn();
 
 	StatComponent* sc = GetComponent<StatComponent>();
 	sc->SetCurrentMP(sc->GetMaxMP());

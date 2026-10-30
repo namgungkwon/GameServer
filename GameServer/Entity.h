@@ -43,7 +43,7 @@ public:
 	T* GetComponent();
 
 public:
-	virtual void Respawn(uint64 nowMs);
+	virtual void Respawn();
 
 public:
 	void MakePkt(OUT Protocol::ObjectData& objectData);

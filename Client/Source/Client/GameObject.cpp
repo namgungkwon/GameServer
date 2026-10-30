@@ -53,7 +53,7 @@ void AGameObject::SpawnPkt(const Protocol::ObjectData& Pkt)
 
 void AGameObject::MovePkt(const Protocol::ObjectPosData& Pkt)
 {
-	serverPos = FVector(Pkt.location().x(), Pkt.location().y(), Pkt.location().z() + 90.f);
+	serverPos = FVector(Pkt.location().x(), Pkt.location().y(), Pkt.location().z());
 }
 
 void AGameObject::Damaged(uint64 damage)

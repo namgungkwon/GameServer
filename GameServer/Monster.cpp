@@ -8,6 +8,7 @@
 #include "Zone.h"
 #include "GameScene.h"
 #include "GridMap.h"
+#include "World.h"
 
 void Monster::Init(const SpawnData& spawnData, MonsterData& data)
 {
@@ -25,24 +26,54 @@ void Monster::Init(const SpawnData& spawnData, MonsterData& data)
 	// NPC
 	SetSpawnLocation(spawnData.location);
 	SetPatrolRadius(spawnData.patrolRadius);
-	
+
 	// Monster
 	_searchRange = data.searchRange;
 	_maxSearchRange = data.maxSearchRange;
 	_attackRange = data.attackRange;
 	_attackDelayMs = data.attackDelayMs;
 	_respawnMs = spawnData.respawnMs;
-	
+
 
 	// Component
 	AddComponent<StatComponent>(shared_from_this())->Init(data.maxHp, data.maxHp, 0, 0);
 	AddComponent<CombatComponent>(shared_from_this())->Init(data.attack, data.defense);
-	MovementComponent* mc = AddComponent<MovementComponent>(shared_from_this());
-	mc->Init(data.speed);
+	AddComponent<MovementComponent>(shared_from_this())->Init(data.speed);
+
+	// temp 기본 공격은 0번 스킬
+	Vector<SkillState> skills;
+	skills.push_back(SkillState{ 0, 1, 0 });
+	AddComponent<SkillComponent>(shared_from_this())->Init(skills);
+}
+
+void Monster::Respawn()
+{
+	Entity::Respawn();
+
+	SetLocation(GetSpawnLocation());
+	SetYaw(0);
+	SetState(EntityState::Idle);
+
+	StatComponent* stat = GetComponent<StatComponent>();
+	stat->SetCurrentHP(stat->GetMaxHP());
+
+	GWorld->EnterEntity(shared_from_this());
 }
 
 void Monster::Update(uint64 nowMs, uint64 deltaTime)
 {
+	if (GetState() != _lastState)
+	{
+		_lastState = GetState();
+
+		switch (_lastState)
+		{
+		case EntityState::Dead:
+			EnterDead(nowMs, deltaTime);
+			break;
+		}
+	}
+
 	switch (GetState())
 	{
 	case EntityState::Idle:
@@ -61,13 +92,6 @@ void Monster::Update(uint64 nowMs, uint64 deltaTime)
 		UpdateDead(nowMs, deltaTime);
 		break;
 	}
-}
-
-void Monster::Respawn(uint64 nowMs)
-{
-	Entity::Respawn(nowMs);
-
-	SetLocation(GetSpawnLocation());
 }
 
 void Monster::UpdateIdle(uint64 nowMs, uint64 deltaTime)
@@ -179,7 +203,20 @@ void Monster::UpdateAttack(uint64 nowMs, uint64 deltaTime)
 }
 
 void Monster::UpdateDead(uint64 nowMs, uint64 deltaTime)
-{}
+{
+	//
+}
+
+void Monster::EnterDead(uint64 nowMs, uint64 deltaTime)
+{
+	ResetPath();
+	GWorld->LeaveEntity(shared_from_this()); // Tick의 영향을 받지 않게 됨
+	_nextRespawnTick = nowMs + _respawnMs;
+	GWorld->DoTimer(_respawnMs, [monster = shared_from_this()]() {
+		monster->Respawn();
+		GWorld->EnterEntity(monster);
+		});
+}
 
 void Monster::FindPlayer(uint64 nowMs)
 {

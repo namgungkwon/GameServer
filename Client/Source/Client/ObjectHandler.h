@@ -30,18 +30,7 @@ public:
 	void Handle(const Protocol::GC_MOVE& pkt);
 	void Handle(const Protocol::GC_ATTACK& pkt);
 	void Handle(const Protocol::GC_DAMAGE& pkt);
-	//void Spawn(const Protocol::GC_SPAWN_OBJECTS& Pkt);
-	//void Spawn(const Protocol::GC_SPAWN_PLAYERS& Pkt);
-	//void Spawn(const Protocol::GC_SPAWN_HERO& Pkt);
 	
-	//void LoadMap(const Protocol::GC_LOAD_MAP& Pkt);
-	//void UnloadMap(const Protocol::GC_UNLOAD_MAP& Pkt);
-	
-	//void MovePacketReceived(const Protocol::GC_MOVE& Pkt);
-	//void AttackPacketReceived(const Protocol::GC_RES_ATTACK& Pkt);
-	//void DamagePacketReceived(const Protocol::GC_DAMAGE& Pkt);
-	
-	AActor* Spawn(uint64 ObjectId, int32 X, int32 Y);
 	
 public:
 	void Despawn(uint64 ObjectId);
