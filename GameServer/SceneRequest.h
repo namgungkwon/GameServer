@@ -14,12 +14,12 @@ public:
 struct AttackRequest : public SceneRequest
 {
 public:
-	AttackRequest(Protocol::CG_ATTACK pkt, PlayerRef player) : pkt(pkt), player(player) {};
+	AttackRequest(Protocol::CG_ATTACK pkt, EntityRef attacker) : pkt(pkt), attacker(attacker) {};
 
 public:
 	virtual void Execute(GameSceneRef scene, uint64 currentTick);
 
 private:
 	Protocol::CG_ATTACK pkt;
-	PlayerRef player;
+	EntityRef attacker;
 };

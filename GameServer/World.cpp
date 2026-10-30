@@ -100,6 +100,9 @@ bool World::EnterEntity(EntityRef entity)
             }
             }));
     }
+
+
+    _entities[entity->GetObjectId()] = entity;
 }
 
 void World::LeaveEntity(EntityRef entity)
@@ -130,6 +133,7 @@ void World::LeaveEntity(EntityRef entity)
             }
             }));
     }
+    _entities.erase(entity->GetObjectId());
 }
 
 void World::CreateScene()
@@ -231,7 +235,6 @@ void World::SpawnMonster()
         MonsterRef monster = MakeShared<Monster>();
         monster->Init(spawnData, *monsterData);
         EnterEntity(monster);
-        _monsters[monster->GetObjectId()]= monster;
     }
 }
 

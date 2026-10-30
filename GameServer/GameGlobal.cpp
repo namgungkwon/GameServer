@@ -56,7 +56,7 @@ void GameGlobal::Init()
 	// 5. GridMap
 	_gridMap = MakeShared<GridMap>();
 	GGridMap = _gridMap.get();
-	if (GGridMap->Init("../GameData/Map/1"))
+	if (GGridMap->Init("../MapFile/Map.txt"))
 		LOG_INFO(L"GridMap load complete");
 	else
 		LOG_WARN(L"Failed to load GridMap");

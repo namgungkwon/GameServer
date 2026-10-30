@@ -12,11 +12,21 @@ bool GridMap::Init(const char* path)
     _xSize = 1000;
     _ySize = 1000;
     _cellWidth = 100;
-
-    return true;
-
+    
+    //return true;
 
     Vector<BYTE> gridData = FileUtils::ReadFile(Utils::ToWString(path).c_str());
+
+    uint64 gridDataSize = gridData.size();
+    for (size_t y = 0; y < _ySize; ++y)
+    {
+        for (size_t x = 0; x < _xSize; ++x)
+        {
+            _cells[y * _xSize + x] = gridData[y * _xSize + x];
+        }
+    }
+
+    return true;
     Vector<string> lines = SplitLine(string(gridData.begin(), gridData.end()));
 
     Vector<string> tokens = SplitToken(lines[0]);

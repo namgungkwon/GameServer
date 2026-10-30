@@ -108,7 +108,7 @@ void Monster::UpdatePatrol(uint64 nowMs, uint64 deltaTime)
 
 		if (GGridMap->CanGo(rndLocation))
 		{
-			path.push_back(rndLocation);
+			GGridMap->FindPath(GetLocation(), rndLocation, path);
 			SetPathIndex(0);
 		}
 	}
@@ -188,6 +188,13 @@ void Monster::UpdateAttack(uint64 nowMs, uint64 deltaTime)
 		SetState(EntityState::Idle);
 		return;
 	}
+	
+	if (target->GetState() == EntityState::Dead)
+	{
+		target = nullptr;
+		SetState(EntityState::Idle);
+		return;
+	}
 
 	Vector3 location = GetLocation();
 	Vector3 targetLocation = target->GetLocation();
@@ -199,7 +206,21 @@ void Monster::UpdateAttack(uint64 nowMs, uint64 deltaTime)
 		return;
 	}
 
+	SetYaw(UtilMath::GetYawFromVector(targetLocation - location));
+
 	// 공격
+	if (GetComponent<SkillComponent>()->CooldownReady(0, nowMs) == false)
+		return;
+
+	GameSceneRef scene = GetScene();
+	{
+		Protocol::CG_ATTACK pkt;
+		MakePkt(*pkt.mutable_posdata());
+		*pkt.mutable_posdata()->mutable_location() = UtilMath::ToProtoLocation(GetLocation());
+		pkt.add_targets(target->GetObjectId());
+		pkt.set_skillid(0);
+		scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<AttackRequest>(pkt, shared_from_this())));
+	}
 }
 
 void Monster::UpdateDead(uint64 nowMs, uint64 deltaTime)

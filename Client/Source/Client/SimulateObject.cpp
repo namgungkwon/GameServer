@@ -44,6 +44,5 @@ void ASimulateObject::SimulateMovement(float DeltaTime)
 void ASimulateObject::SkillPkt(uint64 skillId)
 {
 	AGameObject::SkillPkt(skillId);
-	
 	abp_isAttack = true;
 }

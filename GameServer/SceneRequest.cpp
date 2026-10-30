@@ -17,10 +17,10 @@
 void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 {
 	Protocol::ObjectPosData posData = pkt.posdata();
-	player->SetLocation(UtilMath::ToServerLocation(posData.location()));
-	player->SetYaw(posData.yaw());
+	attacker->SetLocation(UtilMath::ToServerLocation(posData.location()));
+	attacker->SetYaw(posData.yaw());
 
-	GameSceneRef playerScene = player->GetScene();
+	GameSceneRef playerScene = attacker->GetScene();
 
 	if (playerScene != scene)
 	{
@@ -28,13 +28,13 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 		return;
 	}
 
-	if (player->GetState() == EntityState::Dead)
+	if (attacker->GetState() == EntityState::Dead)
 		return;
 
-	CombatComponent* aCombat = player->GetComponent<CombatComponent>();
-	SkillComponent* aSkill = player->GetComponent<SkillComponent>();
-	StatComponent* aStat = player->GetComponent<StatComponent>();
-	MovementComponent* aMovement = player->GetComponent<MovementComponent>();
+	CombatComponent* aCombat = attacker->GetComponent<CombatComponent>();
+	SkillComponent* aSkill = attacker->GetComponent<SkillComponent>();
+	StatComponent* aStat = attacker->GetComponent<StatComponent>();
+	MovementComponent* aMovement = attacker->GetComponent<MovementComponent>();
 
 	if (aCombat == nullptr || aSkill == nullptr || aStat == nullptr)
 		return;
@@ -52,10 +52,10 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 
 	{
 		Protocol::GC_ATTACK res;
-		player->MakePkt(*res.mutable_posdata());
+		attacker->MakePkt(*res.mutable_posdata());
 		res.set_skillid(skillId);
 		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
-		scene->BroadCastAdjacentZone(player->GetZone(), sendBuffer, player->GetObjectId());
+		scene->BroadCastAdjacentZone(attacker->GetZone(), sendBuffer, attacker->GetObjectId());
 	}
 
 	if (pkt.targets().size() == 0)
@@ -65,12 +65,12 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 	Vector<EntityRef> targets;
 	for (uint64 targetId : pkt.targets())
 	{
-		MonsterRef monster = GWorld->FindMonster(targetId);
-		targets.push_back(static_pointer_cast<Entity>(monster));
+		if (EntityRef entity = GWorld->FindEntity(targetId))
+			targets.push_back(entity);
 	}
 
 	SkillData* skill = aSkill->GetSkill(skillId);
-	Vector<EntityRef> finalTargets = CombatSystem::SelectTargetInAttackCone(player, targets, skill->attackRange, skill->attackAngle);
+	Vector<EntityRef> finalTargets = CombatSystem::SelectTargetInAttackCone(attacker, targets, skill->attackRange, skill->attackAngle);
 
 
 	auto fn = [](GameSceneRef scene, ZoneRef zone, DamageEvent event, EntityRef attacker, EntityRef target) {
@@ -94,15 +94,15 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 		LOG_INFO(L"AttackSuccess!");
 		GameSceneRef targetScene = finalTarget->GetScene();
 		ZoneRef targetZone = finalTarget->GetZone();
-		DamageEvent event = CombatSystem::MakeDamageEvent(player, finalTarget, skillId, player->GetYaw());
+		DamageEvent event = CombatSystem::MakeDamageEvent(attacker, finalTarget, skillId, attacker->GetYaw());
 
 		if (targetScene == playerScene)
 		{
-			fn(targetScene, targetZone, event, player, finalTarget);
+			fn(targetScene, targetZone, event, attacker, finalTarget);
 		}
 		else
 		{
-			PlayerRef attacker = player;
+			EntityRef attacker = attacker;
 			targetScene->DoAsync([fn, targetScene, targetZone, event, attacker, finalTarget]()
 				{ fn(targetScene, targetZone, event, attacker, finalTarget); });
 		}
