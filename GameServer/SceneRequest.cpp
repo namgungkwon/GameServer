@@ -83,11 +83,28 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 			Protocol::GC_DAMAGE res;
 			res.set_objectid(target->GetObjectId());
 			res.set_damage(result.damage);
-			res.set_isdead(target->GetState() == EntityState::Dead);
+			res.set_isdead(result.isDead);
 			SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
 			scene->BroadCastAdjacentZone(attacker->GetZone(), sendBuffer);
 		}
+
+		if (result.isDead)
+		{
+			if (attacker->GetType() == Protocol::OBJECT_CATEGORY_PLAYER &&
+				target->GetType() == Protocol::OBJECT_CATEGORY_MONSTER)
+			{
+				PlayerRef player = static_pointer_cast<Player>(attacker);
+				{
+					Protocol::GC_REWARD res;
+					res.set_exp(target->GetExp());
+					SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+					player->Send(sendBuffer);
+				}
+				player->GainExp(target->GetExp());
+			}
 		};
+	};
+
 
 	for (EntityRef finalTarget : finalTargets)
 	{

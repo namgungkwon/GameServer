@@ -36,6 +36,7 @@ public:
 public:
 	bool GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load);
     void SavePlayer(uint64 playerId, const PlayerLoadData* load);
+    void SaveLevelUp(uint64 playerId, int32 level);
 
 
 private:

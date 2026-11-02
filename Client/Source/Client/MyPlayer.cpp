@@ -156,6 +156,33 @@ void AMyPlayer::RevivePktReceived(const Protocol::GC_REVIVE& pkt)
 	Super::RevivePktReceived(pkt);
 }
 
+void AMyPlayer::RewardPktReceived(const Protocol::GC_REWARD& pkt)
+{
+	Exp += pkt.exp();
+
+	UIUpdate();
+}
+
+void AMyPlayer::LevelUpPktReceived(const Protocol::ObjectData& Pkt)
+{
+	Level = Pkt.summary().level();
+
+	Hp = Pkt.stat().hp();
+	MaxHp = Level * 100 + 100;
+	Mp = Pkt.stat().mp();
+	MaxMp = MaxHp / 2;
+	Exp = Pkt.stat().exp();
+
+	int exp = 0;
+	for (int i = 1; i <= Level; i++)
+	{
+		exp += i * 10;
+	}
+	RequiredExp = exp;
+
+	UIUpdate();
+}
+
 void AMyPlayer::SendMovePkt()
 {
 	Protocol::CG_MOVE Pkt;

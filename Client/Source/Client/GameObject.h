@@ -31,7 +31,7 @@ public:
 	virtual void SetHP(float currentHp, float currentMp) {};
 	virtual void Damaged(uint64 damage, bool isDead);
 	UFUNCTION(BlueprintImplementableEvent)
-	void HpChanged();
+	void UIUpdate();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void Dead();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

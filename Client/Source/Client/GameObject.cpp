@@ -78,7 +78,7 @@ void AGameObject::RevivePktReceived(const Protocol::GC_REVIVE& pkt)
 	}
 	RequiredExp = exp;
 
-	HpChanged();
+	UIUpdate();
 }
 
 void AGameObject::Damaged(uint64 damage, bool isDead)
@@ -97,5 +97,5 @@ void AGameObject::Damaged(uint64 damage, bool isDead)
 	Hp -= damage;
 	if (Hp < 0)
 		Hp = 0;
-	HpChanged();
+	UIUpdate();
 }

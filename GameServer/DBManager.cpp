@@ -37,8 +37,7 @@ bool DBManager::Init(const DBConfig& config)
 
 void DBManager::DoAsync(Job&& job)
 {
-	uint32 idx = _choiceWorker.fetch_add(1, std::memory_order_relaxed)
-		% static_cast<uint32>(_workers.size());
+	uint32 idx = _choiceWorker.fetch_add(1, std::memory_order_relaxed)	% static_cast<uint32>(_workers.size());
 	_workers[idx]->DoAsync(std::move(job));
 }
 
@@ -122,4 +121,22 @@ void DBManager::SavePlayer(uint64 playerId, const PlayerLoadData* load)
 
 	if (bind.Execute() == false)
 		return;
+}
+
+void DBManager::SaveLevelUp(uint64 playerId, int32 level)
+{
+	DBConn dbConn;
+
+	DBBind<2, 0> bind(*dbConn.conn,
+		L"Update Players "
+		L"SET level=? "
+		L"WHERE playerid=?");
+
+	bind.BindParam(0, level);
+	bind.BindParam(1, playerId);
+
+	if (bind.Execute() == false)
+		return;
+
+
 }

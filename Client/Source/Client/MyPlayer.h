@@ -32,6 +32,8 @@ public:
 	void SpawnPktReceived();
 
 	virtual void RevivePktReceived(const Protocol::GC_REVIVE& pkt) override;
+	void RewardPktReceived(const Protocol::GC_REWARD& pkt);
+	void LevelUpPktReceived(const Protocol::ObjectData& pkt);
 
 public:
 	void SendMovePkt();

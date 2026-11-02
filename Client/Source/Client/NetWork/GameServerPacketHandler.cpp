@@ -98,3 +98,23 @@ bool Handle_GC_DAMAGE(PacketSessionRef& session, Protocol::GC_DAMAGE& pkt)
 	
 	return true;
 }
+
+bool Handle_GC_REWARD(PacketSessionRef& session, Protocol::GC_REWARD& pkt)
+{
+	UObjectHandler* Handler = GetObjectHandler(session);
+
+	if (Handler)
+		Handler->Handle(pkt);
+	
+	return true;
+}
+
+bool Handle_GC_LEVELUP(PacketSessionRef& session, Protocol::GC_LEVELUP& pkt)
+{
+	UObjectHandler* Handler = GetObjectHandler(session);
+
+	if (Handler)
+		Handler->Handle(pkt);
+	
+	return true;
+}

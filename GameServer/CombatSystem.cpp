@@ -71,6 +71,7 @@ const DamageResult CombatSystem::MakeDamageResult(ZoneRef zone, DamageEvent& eve
 
 			if (tStat->GetCurrentHP() == 0)
 			{
+				result.isDead = true;
 				target->SetState(EntityState::Dead);
 			}
 		}

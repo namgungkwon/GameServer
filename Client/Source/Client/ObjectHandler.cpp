@@ -157,6 +157,22 @@ void UObjectHandler::Handle(const Protocol::GC_REVIVE& pkt)
 	}
 }
 
+void UObjectHandler::Handle(const Protocol::GC_REWARD& pkt)
+{
+	if (MyCharacter)
+	{
+		MyCharacter->RewardPktReceived(pkt);
+	}
+}
+
+void UObjectHandler::Handle(const Protocol::GC_LEVELUP& pkt)
+{
+	if (MyCharacter)
+	{
+		MyCharacter->LevelUpPktReceived(pkt.data());
+	}
+}
+
 TObjectPtr<AGameObject> UObjectHandler::FindObject(uint64 ObjectId)
 {
 	if (SpawnedObjects.Find(ObjectId))

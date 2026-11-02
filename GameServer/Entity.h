@@ -47,8 +47,6 @@ public:
 
 public:
 	void MakePkt(OUT Protocol::ObjectData& objectData);
-
-public:
 	void MakePkt(OUT Protocol::ObjectSummaryData& summary);
 	void MakePkt(OUT Protocol::ObjectPosData& pos);
 	void MakePkt(OUT Protocol::ObjectStatData& stat);

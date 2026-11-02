@@ -41,6 +41,8 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::GC_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_GC_MOVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_GC_ATTACK); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_DAMAGE& pkt) { return MakeSendBuffer(pkt, PKT_GC_DAMAGE); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_REWARD& pkt) { return MakeSendBuffer(pkt, PKT_GC_REWARD); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_LEVELUP& pkt) { return MakeSendBuffer(pkt, PKT_GC_LEVELUP); }
 	
 
 private:

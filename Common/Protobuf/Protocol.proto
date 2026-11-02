@@ -97,6 +97,16 @@ message GC_DAMAGE
 	bool isDead = 3;
 }
 
+message GC_REWARD
+{
+	uint64 exp = 1;
+}
+
+message GC_LEVELUP
+{
+	ObjectData data = 1;
+}
+
 ///////////////////////////////////////////////////////
 //	<	gameServerList >
 ///////////////////////////////////////////////////////
