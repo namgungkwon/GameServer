@@ -148,6 +148,15 @@ void UObjectHandler::Handle(const Protocol::GC_DAMAGE& pkt)
 	}
 }
 
+void UObjectHandler::Handle(const Protocol::GC_REVIVE& pkt)
+{
+	uint64 objectId= pkt.posdata().objectid();
+	if (SpawnedObjects.Find(objectId) != nullptr)
+	{
+		SpawnedObjects[objectId]->RevivePktReceived(pkt);
+	}
+}
+
 TObjectPtr<AGameObject> UObjectHandler::FindObject(uint64 ObjectId)
 {
 	if (SpawnedObjects.Find(ObjectId))

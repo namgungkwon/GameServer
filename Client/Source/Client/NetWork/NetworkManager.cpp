@@ -37,7 +37,7 @@ bool UNetworkManager::ConnectToLoginServer()
 	if (LoginServer != nullptr)
 		return false;
 	
-	const uint16 Port = Protocol::SERVER_PORT_LOGIN_SERVER_PORT_FOR_CLIENT;
+	const uint16 Port = 8005;
 	FSocket* Socket = ConnectServer(FString("127.0.0.1"), Port);
 	if (Socket == nullptr)
 		return false;

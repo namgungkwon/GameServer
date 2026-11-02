@@ -63,6 +63,22 @@ bool Handle_CG_LEAVE_GAME(PacketSessionRef& session, Protocol::CG_LEAVE_GAME& pk
     return true;
 }
 
+bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt)
+{
+    GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+    if (gameSession->IsAuthenticated() == false) return false;
+
+    PlayerRef player = gameSession->GetPlayer();
+    if (player == nullptr)
+        return false;
+
+    GameSceneRef scene = player->GetScene();
+    if (scene == nullptr)
+        return false;
+
+    scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<ReviveRequest>(pkt, player)));
+}
+
 bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);

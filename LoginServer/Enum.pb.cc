@@ -27,7 +27,7 @@ namespace _fl = ::google::protobuf::internal::field_layout;
 namespace Protocol {
 }  // namespace Protocol
 static const ::_pb::EnumDescriptor* PROTOBUF_NONNULL
-    file_level_enum_descriptors_Enum_2eproto[6];
+    file_level_enum_descriptors_Enum_2eproto[5];
 static constexpr const ::_pb::ServiceDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
     file_level_service_descriptors_Enum_2eproto = nullptr;
 const ::uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
@@ -42,28 +42,20 @@ const char descriptor_table_protodef_Enum_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIA
     "ENTER\020\003\022\024\n\020SERVER_TYPE_CHAT\020\004*z\n\014ServerS"
     "tatus\022\026\n\022SERVER_STATUS_NONE\020\000\022\030\n\024SERVER_"
     "STATUS_NORMAL\020\001\022\031\n\025SERVER_STATUS_CROWDED"
-    "\020\002\022\035\n\031SERVER_STATUS_MAINTENANCE\020\003*\360\001\n\nSe"
-    "rverPort\022\034\n\030SERVER_PORT_INVALID_PORT\020\000\022-"
-    "\n(SERVER_PORT_LOGIN_SERVER_PORT_FOR_CLIE"
-    "NT\020\301>\022,\n\'SERVER_PORT_GAME_SERVER_PORT_FO"
-    "R_CLIENT\020\302>\0222\n-SERVER_PORT_CENTER_SERVER"
-    "_PORT_FOR_GAMESERVER\020\303>\0223\n.SERVER_PORT_C"
-    "ENTER_SERVER_PORT_FOR_LOGINSERVER\020\304>*|\n\016"
-    "ObjectCategory\022\030\n\024OBJECT_CATEGORY_NONE\020\000"
-    "\022\032\n\026OBJECT_CATEGORY_PLAYER\020\001\022\033\n\027OBJECT_C"
-    "ATEGORY_MONSTER\020\002\022\027\n\023OBJECT_CATEGORY_NPC"
-    "\020\003*\243\001\n\014MonsterState\022\026\n\022MONSTER_STATE_NON"
-    "E\020\000\022\026\n\022MONSTER_STATE_IDLE\020\001\022\030\n\024MONSTER_S"
-    "TATE_PATROL\020\002\022\027\n\023MONSTER_STATE_CHASE\020\003\022\030"
-    "\n\024MONSTER_STATE_ATTACK\020\004\022\026\n\022MONSTER_STAT"
-    "E_DEAD\020\005*>\n\tDirection\022\017\n\013DIRECTION_N\020\000\022\017"
-    "\n\013DIRECTION_L\020\001\022\017\n\013DIRECTION_R\020\002b\006proto3"
+    "\020\002\022\035\n\031SERVER_STATUS_MAINTENANCE\020\003*|\n\016Obj"
+    "ectCategory\022\030\n\024OBJECT_CATEGORY_NONE\020\000\022\032\n"
+    "\026OBJECT_CATEGORY_PLAYER\020\001\022\033\n\027OBJECT_CATE"
+    "GORY_MONSTER\020\002\022\027\n\023OBJECT_CATEGORY_NPC\020\003*"
+    ">\n\tDirection\022\017\n\013DIRECTION_N\020\000\022\017\n\013DIRECTI"
+    "ON_L\020\001\022\017\n\013DIRECTION_R\020\002*G\n\rRespawnOption"
+    "\022\030\n\024RESPAWNOPTION_CURPOS\020\000\022\034\n\030RESPAWNOPT"
+    "ION_SPAWNPOINT\020\001b\006proto3"
 };
 static ::absl::once_flag descriptor_table_Enum_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
     false,
     false,
-    880,
+    544,
     descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once,
@@ -89,30 +81,24 @@ const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ServerStatus_descript
 }
 PROTOBUF_CONSTINIT const uint32_t ServerStatus_internal_data_[] = {
     262144u, 0u, };
-const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ServerPort_descriptor() {
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ObjectCategory_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
   return file_level_enum_descriptors_Enum_2eproto[2];
 }
-PROTOBUF_CONSTINIT const uint32_t ServerPort_internal_data_[] = {
-    65536u, 262144u, 8003u, 8002u, 8004u, 8001u, };
-const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ObjectCategory_descriptor() {
+PROTOBUF_CONSTINIT const uint32_t ObjectCategory_internal_data_[] = {
+    262144u, 0u, };
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL Direction_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
   return file_level_enum_descriptors_Enum_2eproto[3];
 }
-PROTOBUF_CONSTINIT const uint32_t ObjectCategory_internal_data_[] = {
-    262144u, 0u, };
-const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL MonsterState_descriptor() {
+PROTOBUF_CONSTINIT const uint32_t Direction_internal_data_[] = {
+    196608u, 0u, };
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL RespawnOption_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
   return file_level_enum_descriptors_Enum_2eproto[4];
 }
-PROTOBUF_CONSTINIT const uint32_t MonsterState_internal_data_[] = {
-    393216u, 0u, };
-const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL Direction_descriptor() {
-  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
-  return file_level_enum_descriptors_Enum_2eproto[5];
-}
-PROTOBUF_CONSTINIT const uint32_t Direction_internal_data_[] = {
-    196608u, 0u, };
+PROTOBUF_CONSTINIT const uint32_t RespawnOption_internal_data_[] = {
+    131072u, 0u, };
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 namespace google {

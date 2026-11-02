@@ -34,6 +34,7 @@ bool GameData::LoadData()
     if (LoadMonsterSpawnData() == false) return false;
     if (LoadMonsterData() == false) return false;
     if (LoadSkillData() == false) return false;
+    if (LoadSpawnPointData() == false) return false;
 
 	return true;
 }
@@ -89,7 +90,7 @@ bool GameData::LoadSkillData()
 
 bool GameData::LoadMonsterSpawnData()
 {
-    _spawnData.clear();
+    _monsterSpawnData.clear();
 
     json data;
     if (!LoadJsonArray("../GameData/SpawnData.json", data))
@@ -97,7 +98,7 @@ bool GameData::LoadMonsterSpawnData()
     
     for (const auto& item : data)
     {
-        SpawnData data;
+        MonsterSpawnData data;
         data.monsterId = item["monsterId"];
         data.location.x = item["xLocation"];
         data.location.y = item["yLocation"];
@@ -105,7 +106,7 @@ bool GameData::LoadMonsterSpawnData()
         data.spawnCount = item["spawnCount"];
         data.patrolRadius = item["patrolRadius"];
 
-        _spawnData.push_back(std::move(data));
+        _monsterSpawnData.push_back(std::move(data));
     }
     return true;
 }
@@ -139,6 +140,26 @@ bool GameData::LoadMonsterData()
     return true;
 }
 
+bool GameData::LoadSpawnPointData()
+{
+    _spawnPointData.clear();
+
+    json data;
+    if (!LoadJsonArray("../GameData/RespawnPoint.json", data))
+        return false;
+
+    for (const auto& item : data)
+    {
+        SpawnPointData data;
+        data.spawnLocation.x = item["xLocation"];
+        data.spawnLocation.y = item["yLocation"];
+        data.spawnLocation.z = 0.f;
+
+        _spawnPointData.push_back(std::move(data));
+    }
+    return true;
+}
+
 PlayerData* GameData::GetPlayerData(int32 level)
 {
     auto it = _playerData.find(level);
@@ -155,4 +176,23 @@ MonsterData* GameData::GetMonsterData(uint64 monsterId)
 {
     auto it = _monsterData.find(monsterId);
     return it != _monsterData.end() ? &it->second : nullptr;
+}
+
+SpawnPointData* GameData::GetSpawnPoint(const Vector3& currentLocation)
+{
+    SpawnPointData* ret = nullptr;
+    float minDistanceSq = 99999999999999999;
+
+    for (auto& data : _spawnPointData)
+    {
+        float distSq = currentLocation.DistanceSq(data.spawnLocation);
+
+        if (distSq < minDistanceSq)
+        {
+            minDistanceSq = distSq;
+            ret = &data;
+        }
+    }
+
+    return ret;
 }

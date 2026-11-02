@@ -55,10 +55,34 @@ void AGameObject::MovePkt(const Protocol::ObjectPosData& Pkt)
 	serverPos = FVector(Pkt.location().x(), Pkt.location().y(), Pkt.location().z());
 }
 
+void AGameObject::RevivePktReceived(const Protocol::GC_REVIVE& pkt)
+{
+	abp_isDead = false;
+	Protocol::ObjectPosData posData = pkt.posdata();
+	Protocol::ObjectStatData statData = pkt.statdata();
+	
+	serverPos = FVector(posData.location().x(), posData.location().y(), posData.location().z());
+	SetActorLocation(serverPos);
+	Yaw = posData.yaw();
+
+	Hp = statData.hp();
+	MaxHp = Level * 100 + 100;
+	Mp = statData.mp();
+	MaxMp = MaxHp / 2;
+	Exp = statData.exp();
+
+	int exp = 0;
+	for (int i = 1; i <= Level; i++)
+	{
+		exp += i * 10;
+	}
+	RequiredExp = exp;
+
+	HpChanged();
+}
+
 void AGameObject::Damaged(uint64 damage, bool isDead)
 {
-	HpChanged();
-	
 	if (isDead)
 	{
 		if (abp_isDead == false)
@@ -73,4 +97,5 @@ void AGameObject::Damaged(uint64 damage, bool isDead)
 	Hp -= damage;
 	if (Hp < 0)
 		Hp = 0;
+	HpChanged();
 }

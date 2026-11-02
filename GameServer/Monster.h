@@ -5,8 +5,8 @@
 class Monster : public NPC
 {
 public:
-	void Init(const SpawnData& spawnData, MonsterData& data);
-	virtual void Respawn() override;
+	void Init(const MonsterSpawnData& spawnData, MonsterData& data);
+	virtual void Respawn(const Vector3& respawnLocation) override;
 	virtual void Update(uint64 nowMs, uint64 deltaTime) override;
 
 protected:

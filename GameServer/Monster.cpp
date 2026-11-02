@@ -10,7 +10,7 @@
 #include "GridMap.h"
 #include "World.h"
 
-void Monster::Init(const SpawnData& spawnData, MonsterData& data)
+void Monster::Init(const MonsterSpawnData& spawnData, MonsterData& data)
 {
 	//Entity
 	SetObjectId(IdGenerator::Get());
@@ -46,11 +46,11 @@ void Monster::Init(const SpawnData& spawnData, MonsterData& data)
 	AddComponent<SkillComponent>(shared_from_this())->Init(skills);
 }
 
-void Monster::Respawn()
+void Monster::Respawn(const Vector3& respawnLocation)
 {
-	Entity::Respawn();
+	Entity::Respawn(respawnLocation);
 
-	SetLocation(GetSpawnLocation());
+	SetLocation(respawnLocation);
 	SetYaw(0);
 	SetState(EntityState::Idle);
 
@@ -233,8 +233,8 @@ void Monster::EnterDead(uint64 nowMs, uint64 deltaTime)
 	ResetPath();
 	GWorld->LeaveEntity(shared_from_this()); // Tick의 영향을 받지 않게 됨
 	_nextRespawnTick = nowMs + _respawnMs;
-	GWorld->DoTimer(_respawnMs, [monster = shared_from_this()]() {
-		monster->Respawn();
+	GWorld->DoTimer(_respawnMs, [monster = static_pointer_cast<Monster>(shared_from_this())]() {
+		monster->Respawn(monster->GetSpawnLocation());
 		GWorld->EnterEntity(monster);
 		});
 }

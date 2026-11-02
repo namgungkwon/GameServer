@@ -49,11 +49,11 @@ void ASimulateObject::SkillPkt(uint64 skillId)
 
 void ASimulateObject::DespawnPkt()
 {
-	Super::DespawnPkt();
-
 	if (abp_isDead)
-		return;
+	{
+		abp_isDead = true;
+		Dead();
+	}
 
-	abp_isDead = true;
-	Dead();
+	Super::DespawnPkt();
 }

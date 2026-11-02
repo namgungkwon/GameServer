@@ -8,6 +8,7 @@
 
 bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pkt);
 bool Handle_CG_LEAVE_GAME(PacketSessionRef& session, Protocol::CG_LEAVE_GAME& pkt);
+bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt);
 bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt);
 bool Handle_CG_ATTACK(PacketSessionRef& session, Protocol::CG_ATTACK& pkt);
 
@@ -21,6 +22,7 @@ public:
 	{
 		GPacketHandler[PKT_CG_ENTER_GAME] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_ENTER_GAME>(Handle_CG_ENTER_GAME, session, buffer, len); };
 		GPacketHandler[PKT_CG_LEAVE_GAME] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_LEAVE_GAME>(Handle_CG_LEAVE_GAME, session, buffer, len); };
+		GPacketHandler[PKT_CG_REVIVE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_REVIVE>(Handle_CG_REVIVE, session, buffer, len); };
 		GPacketHandler[PKT_CG_MOVE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_MOVE>(Handle_CG_MOVE, session, buffer, len); };
 		GPacketHandler[PKT_CG_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_ATTACK>(Handle_CG_ATTACK, session, buffer, len); };
 	}
@@ -35,6 +37,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::GC_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_GC_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GC_SPAWN); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GC_DESPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_REVIVE& pkt) { return MakeSendBuffer(pkt, PKT_GC_REVIVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_GC_MOVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_GC_ATTACK); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_DAMAGE& pkt) { return MakeSendBuffer(pkt, PKT_GC_DAMAGE); }

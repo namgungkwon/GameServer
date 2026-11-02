@@ -49,6 +49,18 @@ message GC_DESPAWN
 	repeated uint64 objectId = 1;
 }
 
+message CG_REVIVE
+{
+	uint64 objectId = 1;
+	RespawnOption option = 2;
+}
+
+message GC_REVIVE
+{
+	ObjectPosData posData = 1;
+	ObjectStatData statData = 2;
+}
+
 ///////////////////////////////////////////////////////
 //	<	Move	>
 ///////////////////////////////////////////////////////

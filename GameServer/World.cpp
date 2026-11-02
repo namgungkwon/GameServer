@@ -223,9 +223,9 @@ void World::CreateMoveTable()
 
 void World::SpawnMonster()
 {
-    Vector<SpawnData>& spawnDataList = GGameData->GetSpawnData();
+    Vector<MonsterSpawnData>& spawnDataList = GGameData->GetMonsterSpawnData();
 
-    for (const SpawnData& spawnData : spawnDataList)
+    for (const MonsterSpawnData& spawnData : spawnDataList)
     {
         MonsterData* monsterData = GGameData->GetMonsterData(spawnData.monsterId);
 

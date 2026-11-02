@@ -6,8 +6,9 @@
 
 Atomic<uint64> IdGenerator::id = 0;
 
-void Entity::Respawn()
+void Entity::Respawn(const Vector3& respawnLocation)
 {
+	SetLocation(respawnLocation);
 	SetYaw(0);
 
 	StatComponent* sc = GetComponent<StatComponent>();

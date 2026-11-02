@@ -33,6 +33,7 @@ public:
 	void Handle(const Protocol::GC_MOVE& pkt);
 	void Handle(const Protocol::GC_ATTACK& pkt);
 	void Handle(const Protocol::GC_DAMAGE& pkt);
+	void Handle(const Protocol::GC_REVIVE& pkt);
 	
 	
 public:

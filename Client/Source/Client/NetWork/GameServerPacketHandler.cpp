@@ -59,6 +59,16 @@ bool Handle_GC_DESPAWN(PacketSessionRef& session, Protocol::GC_DESPAWN& pkt)
 	return true;
 }
 
+bool Handle_GC_REVIVE(PacketSessionRef& session, Protocol::GC_REVIVE& pkt)
+{
+	UObjectHandler* Handler = GetObjectHandler(session);
+
+	if (Handler)
+		Handler->Handle(pkt);
+	
+	return true;
+}
+
 bool Handle_GC_MOVE(PacketSessionRef& session, Protocol::GC_MOVE& pkt)
 {
 	UObjectHandler* Handler = GetObjectHandler(session);

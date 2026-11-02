@@ -43,7 +43,7 @@ public:
 	T* GetComponent();
 
 public:
-	virtual void Respawn();
+	virtual void Respawn(const Vector3& respawnLocation);
 
 public:
 	void MakePkt(OUT Protocol::ObjectData& objectData);

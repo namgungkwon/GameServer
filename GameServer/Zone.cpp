@@ -12,7 +12,6 @@
 
 void Zone::Update(uint64 now, uint64 deltaTime)
 {
-	_movingEntity.clear();
 	MovementSystem::Update(shared_from_this(), now, deltaTime, OUT _movingEntity);
 	AISystem::Update(shared_from_this(), now, deltaTime, OUT _movingEntity);
 }

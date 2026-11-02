@@ -257,6 +257,7 @@
     <None Include="..\Common\Protobuf\Struct.proto" />
     <None Include="..\GameData\MonsterData.json" />
     <None Include="..\GameData\PlayerData.json" />
+    <None Include="..\GameData\RespawnPoint.json" />
     <None Include="..\GameData\SkillData.json" />
     <None Include="..\GameData\SpawnData.json" />
     <None Include="server.json" />

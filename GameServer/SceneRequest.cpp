@@ -16,9 +16,8 @@
 
 void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 {
-	Protocol::ObjectPosData posData = pkt.posdata();
-	attacker->SetLocation(UtilMath::ToServerLocation(posData.location()));
-	attacker->SetYaw(posData.yaw());
+	if (attacker->GetState() == EntityState::Dead)
+		return;
 
 	GameSceneRef playerScene = attacker->GetScene();
 
@@ -28,8 +27,9 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 		return;
 	}
 
-	if (attacker->GetState() == EntityState::Dead)
-		return;
+	Protocol::ObjectPosData posData = pkt.posdata();
+	attacker->SetLocation(UtilMath::ToServerLocation(posData.location()));
+	attacker->SetYaw(posData.yaw());
 
 	CombatComponent* aCombat = attacker->GetComponent<CombatComponent>();
 	SkillComponent* aSkill = attacker->GetComponent<SkillComponent>();
@@ -106,5 +106,46 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 			targetScene->DoAsync([fn, targetScene, targetZone, event, attacker, finalTarget]()
 				{ fn(targetScene, targetZone, event, attacker, finalTarget); });
 		}
+	}
+}
+
+void ReviveRequest::Execute(GameSceneRef scene, uint64 currentTick)
+{
+	GameSceneRef targetScene = target->GetScene();
+	ZoneRef targetZone = target->GetZone();
+
+	if (targetScene == nullptr || targetZone == nullptr)
+		return;
+
+	if (targetScene != scene)
+	{
+		targetScene->DoAsync(&GameScene::Request, shared_from_this());
+		return;
+	}
+
+	Protocol::RespawnOption option = pkt.option();
+
+	Vector3 currentLocation = target->GetLocation();
+	Vector3 respawnLocation;
+	
+	switch (option)
+	{
+	case Protocol::RESPAWNOPTION_CURPOS:
+		respawnLocation = currentLocation;
+		break;
+	case Protocol::RESPAWNOPTION_SPAWNPOINT:
+		respawnLocation = GGameData->GetSpawnPoint(currentLocation)->spawnLocation;
+		break;
+	}
+
+	targetZone->GetMovingEntity().push_back(target);
+	target->Respawn(respawnLocation);
+
+	{
+		Protocol::GC_REVIVE res;
+		target->MakePkt(*res.mutable_posdata());
+		target->MakePkt(*res.mutable_statdata());
+		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+		targetScene->BroadCastAdjacentZone(targetZone, sendBuffer);
 	}
 }

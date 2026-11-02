@@ -23,3 +23,16 @@ private:
 	Protocol::CG_ATTACK pkt;
 	EntityRef attacker;
 };
+
+struct ReviveRequest : public SceneRequest
+{
+public:
+	ReviveRequest(Protocol::CG_REVIVE pkt, PlayerRef target) : pkt(pkt), target(target) {};
+
+public:
+	virtual void Execute(GameSceneRef scene, uint64 currentTick);
+	
+private:
+	Protocol::CG_REVIVE pkt;
+	PlayerRef target;
+};

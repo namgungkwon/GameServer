@@ -53,8 +53,9 @@ void AMyPlayer::Tick(float DeltaTime)
 
 	attackdelay -= DeltaTime;
 	movedelay -= DeltaTime;
-	
-	MoveTick(DeltaTime);
+
+	if (abp_isDead == false)
+		MoveTick(DeltaTime);
 }
 
 void AMyPlayer::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -150,6 +151,11 @@ void AMyPlayer::SpawnPkt(const Protocol::ObjectData& Pkt)
 	SpawnPktReceived();
 }
 
+void AMyPlayer::RevivePktReceived(const Protocol::GC_REVIVE& pkt)
+{
+	Super::RevivePktReceived(pkt);
+}
+
 void AMyPlayer::SendMovePkt()
 {
 	Protocol::CG_MOVE Pkt;
@@ -178,6 +184,19 @@ void AMyPlayer::SendMovePkt()
 	SEND_PACKET(Pkt);
 	LastSentInput = CurrentInput;
 	MovePacketTimer = CONST_MOVEPKT_DELAY;
+}
+
+void AMyPlayer::SendRevivePkt(int32 respawnOption)
+{
+	Protocol::CG_REVIVE Pkt;
+	Pkt.set_objectid(GetObjectId());
+
+	if (respawnOption == 1)
+		Pkt.set_option(Protocol::RESPAWNOPTION_SPAWNPOINT);
+	else
+		Pkt.set_option(Protocol::RESPAWNOPTION_CURPOS);
+
+	SEND_PACKET(Pkt);
 }
 
 void AMyPlayer::SendAttackPkt(TArray<AGameObject*> targets, int32 skillId)
@@ -216,7 +235,7 @@ void AMyPlayer::Move(const FInputActionValue& Value)
 		abp_isMoving = true;
 	}
 
-	if (LastSentInput != CurrentInput)
+	if (LastSentInput != CurrentInput && abp_isDead == false)
 	{
 		SendMovePkt();
 	}

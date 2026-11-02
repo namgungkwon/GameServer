@@ -253,5 +253,8 @@
     <None Include="..\GameData\MonsterData.json">
       <Filter>Data\json</Filter>
     </None>
+    <None Include="..\GameData\RespawnPoint.json">
+      <Filter>Data\json</Filter>
+    </None>
   </ItemGroup>
 </Project>

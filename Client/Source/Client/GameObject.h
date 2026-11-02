@@ -24,7 +24,8 @@ public:
 	virtual void SpawnPkt(const Protocol::ObjectData& Pkt);
 	virtual void MovePkt(const Protocol::ObjectPosData& Pkt);
 	virtual void SkillPkt(uint64 skillId) {};
-	virtual void DespawnPkt() {};
+	virtual void DespawnPkt() { Despawn();};
+	virtual void RevivePktReceived(const Protocol::GC_REVIVE& pkt);
 	
 	virtual void ApplyServerPosition(float x, float y) {};
 	virtual void SetHP(float currentHp, float currentMp) {};
@@ -33,6 +34,8 @@ public:
 	void HpChanged();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void Dead();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void Despawn();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

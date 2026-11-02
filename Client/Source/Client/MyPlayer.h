@@ -31,8 +31,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SpawnPktReceived();
 
+	virtual void RevivePktReceived(const Protocol::GC_REVIVE& pkt) override;
+
 public:
 	void SendMovePkt();
+	UFUNCTION(BlueprintCallable)
+	void SendRevivePkt(int32 respawnOption);
 
 	UFUNCTION(BlueprintCallable)
 	void SendAttackPkt(TArray<AGameObject*> targets, int32 skillId);

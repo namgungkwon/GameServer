@@ -23,16 +23,21 @@ private:
 	bool LoadSkillData();
 	bool LoadMonsterSpawnData();
 	bool LoadMonsterData();
+	bool LoadSpawnPointData();
 
 public:
 	PlayerData* GetPlayerData(int32 level);
 	SkillData* GetSkillData(uint64 skillId, int32 skillLevel);
-	Vector<SpawnData>& GetSpawnData() {	return _spawnData; }
+	Vector<MonsterSpawnData>& GetMonsterSpawnData() {	return _monsterSpawnData; }
 	MonsterData* GetMonsterData(uint64 monsterId);
+
+public:
+	SpawnPointData* GetSpawnPoint(const Vector3& currentLocation);
 
 private:
 	HashMap<int32, PlayerData> _playerData; // Level, Data
 	HashMap<std::pair<int32, int32>, SkillData> _skillData;
 	HashMap<int32, MonsterData> _monsterData;
-	Vector<SpawnData> _spawnData;
+	Vector<MonsterSpawnData> _monsterSpawnData;
+	Vector<SpawnPointData> _spawnPointData;
 };

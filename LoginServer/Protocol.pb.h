@@ -71,6 +71,10 @@ class CG_MOVE;
 struct CG_MOVEDefaultTypeInternal;
 extern CG_MOVEDefaultTypeInternal _CG_MOVE_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull CG_MOVE_class_data_;
+class CG_REVIVE;
+struct CG_REVIVEDefaultTypeInternal;
+extern CG_REVIVEDefaultTypeInternal _CG_REVIVE_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull CG_REVIVE_class_data_;
 class GC_ATTACK;
 struct GC_ATTACKDefaultTypeInternal;
 extern GC_ATTACKDefaultTypeInternal _GC_ATTACK_default_instance_;
@@ -91,6 +95,10 @@ class GC_MOVE;
 struct GC_MOVEDefaultTypeInternal;
 extern GC_MOVEDefaultTypeInternal _GC_MOVE_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull GC_MOVE_class_data_;
+class GC_REVIVE;
+struct GC_REVIVEDefaultTypeInternal;
+extern GC_REVIVEDefaultTypeInternal _GC_REVIVE_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull GC_REVIVE_class_data_;
 class GC_SPAWN;
 struct GC_SPAWNDefaultTypeInternal;
 extern GC_SPAWNDefaultTypeInternal _GC_SPAWN_default_instance_;
@@ -362,7 +370,7 @@ class GC_DAMAGE final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_DAMAGE*>(
         &_GC_DAMAGE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(GC_DAMAGE& a, GC_DAMAGE& b) { a.Swap(&b); }
   inline void Swap(GC_DAMAGE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -519,6 +527,208 @@ class GC_DAMAGE final : public ::google::protobuf::Message
 };
 
 extern const ::google::protobuf::internal::ClassDataFull GC_DAMAGE_class_data_;
+// -------------------------------------------------------------------
+
+class CG_REVIVE final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:Protocol.CG_REVIVE) */ {
+ public:
+  inline CG_REVIVE() : CG_REVIVE(nullptr) {}
+  ~CG_REVIVE() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CG_REVIVE* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CG_REVIVE));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CG_REVIVE(::google::protobuf::internal::ConstantInitialized);
+
+  inline CG_REVIVE(const CG_REVIVE& from) : CG_REVIVE(nullptr, from) {}
+  inline CG_REVIVE(CG_REVIVE&& from) noexcept
+      : CG_REVIVE(nullptr, ::std::move(from)) {}
+  inline CG_REVIVE& operator=(const CG_REVIVE& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CG_REVIVE& operator=(CG_REVIVE&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CG_REVIVE& default_instance() {
+    return *reinterpret_cast<const CG_REVIVE*>(
+        &_CG_REVIVE_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 5;
+  friend void swap(CG_REVIVE& a, CG_REVIVE& b) { a.Swap(&b); }
+  inline void Swap(CG_REVIVE* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CG_REVIVE* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CG_REVIVE* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CG_REVIVE>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CG_REVIVE& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CG_REVIVE& from) { CG_REVIVE::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CG_REVIVE* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "Protocol.CG_REVIVE"; }
+
+  explicit CG_REVIVE(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  CG_REVIVE(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const CG_REVIVE& from);
+  CG_REVIVE(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, CG_REVIVE&& from) noexcept
+      : CG_REVIVE(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kObjectIdFieldNumber = 1,
+    kOptionFieldNumber = 2,
+  };
+  // uint64 objectId = 1;
+  void clear_objectid() ;
+  ::uint64_t objectid() const;
+  void set_objectid(::uint64_t value);
+
+  private:
+  ::uint64_t _internal_objectid() const;
+  void _internal_set_objectid(::uint64_t value);
+
+  public:
+  // .Protocol.RespawnOption option = 2;
+  void clear_option() ;
+  ::Protocol::RespawnOption option() const;
+  void set_option(::Protocol::RespawnOption value);
+
+  private:
+  ::Protocol::RespawnOption _internal_option() const;
+  void _internal_set_option(::Protocol::RespawnOption value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:Protocol.CG_REVIVE)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<1, 2,
+                                   0, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const CG_REVIVE& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::uint64_t objectid_;
+    int option_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull CG_REVIVE_class_data_;
 // -------------------------------------------------------------------
 
 class CG_LEAVE_GAME final : public ::google::protobuf::Message
@@ -901,6 +1111,218 @@ class CG_ENTER_GAME final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull CG_ENTER_GAME_class_data_;
 // -------------------------------------------------------------------
 
+class GC_REVIVE final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:Protocol.GC_REVIVE) */ {
+ public:
+  inline GC_REVIVE() : GC_REVIVE(nullptr) {}
+  ~GC_REVIVE() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(GC_REVIVE* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(GC_REVIVE));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR GC_REVIVE(::google::protobuf::internal::ConstantInitialized);
+
+  inline GC_REVIVE(const GC_REVIVE& from) : GC_REVIVE(nullptr, from) {}
+  inline GC_REVIVE(GC_REVIVE&& from) noexcept
+      : GC_REVIVE(nullptr, ::std::move(from)) {}
+  inline GC_REVIVE& operator=(const GC_REVIVE& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GC_REVIVE& operator=(GC_REVIVE&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GC_REVIVE& default_instance() {
+    return *reinterpret_cast<const GC_REVIVE*>(
+        &_GC_REVIVE_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 6;
+  friend void swap(GC_REVIVE& a, GC_REVIVE& b) { a.Swap(&b); }
+  inline void Swap(GC_REVIVE* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GC_REVIVE* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GC_REVIVE* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<GC_REVIVE>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const GC_REVIVE& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const GC_REVIVE& from) { GC_REVIVE::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(GC_REVIVE* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "Protocol.GC_REVIVE"; }
+
+  explicit GC_REVIVE(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  GC_REVIVE(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const GC_REVIVE& from);
+  GC_REVIVE(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, GC_REVIVE&& from) noexcept
+      : GC_REVIVE(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kPosDataFieldNumber = 1,
+    kStatDataFieldNumber = 2,
+  };
+  // .Protocol.ObjectPosData posData = 1;
+  bool has_posdata() const;
+  void clear_posdata() ;
+  const ::Protocol::ObjectPosData& posdata() const;
+  [[nodiscard]] ::Protocol::ObjectPosData* PROTOBUF_NULLABLE release_posdata();
+  ::Protocol::ObjectPosData* PROTOBUF_NONNULL mutable_posdata();
+  void set_allocated_posdata(::Protocol::ObjectPosData* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_posdata(::Protocol::ObjectPosData* PROTOBUF_NULLABLE value);
+  ::Protocol::ObjectPosData* PROTOBUF_NULLABLE unsafe_arena_release_posdata();
+
+  private:
+  const ::Protocol::ObjectPosData& _internal_posdata() const;
+  ::Protocol::ObjectPosData* PROTOBUF_NONNULL _internal_mutable_posdata();
+
+  public:
+  // .Protocol.ObjectStatData statData = 2;
+  bool has_statdata() const;
+  void clear_statdata() ;
+  const ::Protocol::ObjectStatData& statdata() const;
+  [[nodiscard]] ::Protocol::ObjectStatData* PROTOBUF_NULLABLE release_statdata();
+  ::Protocol::ObjectStatData* PROTOBUF_NONNULL mutable_statdata();
+  void set_allocated_statdata(::Protocol::ObjectStatData* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_statdata(::Protocol::ObjectStatData* PROTOBUF_NULLABLE value);
+  ::Protocol::ObjectStatData* PROTOBUF_NULLABLE unsafe_arena_release_statdata();
+
+  private:
+  const ::Protocol::ObjectStatData& _internal_statdata() const;
+  ::Protocol::ObjectStatData* PROTOBUF_NONNULL _internal_mutable_statdata();
+
+  public:
+  // @@protoc_insertion_point(class_scope:Protocol.GC_REVIVE)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<1, 2,
+                                   2, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const GC_REVIVE& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::Protocol::ObjectPosData* PROTOBUF_NULLABLE posdata_;
+    ::Protocol::ObjectStatData* PROTOBUF_NULLABLE statdata_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull GC_REVIVE_class_data_;
+// -------------------------------------------------------------------
+
 class GC_MOVE final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:Protocol.GC_MOVE) */ {
  public:
@@ -956,7 +1378,7 @@ class GC_MOVE final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_MOVE*>(
         &_GC_MOVE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 8;
   friend void swap(GC_MOVE& a, GC_MOVE& b) { a.Swap(&b); }
   inline void Swap(GC_MOVE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1153,7 +1575,7 @@ class GC_ATTACK final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_ATTACK*>(
         &_GC_ATTACK_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 10;
   friend void swap(GC_ATTACK& a, GC_ATTACK& b) { a.Swap(&b); }
   inline void Swap(GC_ATTACK* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1360,7 +1782,7 @@ class CG_MOVE final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_MOVE*>(
         &_CG_MOVE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 5;
+  static constexpr int kIndexInFileMessages = 7;
   friend void swap(CG_MOVE& a, CG_MOVE& b) { a.Swap(&b); }
   inline void Swap(CG_MOVE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1555,7 +1977,7 @@ class CG_ATTACK final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_ATTACK*>(
         &_CG_ATTACK_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 7;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(CG_ATTACK& a, CG_ATTACK& b) { a.Swap(&b); }
   inline void Swap(CG_ATTACK* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2429,6 +2851,250 @@ inline ::google::protobuf::RepeatedField<::uint64_t>* PROTOBUF_NONNULL
 GC_DESPAWN::_internal_mutable_objectid() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.objectid_;
+}
+
+// -------------------------------------------------------------------
+
+// CG_REVIVE
+
+// uint64 objectId = 1;
+inline void CG_REVIVE::clear_objectid() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.objectid_ = ::uint64_t{0u};
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000001U);
+}
+inline ::uint64_t CG_REVIVE::objectid() const {
+  // @@protoc_insertion_point(field_get:Protocol.CG_REVIVE.objectId)
+  return _internal_objectid();
+}
+inline void CG_REVIVE::set_objectid(::uint64_t value) {
+  _internal_set_objectid(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  // @@protoc_insertion_point(field_set:Protocol.CG_REVIVE.objectId)
+}
+inline ::uint64_t CG_REVIVE::_internal_objectid() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.objectid_;
+}
+inline void CG_REVIVE::_internal_set_objectid(::uint64_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.objectid_ = value;
+}
+
+// .Protocol.RespawnOption option = 2;
+inline void CG_REVIVE::clear_option() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.option_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline ::Protocol::RespawnOption CG_REVIVE::option() const {
+  // @@protoc_insertion_point(field_get:Protocol.CG_REVIVE.option)
+  return _internal_option();
+}
+inline void CG_REVIVE::set_option(::Protocol::RespawnOption value) {
+  _internal_set_option(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_set:Protocol.CG_REVIVE.option)
+}
+inline ::Protocol::RespawnOption CG_REVIVE::_internal_option() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::Protocol::RespawnOption>(_impl_.option_);
+}
+inline void CG_REVIVE::_internal_set_option(::Protocol::RespawnOption value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.option_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GC_REVIVE
+
+// .Protocol.ObjectPosData posData = 1;
+inline bool GC_REVIVE::has_posdata() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
+  PROTOBUF_ASSUME(!value || _impl_.posdata_ != nullptr);
+  return value;
+}
+inline const ::Protocol::ObjectPosData& GC_REVIVE::_internal_posdata() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::Protocol::ObjectPosData* p = _impl_.posdata_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::ObjectPosData&>(::Protocol::_ObjectPosData_default_instance_);
+}
+inline const ::Protocol::ObjectPosData& GC_REVIVE::posdata() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:Protocol.GC_REVIVE.posData)
+  return _internal_posdata();
+}
+inline void GC_REVIVE::unsafe_arena_set_allocated_posdata(
+    ::Protocol::ObjectPosData* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.posdata_);
+  }
+  _impl_.posdata_ = reinterpret_cast<::Protocol::ObjectPosData*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.GC_REVIVE.posData)
+}
+inline ::Protocol::ObjectPosData* PROTOBUF_NULLABLE GC_REVIVE::release_posdata() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::Protocol::ObjectPosData* released = _impl_.posdata_;
+  _impl_.posdata_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::Protocol::ObjectPosData* PROTOBUF_NULLABLE GC_REVIVE::unsafe_arena_release_posdata() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:Protocol.GC_REVIVE.posData)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::Protocol::ObjectPosData* temp = _impl_.posdata_;
+  _impl_.posdata_ = nullptr;
+  return temp;
+}
+inline ::Protocol::ObjectPosData* PROTOBUF_NONNULL GC_REVIVE::_internal_mutable_posdata() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.posdata_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::Protocol::ObjectPosData>(GetArena());
+    _impl_.posdata_ = reinterpret_cast<::Protocol::ObjectPosData*>(p);
+  }
+  return _impl_.posdata_;
+}
+inline ::Protocol::ObjectPosData* PROTOBUF_NONNULL GC_REVIVE::mutable_posdata()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::Protocol::ObjectPosData* _msg = _internal_mutable_posdata();
+  // @@protoc_insertion_point(field_mutable:Protocol.GC_REVIVE.posData)
+  return _msg;
+}
+inline void GC_REVIVE::set_allocated_posdata(::Protocol::ObjectPosData* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.posdata_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::Message*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+
+  _impl_.posdata_ = reinterpret_cast<::Protocol::ObjectPosData*>(value);
+  // @@protoc_insertion_point(field_set_allocated:Protocol.GC_REVIVE.posData)
+}
+
+// .Protocol.ObjectStatData statData = 2;
+inline bool GC_REVIVE::has_statdata() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  PROTOBUF_ASSUME(!value || _impl_.statdata_ != nullptr);
+  return value;
+}
+inline const ::Protocol::ObjectStatData& GC_REVIVE::_internal_statdata() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::Protocol::ObjectStatData* p = _impl_.statdata_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::ObjectStatData&>(::Protocol::_ObjectStatData_default_instance_);
+}
+inline const ::Protocol::ObjectStatData& GC_REVIVE::statdata() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:Protocol.GC_REVIVE.statData)
+  return _internal_statdata();
+}
+inline void GC_REVIVE::unsafe_arena_set_allocated_statdata(
+    ::Protocol::ObjectStatData* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.statdata_);
+  }
+  _impl_.statdata_ = reinterpret_cast<::Protocol::ObjectStatData*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.GC_REVIVE.statData)
+}
+inline ::Protocol::ObjectStatData* PROTOBUF_NULLABLE GC_REVIVE::release_statdata() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::Protocol::ObjectStatData* released = _impl_.statdata_;
+  _impl_.statdata_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::Protocol::ObjectStatData* PROTOBUF_NULLABLE GC_REVIVE::unsafe_arena_release_statdata() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:Protocol.GC_REVIVE.statData)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::Protocol::ObjectStatData* temp = _impl_.statdata_;
+  _impl_.statdata_ = nullptr;
+  return temp;
+}
+inline ::Protocol::ObjectStatData* PROTOBUF_NONNULL GC_REVIVE::_internal_mutable_statdata() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.statdata_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::Protocol::ObjectStatData>(GetArena());
+    _impl_.statdata_ = reinterpret_cast<::Protocol::ObjectStatData*>(p);
+  }
+  return _impl_.statdata_;
+}
+inline ::Protocol::ObjectStatData* PROTOBUF_NONNULL GC_REVIVE::mutable_statdata()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::Protocol::ObjectStatData* _msg = _internal_mutable_statdata();
+  // @@protoc_insertion_point(field_mutable:Protocol.GC_REVIVE.statData)
+  return _msg;
+}
+inline void GC_REVIVE::set_allocated_statdata(::Protocol::ObjectStatData* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.statdata_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::Message*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+
+  _impl_.statdata_ = reinterpret_cast<::Protocol::ObjectStatData*>(value);
+  // @@protoc_insertion_point(field_set_allocated:Protocol.GC_REVIVE.statData)
 }
 
 // -------------------------------------------------------------------

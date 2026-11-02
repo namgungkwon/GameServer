@@ -80,7 +80,7 @@ struct MonsterData
     uint64  attackDelayMs = 0.f;
 };
 
-struct SpawnData
+struct MonsterSpawnData
 {
     int32 monsterId = 0;
     Vector3 location = Vector3();
@@ -98,4 +98,10 @@ struct SkillData
     float attackAngle = 90.0f;
     uint64 cooldownMs = 1000;
     uint64 moveDelayMs = 500;
+};
+
+
+struct SpawnPointData
+{
+    Vector3 spawnLocation = Vector3{ 50000.f, 50000.f, 0.f };
 };

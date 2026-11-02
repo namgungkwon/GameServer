@@ -53,12 +53,10 @@ extern const ::google::protobuf::internal::DescriptorTable descriptor_table_Enum
 namespace Protocol {
 enum Direction : int;
 extern const uint32_t Direction_internal_data_[];
-enum MonsterState : int;
-extern const uint32_t MonsterState_internal_data_[];
 enum ObjectCategory : int;
 extern const uint32_t ObjectCategory_internal_data_[];
-enum ServerPort : int;
-extern const uint32_t ServerPort_internal_data_[];
+enum RespawnOption : int;
+extern const uint32_t RespawnOption_internal_data_[];
 enum ServerStatus : int;
 extern const uint32_t ServerStatus_internal_data_[];
 enum ServerType : int;
@@ -70,14 +68,11 @@ template <>
 internal::EnumTraitsT<::Protocol::Direction_internal_data_>
     internal::EnumTraitsImpl::value<::Protocol::Direction>;
 template <>
-internal::EnumTraitsT<::Protocol::MonsterState_internal_data_>
-    internal::EnumTraitsImpl::value<::Protocol::MonsterState>;
-template <>
 internal::EnumTraitsT<::Protocol::ObjectCategory_internal_data_>
     internal::EnumTraitsImpl::value<::Protocol::ObjectCategory>;
 template <>
-internal::EnumTraitsT<::Protocol::ServerPort_internal_data_>
-    internal::EnumTraitsImpl::value<::Protocol::ServerPort>;
+internal::EnumTraitsT<::Protocol::RespawnOption_internal_data_>
+    internal::EnumTraitsImpl::value<::Protocol::RespawnOption>;
 template <>
 internal::EnumTraitsT<::Protocol::ServerStatus_internal_data_>
     internal::EnumTraitsImpl::value<::Protocol::ServerStatus>;
@@ -165,40 +160,6 @@ inline bool ServerStatus_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ServerStatus>(ServerStatus_descriptor(), name,
                                            value);
 }
-enum ServerPort : int {
-  SERVER_PORT_INVALID_PORT = 0,
-  SERVER_PORT_LOGIN_SERVER_PORT_FOR_CLIENT = 8001,
-  SERVER_PORT_GAME_SERVER_PORT_FOR_CLIENT = 8002,
-  SERVER_PORT_CENTER_SERVER_PORT_FOR_GAMESERVER = 8003,
-  SERVER_PORT_CENTER_SERVER_PORT_FOR_LOGINSERVER = 8004,
-  ServerPort_INT_MIN_SENTINEL_DO_NOT_USE_ =
-      ::std::numeric_limits<::int32_t>::min(),
-  ServerPort_INT_MAX_SENTINEL_DO_NOT_USE_ =
-      ::std::numeric_limits<::int32_t>::max(),
-};
-
-extern const uint32_t ServerPort_internal_data_[];
-inline constexpr ServerPort ServerPort_MIN =
-    static_cast<ServerPort>(0);
-inline constexpr ServerPort ServerPort_MAX =
-    static_cast<ServerPort>(8004);
-inline bool ServerPort_IsValid(int value) {
-  return ::google::protobuf::internal::ValidateEnum(value, ServerPort_internal_data_);
-}
-inline constexpr int ServerPort_ARRAYSIZE = 8004 + 1;
-const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ServerPort_descriptor();
-template <typename T>
-const ::std::string& ServerPort_Name(T value) {
-  static_assert(::std::is_same<T, ServerPort>::value ||
-                    ::std::is_integral<T>::value,
-                "Incorrect type passed to ServerPort_Name().");
-  return ::google::protobuf::internal::NameOfEnum(ServerPort_descriptor(), value);
-}
-inline bool ServerPort_Parse(
-    ::absl::string_view name, ServerPort* PROTOBUF_NONNULL value) {
-  return ::google::protobuf::internal::ParseNamedEnum<ServerPort>(ServerPort_descriptor(), name,
-                                           value);
-}
 enum ObjectCategory : int {
   OBJECT_CATEGORY_NONE = 0,
   OBJECT_CATEGORY_PLAYER = 1,
@@ -237,46 +198,6 @@ inline bool ObjectCategory_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ObjectCategory>(ObjectCategory_descriptor(), name,
                                            value);
 }
-enum MonsterState : int {
-  MONSTER_STATE_NONE = 0,
-  MONSTER_STATE_IDLE = 1,
-  MONSTER_STATE_PATROL = 2,
-  MONSTER_STATE_CHASE = 3,
-  MONSTER_STATE_ATTACK = 4,
-  MONSTER_STATE_DEAD = 5,
-  MonsterState_INT_MIN_SENTINEL_DO_NOT_USE_ =
-      ::std::numeric_limits<::int32_t>::min(),
-  MonsterState_INT_MAX_SENTINEL_DO_NOT_USE_ =
-      ::std::numeric_limits<::int32_t>::max(),
-};
-
-extern const uint32_t MonsterState_internal_data_[];
-inline constexpr MonsterState MonsterState_MIN =
-    static_cast<MonsterState>(0);
-inline constexpr MonsterState MonsterState_MAX =
-    static_cast<MonsterState>(5);
-inline bool MonsterState_IsValid(int value) {
-  return 0 <= value && value <= 5;
-}
-inline constexpr int MonsterState_ARRAYSIZE = 5 + 1;
-const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL MonsterState_descriptor();
-template <typename T>
-const ::std::string& MonsterState_Name(T value) {
-  static_assert(::std::is_same<T, MonsterState>::value ||
-                    ::std::is_integral<T>::value,
-                "Incorrect type passed to MonsterState_Name().");
-  return MonsterState_Name(static_cast<MonsterState>(value));
-}
-template <>
-inline const ::std::string& MonsterState_Name(MonsterState value) {
-  return ::google::protobuf::internal::NameOfDenseEnum<MonsterState_descriptor, 0, 5>(
-      static_cast<int>(value));
-}
-inline bool MonsterState_Parse(
-    ::absl::string_view name, MonsterState* PROTOBUF_NONNULL value) {
-  return ::google::protobuf::internal::ParseNamedEnum<MonsterState>(MonsterState_descriptor(), name,
-                                           value);
-}
 enum Direction : int {
   DIRECTION_N = 0,
   DIRECTION_L = 1,
@@ -312,6 +233,42 @@ inline const ::std::string& Direction_Name(Direction value) {
 inline bool Direction_Parse(
     ::absl::string_view name, Direction* PROTOBUF_NONNULL value) {
   return ::google::protobuf::internal::ParseNamedEnum<Direction>(Direction_descriptor(), name,
+                                           value);
+}
+enum RespawnOption : int {
+  RESPAWNOPTION_CURPOS = 0,
+  RESPAWNOPTION_SPAWNPOINT = 1,
+  RespawnOption_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  RespawnOption_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t RespawnOption_internal_data_[];
+inline constexpr RespawnOption RespawnOption_MIN =
+    static_cast<RespawnOption>(0);
+inline constexpr RespawnOption RespawnOption_MAX =
+    static_cast<RespawnOption>(1);
+inline bool RespawnOption_IsValid(int value) {
+  return 0 <= value && value <= 1;
+}
+inline constexpr int RespawnOption_ARRAYSIZE = 1 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL RespawnOption_descriptor();
+template <typename T>
+const ::std::string& RespawnOption_Name(T value) {
+  static_assert(::std::is_same<T, RespawnOption>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to RespawnOption_Name().");
+  return RespawnOption_Name(static_cast<RespawnOption>(value));
+}
+template <>
+inline const ::std::string& RespawnOption_Name(RespawnOption value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<RespawnOption_descriptor, 0, 1>(
+      static_cast<int>(value));
+}
+inline bool RespawnOption_Parse(
+    ::absl::string_view name, RespawnOption* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<RespawnOption>(RespawnOption_descriptor(), name,
                                            value);
 }
 
@@ -355,28 +312,22 @@ inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::Serv
   return ::Protocol::ServerStatus_descriptor();
 }
 template <>
-struct is_proto_enum<::Protocol::ServerPort> : std::true_type {};
-template <>
-inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::ServerPort>() {
-  return ::Protocol::ServerPort_descriptor();
-}
-template <>
 struct is_proto_enum<::Protocol::ObjectCategory> : std::true_type {};
 template <>
 inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::ObjectCategory>() {
   return ::Protocol::ObjectCategory_descriptor();
 }
 template <>
-struct is_proto_enum<::Protocol::MonsterState> : std::true_type {};
-template <>
-inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::MonsterState>() {
-  return ::Protocol::MonsterState_descriptor();
-}
-template <>
 struct is_proto_enum<::Protocol::Direction> : std::true_type {};
 template <>
 inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::Direction>() {
   return ::Protocol::Direction_descriptor();
+}
+template <>
+struct is_proto_enum<::Protocol::RespawnOption> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::RespawnOption>() {
+  return ::Protocol::RespawnOption_descriptor();
 }
 
 }  // namespace protobuf

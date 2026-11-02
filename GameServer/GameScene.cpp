@@ -52,6 +52,8 @@ void GameScene::ProcessMovingEntity()
 			BroadcastMoveResult(result->leaveZones, entity, VISION_TYPE::DESPAWN);
 			BroadcastMoveResult(result->keepZones, entity, VISION_TYPE::MOVE);
 		}
+
+		movingEntityList.clear();
 	}
 }
 
