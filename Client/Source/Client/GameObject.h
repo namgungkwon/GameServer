@@ -24,12 +24,15 @@ public:
 	virtual void SpawnPkt(const Protocol::ObjectData& Pkt);
 	virtual void MovePkt(const Protocol::ObjectPosData& Pkt);
 	virtual void SkillPkt(uint64 skillId) {};
+	virtual void DespawnPkt() {};
 	
 	virtual void ApplyServerPosition(float x, float y) {};
 	virtual void SetHP(float currentHp, float currentMp) {};
-	virtual void Damaged(uint64 damage);
+	virtual void Damaged(uint64 damage, bool isDead);
 	UFUNCTION(BlueprintImplementableEvent)
 	void HpChanged();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void Dead();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -38,6 +41,8 @@ public:
 	bool abp_isAttack = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector abp_MoveDirection;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool abp_isDead = false;
 
 public:
 	uint64 ObjectId = 0;

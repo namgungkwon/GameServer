@@ -177,7 +177,7 @@ void AMyPlayer::SendMovePkt()
 	
 	SEND_PACKET(Pkt);
 	LastSentInput = CurrentInput;
-	MovePacketTimer = MOVEPKT_DELAY;
+	MovePacketTimer = CONST_MOVEPKT_DELAY;
 }
 
 void AMyPlayer::SendAttackPkt(TArray<AGameObject*> targets, int32 skillId)

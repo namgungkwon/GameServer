@@ -84,7 +84,7 @@ void GameScene::HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef new
 EntityRef GameScene::FindNearestPlayer(Vector<ZoneRef> zones, Vector3 location, float searchRange)
 {
 	float searchRangeSq = searchRange * searchRange;
-	EntityRef target;
+	EntityRef target = nullptr;
 	float minRangeSq = 1000000000.f;
 	for (ZoneRef& zone : zones)
 	{

@@ -30,6 +30,17 @@ void UObjectHandler::Deinitialize()
 	Super::Deinitialize();
 }
 
+void UObjectHandler::Destroy(AGameObject* gameObject)
+{
+	if (SpawnedObjects.Find(gameObject->GetObjectId()) != nullptr)
+	{
+		AGameObject* go = SpawnedObjects[gameObject->GetObjectId()];
+		SpawnedObjects.Remove(gameObject->GetObjectId());
+		go->Destroy();
+	}
+	
+}
+
 void UObjectHandler::Handle(const Protocol::GC_ENTER_GAME& pkt)
 {
 	uint64 templateId = pkt.object().summary().templateid();
@@ -101,8 +112,7 @@ void UObjectHandler::Handle(const Protocol::GC_DESPAWN& pkt)
 	{
 		if (SpawnedObjects.Find(id) != nullptr)
 		{
-			SpawnedObjects[id]->Destroy();
-			SpawnedObjects.Remove(id);
+			SpawnedObjects[id]->DespawnPkt();
 		}	
 	}
 }
@@ -134,22 +144,7 @@ void UObjectHandler::Handle(const Protocol::GC_DAMAGE& pkt)
 {
 	if (SpawnedObjects.Find(pkt.objectid()) != nullptr)
 	{
-		SpawnedObjects[pkt.objectid()]->Damaged(pkt.damage());
-	}
-}
-
-void UObjectHandler::Despawn(uint64 ObjectId)
-{
-	if (MyCharacter)
-	{
-		if (MyCharacter->GetObjectId() == ObjectId)
-			return;
-	}
-	
-	if (TObjectPtr<AGameObject>* Object = SpawnedObjects.Find(ObjectId))
-	{
-		(*Object)->Destroy();
-		SpawnedObjects.Remove(ObjectId);
+		SpawnedObjects[pkt.objectid()]->Damaged(pkt.damage(), pkt.isdead());
 	}
 }
 

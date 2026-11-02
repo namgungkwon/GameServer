@@ -48,17 +48,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector CurrentInput;
 	FVector LastSentInput;
-	const float MOVEPKT_DELAY = 0.2f;
-	float MovePacketTimer = MOVEPKT_DELAY;
+	const float CONST_MOVEPKT_DELAY = 0.2f;
+	float MovePacketTimer = CONST_MOVEPKT_DELAY;
 	float SnapThreshold = moveSpeed * 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MOVE_DELAY = 0.5f;
+	float CONST_MOVE_DELAY = 0.5f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float movedelay = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ATTACK_DELAY = 0.5f;
+	float CONST_ATTACK_DELAY = 0.5f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float attackdelay = 0.f;
 

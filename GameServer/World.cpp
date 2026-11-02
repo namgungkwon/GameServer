@@ -232,9 +232,12 @@ void World::SpawnMonster()
         if (monsterData == nullptr)
             return;
 
-        MonsterRef monster = MakeShared<Monster>();
-        monster->Init(spawnData, *monsterData);
-        EnterEntity(monster);
+        for (size_t i = 0; i < spawnData.spawnCount; ++i)
+        {
+            MonsterRef monster = MakeShared<Monster>();
+            monster->Init(spawnData, *monsterData);
+            EnterEntity(monster);
+        }
     }
 }
 

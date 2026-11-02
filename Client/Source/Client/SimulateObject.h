@@ -20,6 +20,7 @@ public:
 public:
 	virtual void MovePkt(const Protocol::ObjectPosData& Pkt) override;
 	virtual void SkillPkt(uint64 skillId) override;
+	virtual void DespawnPkt() override;
 
 public:
 	void SimulateMovement(float DeltaTime);

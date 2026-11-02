@@ -46,3 +46,14 @@ void ASimulateObject::SkillPkt(uint64 skillId)
 	AGameObject::SkillPkt(skillId);
 	abp_isAttack = true;
 }
+
+void ASimulateObject::DespawnPkt()
+{
+	Super::DespawnPkt();
+
+	if (abp_isDead)
+		return;
+
+	abp_isDead = true;
+	Dead();
+}

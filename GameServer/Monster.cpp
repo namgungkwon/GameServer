@@ -96,6 +96,7 @@ void Monster::Update(uint64 nowMs, uint64 deltaTime)
 
 void Monster::UpdateIdle(uint64 nowMs, uint64 deltaTime)
 {
+	_target.reset();
 	FindPlayer(nowMs);
 }
 
@@ -191,7 +192,6 @@ void Monster::UpdateAttack(uint64 nowMs, uint64 deltaTime)
 	
 	if (target->GetState() == EntityState::Dead)
 	{
-		target = nullptr;
 		SetState(EntityState::Idle);
 		return;
 	}

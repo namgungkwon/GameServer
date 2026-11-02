@@ -22,7 +22,10 @@ public:
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
-	
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void Destroy(AGameObject* gameObject);
 public:
 	void Handle(const Protocol::GC_ENTER_GAME& pkt);
 	void Handle(const Protocol::GC_SPAWN& pkt);

@@ -6,7 +6,7 @@
       "yLocation": 54400,
       "respawnMs": 10000,
       "spawnCount": 1,
-      "patrolRadius" : 300
+      "patrolRadius": 300
     }
   ]
 }

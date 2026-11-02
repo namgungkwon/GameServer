@@ -6,9 +6,8 @@
 // Sets default values
 AGameObject::AGameObject()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -56,16 +55,22 @@ void AGameObject::MovePkt(const Protocol::ObjectPosData& Pkt)
 	serverPos = FVector(Pkt.location().x(), Pkt.location().y(), Pkt.location().z());
 }
 
-void AGameObject::Damaged(uint64 damage)
+void AGameObject::Damaged(uint64 damage, bool isDead)
 {
-	if (damage > Hp)
-		Hp = 0;
-	else
-	{
-		Hp -= damage;
-	}
 	HpChanged();
+	
+	if (isDead)
+	{
+		if (abp_isDead == false)
+		{
+			Hp = 0;
+			abp_isDead = true;
+			Dead();
+		}
+		return;
+	}
+
+	Hp -= damage;
+	if (Hp < 0)
+		Hp = 0;
 }
-
-
-

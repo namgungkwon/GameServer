@@ -10,7 +10,7 @@
       "rewardExp": 5,
       "speed": 200,
       "searchRange": 1000,
-      "maxSearchRange": 1000,
+      "maxSearchRange": 2000,
       "attackRange": 100,
       "attackDelayMs": 500
     }
