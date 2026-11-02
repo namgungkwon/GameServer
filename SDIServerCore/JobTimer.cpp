@@ -65,7 +65,7 @@ void JobTimer::Distribute(uint64 now)
 				const uint64 nextWaitTick = _items.top().executeTick;
 				const uint64 delayTime = nextWaitTick > nowTick ? nextWaitTick - nowTick : 0;
 
-				_cv.wait_for(lock, std::chrono::milliseconds(delayTime), [this, nextWaitTick] {return GetTickCount64() >= nextWaitTick || _isStart == false; });
+				_cv.wait_for(lock, std::chrono::milliseconds(delayTime));
 			}
 		}
 	}

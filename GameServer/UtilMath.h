@@ -41,6 +41,22 @@ public:
 		return Vector3{ std::cos(yawRadian), std::sin(yawRadian), 0.f };
 	}
 
+	static inline Vector3 GetMoveDirectionFromInput(const Vector3 input, float yaw)
+	{
+		const Vector3 forward = GetForwardVectorFromYaw(yaw);
+		const Vector3 right = Vector3{ -forward.y, forward.x, 0.f };
+
+		Vector3 dir;
+		dir.x = forward.x * input.x + right.x * input.y;
+		dir.y = forward.y * input.x + right.y * input.y;
+		dir.z = 0.f;
+
+		if (dir.LengthSq() > 0.f)
+			dir = dir.Normalized();
+
+		return dir;
+	}
+
 	static Vector3 ToServerLocation(const Protocol::Vector3& from);
 	static Protocol::Vector3 ToProtoLocation(const Vector3& from);
 };

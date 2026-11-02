@@ -53,9 +53,9 @@ Vector3 MovementSystem::GetNextPos(EntityRef entity, MoveJob& job, uint64 deltaT
 	}
 
 	Vector3 location = job.location;
-	Vector3 normal = job.velocity.Normalized();
+	Vector3 Direction = UtilMath::GetMoveDirectionFromInput(job.velocity, job.yaw);
 
-	Vector3 nextLocation = location + (normal * mc->GetMoveSpeed() * deltaTime * 0.001f /* ms 변환 */);
+	Vector3 nextLocation = location + (Direction * mc->GetMoveSpeed() * deltaTime * 0.001f /* ms 변환 */);
 
 	if (GGridMap->CanGo(nextLocation) == false)
 		nextLocation = location;
