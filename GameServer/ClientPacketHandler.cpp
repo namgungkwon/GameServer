@@ -120,3 +120,22 @@ bool Handle_CG_ATTACK(PacketSessionRef& session, Protocol::CG_ATTACK& pkt)
 
     return true;
 }
+
+
+bool Handle_CG_CHAT(PacketSessionRef& session, Protocol::CG_CHAT& pkt)
+{
+    GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+    if (gameSession->IsAuthenticated() == false) return false;
+
+    PlayerRef player = gameSession->GetPlayer();
+    if (player == nullptr)
+        return false;
+
+    GameSceneRef scene = player->GetScene();
+    if (scene == nullptr)
+        return false;
+
+    scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<ChatRequest>(pkt, player)));
+
+    return true;
+}

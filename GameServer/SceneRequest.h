@@ -36,3 +36,15 @@ private:
 	Protocol::CG_REVIVE pkt;
 	PlayerRef target;
 };
+
+struct ChatRequest : public SceneRequest
+{
+public:
+	ChatRequest(Protocol::CG_CHAT pkt, PlayerRef player) : pkt(pkt), player(player) {};
+
+public:
+	virtual void Execute(GameSceneRef scene, uint64 currentTick);
+private:
+	Protocol::CG_CHAT pkt;
+	PlayerRef player;
+};

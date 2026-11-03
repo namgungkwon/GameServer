@@ -41,3 +41,9 @@ enum RespawnOption
 	RESPAWNOPTION_CURPOS = 0;
 	RESPAWNOPTION_SPAWNPOINT = 1;
 }
+
+enum ChatType
+{
+	CHATTYPE_ADJACENT = 0;
+	CHATTYPE_WORLD = 1;
+}

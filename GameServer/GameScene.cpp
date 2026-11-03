@@ -154,7 +154,7 @@ void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VI
 	}
 }
 
-void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef& sendBuffer, uint64 exceptId)
+void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, uint64 exceptId)
 {
 	HashMap<GameScene*, Vector<ZoneRef>> adjacentZoneInfo;
 	zone->GetAdjacentZoneInfo(OUT adjacentZoneInfo);
@@ -174,5 +174,13 @@ void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef& sendBuffer, u
 					zone->BroadCastBuffer(sendBuffer, exceptId);
 				});
 		}
+	}
+}
+
+void GameScene::BroadCast(SendBufferRef sendBuffer, uint64 exceptId)
+{
+	for (auto& zone : _zones)
+	{
+		zone->BroadCastBuffer(sendBuffer, exceptId);
 	}
 }

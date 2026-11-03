@@ -183,6 +183,34 @@ void AMyPlayer::LevelUpPktReceived(const Protocol::ObjectData& Pkt)
 	UIUpdate();
 }
 
+void AMyPlayer::ChatPktReceived(FString InSender, FString InMessage)
+{
+	Sender = InSender;
+	Message = InMessage;
+	ChatReceived();
+}
+
+void AMyPlayer::SendChatPkt(int32 option, FString string)
+{
+	Protocol::CG_CHAT pkt;
+	pkt.set_chat(TCHAR_TO_UTF8(*string));
+	Protocol::ChatType type;
+	
+	switch (option)
+	{
+	case 0:
+			type = Protocol::CHATTYPE_ADJACENT;
+		break;
+	default:
+		type = Protocol::CHATTYPE_WORLD;
+		break;
+	}
+
+	pkt.set_type(type);
+	
+	SEND_PACKET(pkt);
+}
+
 void AMyPlayer::SendMovePkt()
 {
 	Protocol::CG_MOVE Pkt;

@@ -280,6 +280,14 @@ MoveResultRef World::GetMoveResult(ZoneRef oldZone, ZoneRef newZone)
     return CalculateMoveResult(oldZone, newZone);
 }
 
+void World::BroadCast(SendBufferRef sendBuffer, uint64 exceptId)
+{
+    for (const auto& scene : _scenes)
+    {
+        scene->DoAsync(&GameScene::BroadCast, sendBuffer, exceptId);
+    }
+}
+
 MoveResultRef World::CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone)
 {
     const Vector<ZoneRef>& oldAdj = oldZone->GetAdjacentZones();

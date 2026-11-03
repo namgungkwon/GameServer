@@ -30,7 +30,8 @@ public:
 	void AddZone(ZoneRef zone) { _zones.push_back(zone); }
 	void Request(SceneRequestRef request) { request->Execute(static_pointer_cast<GameScene>(shared_from_this()), _lastUpdateTick); }
 
-	void BroadCastAdjacentZone(ZoneRef zone, SendBufferRef& sendBuffer, uint64 exceptId = -1);
+	void BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, uint64 exceptId = -1);
+	void BroadCast(SendBufferRef sendBuffer, uint64 exceptId = -1);
 
 private:
 	void BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type);

@@ -7,9 +7,6 @@
     <ClInclude Include="GameLibraries.h">
       <Filter>pch</Filter>
     </ClInclude>
-    <ClInclude Include="GameMacro.h">
-      <Filter>pch</Filter>
-    </ClInclude>
     <ClInclude Include="GameStruct.h">
       <Filter>pch</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
     <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="NPC.h">
       <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMacro.h">
+      <Filter>pch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

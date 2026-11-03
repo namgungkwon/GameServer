@@ -15,13 +15,15 @@
 
 #include "SocketUtils.h"
 
+#ifdef _DEBUG
+std::unique_ptr<class DeadLockProfiler>	CoreGlobal::_deadLockProfiler	= nullptr;
+#endif // _DEBUG
 
 std::unique_ptr<class Memory>			CoreGlobal::_memory				= nullptr;
 std::unique_ptr<class ThreadManager>	CoreGlobal::_threadManager		= nullptr;
 std::unique_ptr<class SendBufferManager>CoreGlobal::_sendBufferManager	= nullptr;
 std::unique_ptr<class GlobalQueue>		CoreGlobal::_globalQueue		= nullptr;
 std::unique_ptr<class JobTimer>			CoreGlobal::_jobTimer			= nullptr;
-std::unique_ptr<class DeadLockProfiler>	CoreGlobal::_deadLockProfiler	= nullptr;
 std::unique_ptr<class DBConnectionPool>	CoreGlobal::_dbConnectionPool	= nullptr;
 std::unique_ptr<class Logger>			CoreGlobal::_logger				= nullptr;
 
@@ -98,6 +100,11 @@ void CoreGlobal::Clear()
 		GThreadManager->Join();
 	GThreadManager				= nullptr;
 	_threadManager				= nullptr;
+
+#ifdef _DEBUG
+	GDeadLockProfiler			= nullptr;
+	_deadLockProfiler			= nullptr;
+#endif // _DEBUG
 
 	SocketUtils::Clear();
 

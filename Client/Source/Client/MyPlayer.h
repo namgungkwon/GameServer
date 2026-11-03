@@ -34,8 +34,13 @@ public:
 	virtual void RevivePktReceived(const Protocol::GC_REVIVE& pkt) override;
 	void RewardPktReceived(const Protocol::GC_REWARD& pkt);
 	void LevelUpPktReceived(const Protocol::ObjectData& pkt);
+	void ChatPktReceived(FString InSender, FString InMessage);
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChatReceived();
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void SendChatPkt(int32 option, FString string);
 	void SendMovePkt();
 	UFUNCTION(BlueprintCallable)
 	void SendRevivePkt(int32 respawnOption);
@@ -67,6 +72,11 @@ public:
 	float CONST_ATTACK_DELAY = 0.5f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float attackdelay = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Sender;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Message;
 
 
 public:

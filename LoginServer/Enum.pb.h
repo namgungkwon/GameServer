@@ -51,6 +51,8 @@ extern "C" {
 extern const ::google::protobuf::internal::DescriptorTable descriptor_table_Enum_2eproto;
 }  // extern "C"
 namespace Protocol {
+enum ChatType : int;
+extern const uint32_t ChatType_internal_data_[];
 enum Direction : int;
 extern const uint32_t Direction_internal_data_[];
 enum ObjectCategory : int;
@@ -64,6 +66,9 @@ extern const uint32_t ServerType_internal_data_[];
 }  // namespace Protocol
 namespace google {
 namespace protobuf {
+template <>
+internal::EnumTraitsT<::Protocol::ChatType_internal_data_>
+    internal::EnumTraitsImpl::value<::Protocol::ChatType>;
 template <>
 internal::EnumTraitsT<::Protocol::Direction_internal_data_>
     internal::EnumTraitsImpl::value<::Protocol::Direction>;
@@ -271,6 +276,42 @@ inline bool RespawnOption_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<RespawnOption>(RespawnOption_descriptor(), name,
                                            value);
 }
+enum ChatType : int {
+  CHATTYPE_ADJACENT = 0,
+  CHATTYPE_WORLD = 1,
+  ChatType_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  ChatType_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t ChatType_internal_data_[];
+inline constexpr ChatType ChatType_MIN =
+    static_cast<ChatType>(0);
+inline constexpr ChatType ChatType_MAX =
+    static_cast<ChatType>(1);
+inline bool ChatType_IsValid(int value) {
+  return 0 <= value && value <= 1;
+}
+inline constexpr int ChatType_ARRAYSIZE = 1 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ChatType_descriptor();
+template <typename T>
+const ::std::string& ChatType_Name(T value) {
+  static_assert(::std::is_same<T, ChatType>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to ChatType_Name().");
+  return ChatType_Name(static_cast<ChatType>(value));
+}
+template <>
+inline const ::std::string& ChatType_Name(ChatType value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<ChatType_descriptor, 0, 1>(
+      static_cast<int>(value));
+}
+inline bool ChatType_Parse(
+    ::absl::string_view name, ChatType* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ChatType>(ChatType_descriptor(), name,
+                                           value);
+}
 
 // ===================================================================
 
@@ -328,6 +369,12 @@ struct is_proto_enum<::Protocol::RespawnOption> : std::true_type {};
 template <>
 inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::RespawnOption>() {
   return ::Protocol::RespawnOption_descriptor();
+}
+template <>
+struct is_proto_enum<::Protocol::ChatType> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::ChatType>() {
+  return ::Protocol::ChatType_descriptor();
 }
 
 }  // namespace protobuf

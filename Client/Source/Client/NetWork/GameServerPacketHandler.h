@@ -15,6 +15,7 @@ bool Handle_GC_ATTACK(PacketSessionRef& session, Protocol::GC_ATTACK& pkt);
 bool Handle_GC_DAMAGE(PacketSessionRef& session, Protocol::GC_DAMAGE& pkt);
 bool Handle_GC_REWARD(PacketSessionRef& session, Protocol::GC_REWARD& pkt);
 bool Handle_GC_LEVELUP(PacketSessionRef& session, Protocol::GC_LEVELUP& pkt);
+bool Handle_GC_CHAT(PacketSessionRef& session, Protocol::GC_CHAT& pkt);
 
 ///////////////////////////////////////////////////////
 //	<	GameServerPacketHandler	>
@@ -33,6 +34,7 @@ public:
 		GPacketHandler[PKT_GC_DAMAGE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_DAMAGE>(Handle_GC_DAMAGE, session, buffer, len); };
 		GPacketHandler[PKT_GC_REWARD] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_REWARD>(Handle_GC_REWARD, session, buffer, len); };
 		GPacketHandler[PKT_GC_LEVELUP] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_LEVELUP>(Handle_GC_LEVELUP, session, buffer, len); };
+		GPacketHandler[PKT_GC_CHAT] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_CHAT>(Handle_GC_CHAT, session, buffer, len); };
 	}
 
 	static bool	HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -47,6 +49,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::CG_REVIVE& pkt) { return MakeSendBuffer(pkt, PKT_CG_REVIVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::CG_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_CG_MOVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::CG_ATTACK& pkt) { return MakeSendBuffer(pkt, PKT_CG_ATTACK); }
+	static SendBufferRef MakeSendBuffer(Protocol::CG_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_CG_CHAT); }
 	
 
 private:

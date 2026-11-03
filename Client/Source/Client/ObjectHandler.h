@@ -36,6 +36,7 @@ public:
 	void Handle(const Protocol::GC_REVIVE& pkt);
 	void Handle(const Protocol::GC_REWARD& pkt);
 	void Handle(const Protocol::GC_LEVELUP& pkt);
+	void Handle(const Protocol::GC_CHAT& pkt);
 	
 	
 public:

@@ -13,6 +13,6 @@ private:
 	bool Connect(const RedisConfig& redisConfig);
 
 private:
-	unique_ptr<sw::redis::Redis> _redis;
+	std::unique_ptr<sw::redis::Redis> _redis;
 };
 

@@ -166,3 +166,39 @@ void ReviveRequest::Execute(GameSceneRef scene, uint64 currentTick)
 		targetScene->BroadCastAdjacentZone(targetZone, sendBuffer);
 	}
 }
+
+void ChatRequest::Execute(GameSceneRef scene, uint64 currentTick)
+{
+	GameSceneRef targetScene = player->GetScene();
+	ZoneRef targetZone = player->GetZone();
+
+	if (targetScene == nullptr || targetZone == nullptr)
+		return;
+
+	if (targetScene != scene)
+	{
+		targetScene->DoAsync(&GameScene::Request, shared_from_this());
+		return;
+	}
+
+	Protocol::ChatType type = pkt.type();
+
+	Protocol::GC_CHAT res;
+	res.set_name(Utils::ToString(player->GetName()));
+	res.set_chat(pkt.chat());
+	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+
+	switch (type)
+	{
+	case Protocol::CHATTYPE_ADJACENT:
+	{
+		scene->BroadCastAdjacentZone(targetZone, sendBuffer, player->GetObjectId());
+	}
+		break;
+	case Protocol::CHATTYPE_WORLD:
+	{
+		GWorld->BroadCast(sendBuffer, player->GetObjectId());
+	}
+		break;
+	}
+}

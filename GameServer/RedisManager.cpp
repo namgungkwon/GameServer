@@ -7,8 +7,6 @@ bool RedisManager::Init(const RedisConfig& redisConfig, const ServerConfig& serv
 {
 	if (Connect(redisConfig) == false)
 		return false;
-
-
 }
 
 bool RedisManager::Connect(const RedisConfig& redisConfig)

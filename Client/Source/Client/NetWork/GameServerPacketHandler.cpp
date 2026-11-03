@@ -118,3 +118,13 @@ bool Handle_GC_LEVELUP(PacketSessionRef& session, Protocol::GC_LEVELUP& pkt)
 	
 	return true;
 }
+
+bool Handle_GC_CHAT(PacketSessionRef& session, Protocol::GC_CHAT& pkt)
+{
+	UObjectHandler* Handler = GetObjectHandler(session);
+
+	if (Handler)
+		Handler->Handle(pkt);
+	
+	return true;
+}

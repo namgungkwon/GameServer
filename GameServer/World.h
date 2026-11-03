@@ -28,6 +28,9 @@ public:
 	ZoneRef         GetZoneById(int32 id);
 	MoveResultRef	GetMoveResult(ZoneRef oldZone, ZoneRef newZone);
 
+public:
+	void BroadCast(SendBufferRef sendBuffer, uint64 expectId = -1);
+
 private:
 	void CreateScene();
 	void CreateZone();

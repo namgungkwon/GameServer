@@ -173,6 +173,16 @@ void UObjectHandler::Handle(const Protocol::GC_LEVELUP& pkt)
 	}
 }
 
+void UObjectHandler::Handle(const Protocol::GC_CHAT& pkt)
+{
+	FString Sender = FString(pkt.name().c_str());
+	FString Chat = FString(pkt.chat().c_str());
+	if (MyCharacter)
+	{
+		MyCharacter->ChatPktReceived(Sender, Chat);
+	}	
+}
+
 TObjectPtr<AGameObject> UObjectHandler::FindObject(uint64 ObjectId)
 {
 	if (SpawnedObjects.Find(ObjectId))

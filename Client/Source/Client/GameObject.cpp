@@ -14,6 +14,8 @@ AGameObject::AGameObject()
 void AGameObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Name = FString("Test");
 }
 
 // Called every frame

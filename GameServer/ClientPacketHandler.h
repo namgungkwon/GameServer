@@ -11,6 +11,7 @@ bool Handle_CG_LEAVE_GAME(PacketSessionRef& session, Protocol::CG_LEAVE_GAME& pk
 bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt);
 bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt);
 bool Handle_CG_ATTACK(PacketSessionRef& session, Protocol::CG_ATTACK& pkt);
+bool Handle_CG_CHAT(PacketSessionRef& session, Protocol::CG_CHAT& pkt);
 
 ///////////////////////////////////////////////////////
 //	<	ClientPacketHandler	>
@@ -25,6 +26,7 @@ public:
 		GPacketHandler[PKT_CG_REVIVE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_REVIVE>(Handle_CG_REVIVE, session, buffer, len); };
 		GPacketHandler[PKT_CG_MOVE] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_MOVE>(Handle_CG_MOVE, session, buffer, len); };
 		GPacketHandler[PKT_CG_ATTACK] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_ATTACK>(Handle_CG_ATTACK, session, buffer, len); };
+		GPacketHandler[PKT_CG_CHAT] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CG_CHAT>(Handle_CG_CHAT, session, buffer, len); };
 	}
 
 	static bool	HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -43,6 +45,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::GC_DAMAGE& pkt) { return MakeSendBuffer(pkt, PKT_GC_DAMAGE); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_REWARD& pkt) { return MakeSendBuffer(pkt, PKT_GC_REWARD); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_LEVELUP& pkt) { return MakeSendBuffer(pkt, PKT_GC_LEVELUP); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_GC_CHAT); }
 	
 
 private:

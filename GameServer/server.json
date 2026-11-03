@@ -23,6 +23,6 @@
   "world": {
     "mapSize": 100000,
     "zoneSize": 2000,
-    "sceneCount" : 1
+    "sceneCount" : 8
   }
 }
