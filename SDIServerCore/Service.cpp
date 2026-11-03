@@ -100,10 +100,10 @@ bool ClientService::Start()
 ///////////////////////////////////////////////////////
 //	<	ServerService	>
 ///////////////////////////////////////////////////////
-ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
+ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount, int32 acceptPoolCount)
 	: Service(ServiceType::Server, address, core, factory, maxSessionCount)
 {
-
+	_acceptPoolCount = static_cast<size_t>(acceptPoolCount);
 }
 
 bool ServerService::Start()

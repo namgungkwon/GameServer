@@ -48,7 +48,7 @@ bool Listener::StartAccept(ServerServiceRef service)
 	if (SocketUtils::Listen(_socket) == false)
 		return false;
 
-	const int32 acceptCount = _service->GetMaxSessionCount();
+	const int32 acceptCount = _service->GetAcceptPoolCount();
 	for (int32 i = 0; i < acceptCount; ++i)
 	{
 		AcceptEvent* acceptEvent = cnew<AcceptEvent>();

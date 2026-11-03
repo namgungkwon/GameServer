@@ -13,7 +13,7 @@ class GameGlobal
 {
 public:
 	static void Init();
-	void Clear();
+	static void Clear();
 
 	static ServerServiceRef& GetService() { return _service; }
 

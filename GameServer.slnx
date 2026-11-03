@@ -4,5 +4,6 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="GameServer/GameServer.vcxproj" Id="58095b58-d63f-4d34-b28a-080d7f096ab5" />
+  <Project Path="LoginServer/LoginServer.vcxproj" Id="b761cc54-0dac-45a7-be3b-c76f9027845d" />
   <Project Path="SDIServerCore/SDIServerCore.vcxproj" Id="ccb1be3c-acd7-4f6a-9454-645652259b10" />
 </Solution>

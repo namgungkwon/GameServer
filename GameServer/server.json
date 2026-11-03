@@ -12,17 +12,25 @@
     "host": "127.0.0.1",
     "port": 6379
   },
-  "server": {
+  "gameServer": {
     "id": 1,
-    "name": "Server1",
+    "name": "GameServer1",
     "ip": "127.0.0.1",
     "port": 8000,
+    "masSessions": 3000,
+    "acceptPool": 10
+  },
+  "loginServer": {
+    "id": 1,
+    "name": "LoginServer1",
+    "ip": "127.0.0.1",
+    "port": 8001,
     "masSessions": 3000,
     "acceptPool": 10
   },
   "world": {
     "mapSize": 100000,
     "zoneSize": 2000,
-    "sceneCount" : 8
+    "sceneCount": 8
   }
 }

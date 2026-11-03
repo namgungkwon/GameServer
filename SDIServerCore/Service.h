@@ -87,13 +87,17 @@ public:
 class ServerService : public Service
 {
 public:
-	ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
+	ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1, int32 acceptPoolCount = 1);
 	virtual ~ServerService() {}
 
 public:
 	virtual bool		Start() override;
 	virtual void		CloseService() override;
 
+public:
+	size_t GetAcceptPoolCount() { return _acceptPoolCount; }
+
 private:
 	ListenerRef			_listener = nullptr;
+	size_t				_acceptPoolCount = 1;
 };

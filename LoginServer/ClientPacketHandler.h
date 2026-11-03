@@ -6,6 +6,8 @@
 #include "NetworkHeader.h"
 #endif
 
+bool Handle_CL_CREATE_ACCOUNT(PacketSessionRef& session, Protocol::CL_CREATE_ACCOUNT& pkt);
+bool Handle_CL_LOGIN(PacketSessionRef& session, Protocol::CL_LOGIN& pkt);
 
 ///////////////////////////////////////////////////////
 //	<	ClientPacketHandler	>
@@ -15,6 +17,8 @@ class ClientPacketHandler
 public:
 	static void Init()
 	{
+		GPacketHandler[PKT_CL_CREATE_ACCOUNT] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CL_CREATE_ACCOUNT>(Handle_CL_CREATE_ACCOUNT, session, buffer, len); };
+		GPacketHandler[PKT_CL_LOGIN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::CL_LOGIN>(Handle_CL_LOGIN, session, buffer, len); };
 	}
 
 	static bool	HandlePacket(PacketSessionRef& session, BYTE* buffer, int32 len)
@@ -24,6 +28,8 @@ public:
 	}
 
 
+	static SendBufferRef MakeSendBuffer(Protocol::LC_CREATE_ACCOUNT& pkt) { return MakeSendBuffer(pkt, PKT_LC_CREATE_ACCOUNT); }
+	static SendBufferRef MakeSendBuffer(Protocol::LC_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_LC_LOGIN); }
 	
 
 private:

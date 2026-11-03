@@ -72,7 +72,7 @@ void GameGlobal::Init()
 	// 7. Redis Manager
 	_redisManager = MakeShared<RedisManager>();
 	GRedisManager = _redisManager.get();
-	if (GRedisManager->Init(_config.redis, _config.server))
+	if (GRedisManager->Init(_config.redis, _config.gameServer))
 		LOG_INFO(L"RedisManager init complete");
 	else
 		LOG_ERROR(L"Failed to init RedisManager");
@@ -87,10 +87,11 @@ void GameGlobal::Init()
 
 	// 9. Service
 	_service = MakeShared<ServerService>(
-		NetAddress(_config.server.ip, _config.server.port),
+		NetAddress(_config.gameServer.ip, _config.gameServer.port),
 		MakeShared<IocpCore>(),
 		MakeShared<GameSession>,
-		_config.server.acceptPool
+		_config.gameServer.maxSessions,
+		_config.gameServer.acceptPool
 	);
 	ASSERT_CRASH(_service->Start());
 

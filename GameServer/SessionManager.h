@@ -3,7 +3,7 @@
 
 class SessionManager
 {
-	friend class ClientSession;
+	friend class GameSession;
 public:
 	SessionManager();
 public:
@@ -21,4 +21,3 @@ private:
 	SessionAliveCheckerRef			_clientChecker;
 	Map<uint64, GameSessionRef>		_clientSessions;
 };
-

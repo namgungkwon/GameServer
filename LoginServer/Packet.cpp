@@ -1,6 +1,4 @@
-#if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING == 0
 #include "pch.h"
-#endif
 #include "Packet.h"
 
 

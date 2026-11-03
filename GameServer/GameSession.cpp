@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GameSession.h"
+#include "SessionManager.h"
 
 #include "ClientPacketHandler.h"
 #include "DBManager.h"
@@ -11,11 +12,13 @@ void GameSession::OnConnected()
 {
 	// temp
 	_accountDBId = 1;
+	GSessionManager->Add(static_pointer_cast<GameSession>(shared_from_this()));
 }
 
 void GameSession::OnDisconnected()
 {
 	LeavePlayer();
+	GSessionManager->Remove(static_pointer_cast<GameSession>(shared_from_this()));
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)

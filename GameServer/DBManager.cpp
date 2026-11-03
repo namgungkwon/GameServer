@@ -137,6 +137,4 @@ void DBManager::SaveLevelUp(uint64 playerId, int32 level)
 
 	if (bind.Execute() == false)
 		return;
-
-
 }

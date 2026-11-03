@@ -302,16 +302,16 @@ void DBConnection::HandleError(SQLRETURN ret)
 			_countof(errMsg),
 			OUT & msgLen
 		);
+		
+		wcout.imbue(locale("kor"));
+		wcout << errMsg << endl;
 
 		if (errorRet == SQL_NO_DATA)
 			break;
 
-		if (errorRet == SQL_SUCCESS && errorRet == SQL_SUCCESS_WITH_INFO)
+		if (errorRet == SQL_SUCCESS || errorRet == SQL_SUCCESS_WITH_INFO)
 			break;
 
-		wcout.imbue(locale("kor"));
-		wcout << errMsg << endl;
-
-		index++;
+		break;
 	}
 }

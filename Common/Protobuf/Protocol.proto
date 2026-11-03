@@ -12,11 +12,41 @@ import "Struct.proto";
 ///////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////
+//	<	LoginServer	>
+///////////////////////////////////////////////////////
+message CL_CREATE_ACCOUNT
+{
+	string					id = 1;
+	string					password = 2;
+}
+
+message LC_CREATE_ACCOUNT
+{
+	string					success = 1;
+	string					cause = 2;
+}
+
+message CL_LOGIN
+{
+	string					id = 1;
+	string					password = 2;
+}
+
+message LC_LOGIN
+{
+	bool					success = 1;
+	string					cause = 2;
+	string					token = 3;
+	repeated ObjectSummaryData playerData = 4;
+}
+
+///////////////////////////////////////////////////////
 //	<	GameServer	>
 ///////////////////////////////////////////////////////
 message CG_ENTER_GAME
 {
 	uint64 playerId = 1;
+	string	token = 2;
 }
 
 message GC_ENTER_GAME
