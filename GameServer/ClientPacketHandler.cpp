@@ -3,11 +3,53 @@
 
 #include "GameSession.h"
 #include "DBManager.h"
-#include "job.h"
+#include "RedisManager.h"
+
 #include "World.h"
 #include "player.h"
 #include "GameScene.h"
 #include "MovementComponent.h"
+
+bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pkt)
+{
+    GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+
+    GRedisManager->DoAsync([token = pkt.token(), gameSession]() {
+            
+        uint64 accountId;
+        Protocol::Result result = GRedisManager->AuthToken(token, OUT accountId);
+
+        if (result != Protocol::SUCCESS)
+        {
+            Protocol::GC_AUTH_TOKEN res;
+            res.set_result(result);
+
+            SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+            gameSession->Send(sendBuffer);
+        }
+
+        GDBManager->DoAsync(Job([accountId, gameSession]()
+            {
+                Protocol::GC_AUTH_TOKEN res;
+                Vector<Protocol::ObjectSummaryData> summaries;
+
+                res.set_result(GDBManager->GetPlayerList(accountId, summaries));
+                
+                for (auto& summary : summaries)
+                {
+                    Protocol::ObjectSummaryData* target = res.add_summaries();
+                    *target = summary;
+                }
+
+                gameSession->SetAccountDBId(accountId);
+                SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+                gameSession->Send(sendBuffer);
+            }));
+
+        });
+
+    return false;
+}
 
 bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pkt)
 {
@@ -25,9 +67,8 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
     uint64 accountId = gameSession->GetAccountDBId();
 
     //temp
-    static Atomic<uint64> tempId = 1;
-    uint64 playerId = tempId.fetch_add(1);
-    //uint64 playerId = pkt.playerid();
+    //uint64 playerId = tempId.fetch_add(1);
+    uint64 playerId = pkt.playerid();
     // DB에서 선택한 계정의 목록을 불러옴
     GDBManager->DoAsync(Job([gameSession, accountId, playerId]()
         {
@@ -46,7 +87,6 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
 
             gameSession->SetPlayerDBId(playerId);
 
-            // Todo : World에 넣기
             GWorld->DoAsync(&World::EnterPlayer, gameSession, summary, load);
         }));
 

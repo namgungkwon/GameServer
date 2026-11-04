@@ -41,6 +41,42 @@ void DBManager::DoAsync(Job&& job)
 	_workers[idx]->DoAsync(std::move(job));
 }
 
+Protocol::Result DBManager::GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries)
+{
+	DBConn dbConn;
+
+	uint64 oPlayerId;
+	uint64 oTemplateId;
+	WCHAR oName[255];
+	int32 oLevel;
+
+	DBBind<1, 4> bind(*dbConn.conn,
+		L"SELECT playerId, templateId, name, level "
+		L"FROM players "
+		L"WHERE accountId = ?;");
+
+	bind.BindParam(0, accoutDBId);
+	bind.BindCol(0, oPlayerId);
+	bind.BindCol(1, oTemplateId);
+	bind.BindCol(2, oName);
+	bind.BindCol(3, oLevel);
+
+	if (bind.Execute() == false)
+		return Protocol::DB_ERROR;
+
+	while (bind.Fetch())
+	{
+		Protocol::ObjectSummaryData summary;
+		summary.set_objectid(oPlayerId);
+		summary.set_name(Utils::ToString(wstring(oName)));
+		summary.set_templateid(oTemplateId);
+		summary.set_level(oLevel);
+		summaries.push_back(std::move(summary));
+	}
+
+	return Protocol::SUCCESS;
+}
+
 bool DBManager::GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load)
 {
 	DBConn dbConn;
@@ -76,7 +112,7 @@ bool DBManager::GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummar
 	bind.BindCol(8, oMp);
 	bind.BindCol(9, oExp);
 
-	if (bind.Execute() == false || dbConn.conn->Fetch() == false)
+	if (bind.Execute() == false || bind.Fetch() == false)
 		return false;
 
 	summary->playerId = playerId;

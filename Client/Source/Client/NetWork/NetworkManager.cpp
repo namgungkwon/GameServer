@@ -20,6 +20,12 @@ void UNetworkManager::Deinitialize()
 	Super::Deinitialize();
 }
 
+void UNetworkManager::SendPacket(const SendBufferRef& SendBuffer)
+{
+	if (GameServer) GameServer->SendPacket(SendBuffer);
+	else if (LoginServer) LoginServer->SendPacket(SendBuffer);
+}
+
 void UNetworkManager::Tick(float DeltaTime)
 {
 	if (LoginServer)
@@ -37,13 +43,15 @@ bool UNetworkManager::ConnectToLoginServer()
 	if (LoginServer != nullptr)
 		return false;
 	
-	const uint16 Port = 8005;
+	const uint16 Port = 8001;
 	FSocket* Socket = ConnectServer(FString("127.0.0.1"), Port);
 	if (Socket == nullptr)
 		return false;
 	
 	LoginServer = MakeShared<PacketSession>(Socket);
 	UE_LOG(LogTemp, Log, TEXT("LoginServer Connected"));
+
+	LoginServer->Run();
 	return true;
 }
 
@@ -84,6 +92,14 @@ void UNetworkManager::DisconnectFromGameServer()
 		return;
 	GameServer->Disconnect();
 	GameServer = nullptr;
+}
+
+void UNetworkManager::SendAuthTokenPkt()
+{
+	Protocol::CG_AUTH_TOKEN Pkt;
+	Pkt.set_token(TCHAR_TO_UTF8(*token));
+	SendBufferRef SendBuffer = GameServerPacketHandler::MakeSendBuffer(Pkt);
+	GameServer->SendPacket(SendBuffer);
 }
 
 

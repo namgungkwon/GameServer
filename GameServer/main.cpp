@@ -23,7 +23,7 @@ int main()
 	}
 
 	const size_t LogicThreadCount = 5;
-	for (size_t i = 0; i < networkThreadCount; ++i)
+	for (size_t i = 0; i < LogicThreadCount; ++i)
 	{
 		GThreadManager->Launch([&service]()
 			{

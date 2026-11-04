@@ -38,7 +38,6 @@ void UObjectHandler::Destroy(AGameObject* gameObject)
 		SpawnedObjects.Remove(gameObject->GetObjectId());
 		go->Destroy();
 	}
-	
 }
 
 void UObjectHandler::Handle(const Protocol::GC_ENTER_GAME& pkt)

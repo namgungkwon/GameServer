@@ -22,8 +22,7 @@ message CL_CREATE_ACCOUNT
 
 message LC_CREATE_ACCOUNT
 {
-	string					success = 1;
-	string					cause = 2;
+	Result result = 1;
 }
 
 message CL_LOGIN
@@ -34,19 +33,28 @@ message CL_LOGIN
 
 message LC_LOGIN
 {
-	bool					success = 1;
-	string					cause = 2;
-	string					token = 3;
-	repeated ObjectSummaryData playerData = 4;
+	Result					 result = 1;
+	string					token = 2;
 }
 
 ///////////////////////////////////////////////////////
 //	<	GameServer	>
 ///////////////////////////////////////////////////////
+message CG_AUTH_TOKEN
+{
+	string token = 1;
+}
+
+message GC_AUTH_TOKEN
+{
+	Result result = 1;
+	repeated ObjectSummaryData summaries = 2;
+}
+
 message CG_ENTER_GAME
 {
-	uint64 playerId = 1;
-	string	token = 2;
+	uint64 dbId = 1;
+	uint64 playerId = 2;
 }
 
 message GC_ENTER_GAME

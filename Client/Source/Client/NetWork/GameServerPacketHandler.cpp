@@ -27,6 +27,18 @@ UObjectHandler* GetObjectHandler(PacketSessionRef session)
 }
 
 
+bool Handle_GC_AUTH_TOKEN(PacketSessionRef& session, Protocol::GC_AUTH_TOKEN& pkt)
+{
+	if (pkt.result() != Protocol::SUCCESS)
+	{
+	// TODO 실패시 UI 
+	}
+
+	
+	
+	return true;
+}
+
 bool Handle_GC_ENTER_GAME(PacketSessionRef& session, Protocol::GC_ENTER_GAME& pkt)
 {
 	UObjectHandler* Handler = GetObjectHandler(session);

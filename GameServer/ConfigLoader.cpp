@@ -67,17 +67,6 @@ bool ConfigLoader::Load(const string& path, GameConfig& config)
 		ReadField(server, "acceptPool", config.gameServer.acceptPool);
 	}
 
-	if (j.contains("loginServer"))
-	{
-		auto& server = j["loginServer"];
-		ReadField(server, "id", config.loginServer.id);
-		ReadWString(server, "name", config.loginServer.name);
-		ReadWString(server, "ip", config.loginServer.ip);
-		ReadField(server, "port", config.loginServer.port);
-		ReadField(server, "masSessions", config.loginServer.maxSessions);
-		ReadField(server, "acceptPool", config.loginServer.acceptPool);
-	}
-
 	if (j.contains("world"))
 	{
 		auto& server = j["world"];

@@ -3,6 +3,7 @@
 #include "ConfigLoader.h"
 #include "DBConnection.h"
 #include "DBConnectionPool.h"
+#include "job.h"
 
 struct DBConn
 {
@@ -34,6 +35,7 @@ public:
 	void DoAsync(Job&& job);
 
 public:
+    Protocol::Result GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries);
 	bool GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load);
     void SavePlayer(uint64 playerId, const PlayerLoadData* load);
     void SaveLevelUp(uint64 playerId, int32 level);

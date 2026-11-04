@@ -1,12 +1,28 @@
 #include "pch.h"
 #include "RedisManager.h"
-#include <optional>
 using namespace sw::redis;
 
 bool RedisManager::Init(const RedisConfig& redisConfig, const ServerConfig& serverConfig)
 {
 	if (Connect(redisConfig) == false)
 		return false;
+}
+
+Protocol::Result RedisManager::AuthToken(const string& token, OUT uint64& accountId)
+{
+	try
+	{
+		auto val = _redis->get(token);
+		if (!val) return Protocol::TOKEN_INVALID;
+
+		accountId = std::stoull(*val);
+		return Protocol::SUCCESS;
+	}
+	catch (const Error& e)
+	{
+		LOG_ERROR(L"Redis GetAccountId Failed");
+		return Protocol::REDIS_ERROR;
+	}
 }
 
 bool RedisManager::Connect(const RedisConfig& redisConfig)

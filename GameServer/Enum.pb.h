@@ -59,6 +59,8 @@ enum ObjectCategory : int;
 extern const uint32_t ObjectCategory_internal_data_[];
 enum RespawnOption : int;
 extern const uint32_t RespawnOption_internal_data_[];
+enum Result : int;
+extern const uint32_t Result_internal_data_[];
 enum ServerStatus : int;
 extern const uint32_t ServerStatus_internal_data_[];
 enum ServerType : int;
@@ -78,6 +80,9 @@ internal::EnumTraitsT<::Protocol::ObjectCategory_internal_data_>
 template <>
 internal::EnumTraitsT<::Protocol::RespawnOption_internal_data_>
     internal::EnumTraitsImpl::value<::Protocol::RespawnOption>;
+template <>
+internal::EnumTraitsT<::Protocol::Result_internal_data_>
+    internal::EnumTraitsImpl::value<::Protocol::Result>;
 template <>
 internal::EnumTraitsT<::Protocol::ServerStatus_internal_data_>
     internal::EnumTraitsImpl::value<::Protocol::ServerStatus>;
@@ -312,6 +317,49 @@ inline bool ChatType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<ChatType>(ChatType_descriptor(), name,
                                            value);
 }
+enum Result : int {
+  SUCCESS = 0,
+  DB_ERROR = 1,
+  REDIS_ERROR = 2,
+  CREATEACCOUNT_DUPLICATION = 3,
+  CREATEACCOUNT_LENGTH = 4,
+  CREATECHARACTER_LENGTH = 5,
+  CREATECHARACTER_DUPLICATION = 6,
+  LOGIN_INVALID_ACCOUNT = 7,
+  TOKEN_INVALID = 8,
+  Result_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  Result_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t Result_internal_data_[];
+inline constexpr Result Result_MIN =
+    static_cast<Result>(0);
+inline constexpr Result Result_MAX =
+    static_cast<Result>(8);
+inline bool Result_IsValid(int value) {
+  return 0 <= value && value <= 8;
+}
+inline constexpr int Result_ARRAYSIZE = 8 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL Result_descriptor();
+template <typename T>
+const ::std::string& Result_Name(T value) {
+  static_assert(::std::is_same<T, Result>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to Result_Name().");
+  return Result_Name(static_cast<Result>(value));
+}
+template <>
+inline const ::std::string& Result_Name(Result value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<Result_descriptor, 0, 8>(
+      static_cast<int>(value));
+}
+inline bool Result_Parse(
+    ::absl::string_view name, Result* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Result>(Result_descriptor(), name,
+                                           value);
+}
 
 // ===================================================================
 
@@ -375,6 +423,12 @@ struct is_proto_enum<::Protocol::ChatType> : std::true_type {};
 template <>
 inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::ChatType>() {
   return ::Protocol::ChatType_descriptor();
+}
+template <>
+struct is_proto_enum<::Protocol::Result> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::Protocol::Result>() {
+  return ::Protocol::Result_descriptor();
 }
 
 }  // namespace protobuf

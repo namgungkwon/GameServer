@@ -3,6 +3,9 @@
 #include "ConfigLoader.h"
 #include "DBConnection.h"
 #include "DBConnectionPool.h"
+#include "Job.h"
+
+#include "Protocol.pb.h"
 
 struct DBConn
 {
@@ -17,7 +20,7 @@ struct DBTransactionGuard
     bool          committed = false;
 
     explicit DBTransactionGuard(DBConnection* c) : conn(c) { if (conn) conn->SetAutoCommit(false); }
-    ~DBTransactionGuard()
+    ~DBTransactionGuard() 
     {
         if (!conn) return;
         if (!committed) conn->Rollback();
@@ -34,7 +37,8 @@ public:
 	void DoAsync(Job&& job);
 
 public:
-    bool CreateAccount(string id, string password);
+    Protocol::Result CreateAccount(const string& id, const string& password);
+    Protocol::Result LoginGame(const string& id, const string& password, OUT uint64& accountId);
 
 private:
 	Vector<JobQueueRef> _workers;

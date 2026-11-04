@@ -27,22 +27,11 @@ struct ServerConfig
 	int32 acceptPool = 10;
 };
 
-struct WorldConfig
-{
-	int32 mapSize = 1000;
-	int32 zoneSize = 20;
-	int32 sceneCount = 8;
-};
-
-
-
 struct GameConfig
 {
-	ServerConfig gameServer;
 	ServerConfig loginServer;
 	DBConfig db;
 	RedisConfig redis;
-	WorldConfig world;
 };
 
 class ConfigLoader

@@ -3,6 +3,8 @@
 #include "Jobqueue.h"
 #include "DBBind.h"
 
+#include "Protocol.pb.h"
+
 
 bool DBManager::Init(const DBConfig& config)
 {
@@ -39,8 +41,11 @@ void DBManager::DoAsync(Job&& job)
 	_workers[idx]->DoAsync(std::move(job));
 }
 
-bool DBManager::CreateAccount(string id, string password)
+Protocol::Result DBManager::CreateAccount(const string& id, const string& password)
 {
+	if (id.size() > 255 || password.size() > 100)
+		return Protocol::CREATEACCOUNT_LENGTH;
+
 	DBConn dbConn;
 	DBTransactionGuard guard(dbConn.conn);
 
@@ -62,10 +67,54 @@ bool DBManager::CreateAccount(string id, string password)
 		bind.BindParam(1, newPassword);
 
 		if (bind.Execute() == false)
-			return false;
+		{
+			return Protocol::CREATEACCOUNT_DUPLICATION;
+		}
 	}
 
-	if (guard.Commit() == false) return false;
+	if (guard.Commit() == false)
+	{
+		return Protocol::DB_ERROR;
+	}
 
-	return true;
+	return Protocol::SUCCESS;
+}
+
+Protocol::Result DBManager::LoginGame(const string& id, const string& password, OUT uint64& accountId)
+{
+	WCHAR newId[255];
+	wstring wId = Utils::ToWString(id);
+	::wcsncpy_s(newId, wId.c_str(), 254);
+
+	uint64 oAccountId;
+	WCHAR oPassword[100] = {};
+
+	// GetAccountInfo
+	{
+		DBConn dbConn;
+		
+		DBBind<1, 2> bind(*dbConn.conn,
+			L"SELECT password, accountid "
+			L"FROM Accounts "
+			L"WHERE id = ?;");
+
+		bind.BindParam(0, newId);
+		bind.BindCol(0, oPassword);
+		bind.BindCol(1, oAccountId);
+
+		if (bind.Execute() == false)
+			return Protocol::DB_ERROR;
+
+		if (bind.Fetch() == false)
+			return Protocol::LOGIN_INVALID_ACCOUNT;
+	}
+
+	if (wstring(oPassword) != Utils::ToWString(password))
+	{
+		return Protocol::LOGIN_INVALID_ACCOUNT;
+	}
+
+	accountId = oAccountId;
+
+	return Protocol::SUCCESS;
 }

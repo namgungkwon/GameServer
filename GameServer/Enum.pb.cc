@@ -27,7 +27,7 @@ namespace _fl = ::google::protobuf::internal::field_layout;
 namespace Protocol {
 }  // namespace Protocol
 static const ::_pb::EnumDescriptor* PROTOBUF_NONNULL
-    file_level_enum_descriptors_Enum_2eproto[6];
+    file_level_enum_descriptors_Enum_2eproto[7];
 static constexpr const ::_pb::ServiceDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
     file_level_service_descriptors_Enum_2eproto = nullptr;
 const ::uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
@@ -50,13 +50,19 @@ const char descriptor_table_protodef_Enum_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIA
     "ON_L\020\001\022\017\n\013DIRECTION_R\020\002*G\n\rRespawnOption"
     "\022\030\n\024RESPAWNOPTION_CURPOS\020\000\022\034\n\030RESPAWNOPT"
     "ION_SPAWNPOINT\020\001*5\n\010ChatType\022\025\n\021CHATTYPE"
-    "_ADJACENT\020\000\022\022\n\016CHATTYPE_WORLD\020\001b\006proto3"
+    "_ADJACENT\020\000\022\022\n\016CHATTYPE_WORLD\020\001*\330\001\n\006Resu"
+    "lt\022\013\n\007SUCCESS\020\000\022\014\n\010DB_ERROR\020\001\022\017\n\013REDIS_E"
+    "RROR\020\002\022\035\n\031CREATEACCOUNT_DUPLICATION\020\003\022\030\n"
+    "\024CREATEACCOUNT_LENGTH\020\004\022\032\n\026CREATECHARACT"
+    "ER_LENGTH\020\005\022\037\n\033CREATECHARACTER_DUPLICATI"
+    "ON\020\006\022\031\n\025LOGIN_INVALID_ACCOUNT\020\007\022\021\n\rTOKEN"
+    "_INVALID\020\010b\006proto3"
 };
 static ::absl::once_flag descriptor_table_Enum_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
     false,
     false,
-    599,
+    818,
     descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once,
@@ -106,6 +112,12 @@ const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ChatType_descriptor()
 }
 PROTOBUF_CONSTINIT const uint32_t ChatType_internal_data_[] = {
     131072u, 0u, };
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL Result_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[6];
+}
+PROTOBUF_CONSTINIT const uint32_t Result_internal_data_[] = {
+    589824u, 0u, };
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 namespace google {

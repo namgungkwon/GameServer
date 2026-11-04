@@ -56,17 +56,6 @@ bool ConfigLoader::Load(const string& path, GameConfig& config)
 		ReadField(r, "port", config.redis.port);
 	}
 
-	if (j.contains("gameServer"))
-	{
-		auto& server = j["gameServer"];
-		ReadField(server, "id", config.gameServer.id);
-		ReadWString(server, "name", config.gameServer.name);
-		ReadWString(server, "ip", config.gameServer.ip);
-		ReadField(server, "port", config.gameServer.port);
-		ReadField(server, "masSessions", config.gameServer.maxSessions);
-		ReadField(server, "acceptPool", config.gameServer.acceptPool);
-	}
-
 	if (j.contains("loginServer"))
 	{
 		auto& server = j["loginServer"];
@@ -78,12 +67,5 @@ bool ConfigLoader::Load(const string& path, GameConfig& config)
 		ReadField(server, "acceptPool", config.loginServer.acceptPool);
 	}
 
-	if (j.contains("world"))
-	{
-		auto& server = j["world"];
-		ReadField(server, "mapSize", config.world.mapSize);
-		ReadField(server, "zoneSize", config.world.zoneSize);
-		ReadField(server, "sceneCount", config.world.sceneCount);
-	}
 	return true;
 }

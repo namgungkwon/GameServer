@@ -41,7 +41,7 @@ void GameGlobal::Init()
 	// 7. Redis Manager
 	_redisManager = MakeShared<RedisManager>();
 	GRedisManager = _redisManager.get();
-	if (GRedisManager->Init(_config.redis, _config.gameServer))
+	if (GRedisManager->Init(_config.redis))
 		LOG_INFO(L"RedisManager init complete");
 	else
 		LOG_ERROR(L"Failed to init RedisManager");

@@ -181,6 +181,7 @@
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="RedisManager.h" />
     <ClInclude Include="Struct.pb.h" />
+    <ClInclude Include="TokenManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientPacketHandler.cpp" />
@@ -216,6 +217,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TokenManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

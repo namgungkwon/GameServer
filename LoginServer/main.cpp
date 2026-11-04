@@ -27,7 +27,7 @@ int main()
 	}
 
 	const size_t LogicThreadCount = 5;
-	for (size_t i = 0; i < networkThreadCount; ++i)
+	for (size_t i = 0; i < LogicThreadCount; ++i)
 	{
 		GThreadManager->Launch([&service]()
 			{
@@ -55,14 +55,36 @@ int main()
 
 #include <chrono>
 #include "DBManager.h"
+#include "RedisManager.h"
 #include "Job.h"
+#include "Protocol.pb.h"
 
 void DBTest()
 {
+/*	GDBManager->DoAsync(Job([]() {
 
-	GDBManager->DoAsync(Job([]() {
+		uint64 accountId;
+		Vector<Protocol::ObjectSummaryData> summaries;
+		GDBManager->LoginGame("admin", "1", accountId);
 
-		GDBManager->CreateAccount("test", "111");
 
-		}));
+		Protocol::Result result = GDBManager->LoginGame("admin", "1", accountId);
+
+		if (result != Protocol::SUCCESS)
+		{
+			Protocol::LC_LOGIN res;
+			res.set_result(result);
+			return;
+		}
+
+		GRedisManager->DoAsync([accountId]()
+			{
+				std::string token = GRedisManager->SetToken(accountId);
+
+				Protocol::LC_LOGIN res;
+				res.set_result(Protocol::SUCCESS);
+				res.set_token(token);
+			});
+
+		}));*/
 }

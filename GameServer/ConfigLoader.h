@@ -39,7 +39,6 @@ struct WorldConfig
 struct GameConfig
 {
 	ServerConfig gameServer;
-	ServerConfig loginServer;
 	DBConfig db;
 	RedisConfig redis;
 	WorldConfig world;

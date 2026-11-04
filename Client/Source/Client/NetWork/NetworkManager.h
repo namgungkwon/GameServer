@@ -24,7 +24,7 @@ public:
 public:
 	PacketSessionRef GetLoginServer() {return LoginServer; }
 	PacketSessionRef GetGameServer() { return GameServer; }
-	void			SendPacket(const SendBufferRef& SendBuffer) { if (GameServer) GameServer->SendPacket(SendBuffer);}
+	void			SendPacket(const SendBufferRef& SendBuffer);
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -41,10 +41,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DisconnectFromGameServer();
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void SendAuthTokenPkt();
+
 private:
 	FSocket* ConnectServer(FString IpAddress, uint16 Port);
 
 private:
 	PacketSessionRef LoginServer;
 	PacketSessionRef GameServer;
+
+public:
+	FString token = FString();
 };
