@@ -11,7 +11,6 @@
 void GameSession::OnConnected()
 {
 	// temp
-	_accountDBId = 1;
 	GSessionManager->Add(static_pointer_cast<GameSession>(shared_from_this()));
 }
 

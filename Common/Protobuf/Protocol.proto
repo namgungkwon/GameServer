@@ -53,8 +53,7 @@ message GC_AUTH_TOKEN
 
 message CG_ENTER_GAME
 {
-	uint64 dbId = 1;
-	uint64 playerId = 2;
+	uint64 playerId = 1;
 }
 
 message GC_ENTER_GAME

@@ -301,7 +301,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr CG_ENTER_GAME::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        dbid_{::uint64_t{0u}},
         playerid_{::uint64_t{0u}} {}
 
 template <typename>
@@ -658,11 +657,9 @@ const ::uint32_t
         0,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_ENTER_GAME, _impl_._has_bits_),
-        5, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::Protocol::CG_ENTER_GAME, _impl_.dbid_),
+        4, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_ENTER_GAME, _impl_.playerid_),
         0,
-        1,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Protocol::GC_ENTER_GAME, _impl_._has_bits_),
         5, // hasbit index offset
@@ -769,21 +766,21 @@ static const ::_pbi::MigrationSchema
         {26, sizeof(::Protocol::CG_AUTH_TOKEN)},
         {31, sizeof(::Protocol::GC_AUTH_TOKEN)},
         {38, sizeof(::Protocol::CG_ENTER_GAME)},
-        {45, sizeof(::Protocol::GC_ENTER_GAME)},
-        {52, sizeof(::Protocol::CG_LEAVE_GAME)},
-        {57, sizeof(::Protocol::GC_SPAWN)},
-        {62, sizeof(::Protocol::GC_DESPAWN)},
-        {67, sizeof(::Protocol::CG_REVIVE)},
-        {74, sizeof(::Protocol::GC_REVIVE)},
-        {81, sizeof(::Protocol::CG_MOVE)},
-        {86, sizeof(::Protocol::GC_MOVE)},
-        {91, sizeof(::Protocol::CG_ATTACK)},
-        {100, sizeof(::Protocol::GC_ATTACK)},
-        {107, sizeof(::Protocol::GC_DAMAGE)},
-        {116, sizeof(::Protocol::GC_REWARD)},
-        {121, sizeof(::Protocol::GC_LEVELUP)},
-        {126, sizeof(::Protocol::CG_CHAT)},
-        {133, sizeof(::Protocol::GC_CHAT)},
+        {43, sizeof(::Protocol::GC_ENTER_GAME)},
+        {50, sizeof(::Protocol::CG_LEAVE_GAME)},
+        {55, sizeof(::Protocol::GC_SPAWN)},
+        {60, sizeof(::Protocol::GC_DESPAWN)},
+        {65, sizeof(::Protocol::CG_REVIVE)},
+        {72, sizeof(::Protocol::GC_REVIVE)},
+        {79, sizeof(::Protocol::CG_MOVE)},
+        {84, sizeof(::Protocol::GC_MOVE)},
+        {89, sizeof(::Protocol::CG_ATTACK)},
+        {98, sizeof(::Protocol::GC_ATTACK)},
+        {105, sizeof(::Protocol::GC_DAMAGE)},
+        {114, sizeof(::Protocol::GC_REWARD)},
+        {119, sizeof(::Protocol::GC_LEVELUP)},
+        {124, sizeof(::Protocol::CG_CHAT)},
+        {131, sizeof(::Protocol::GC_CHAT)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::Protocol::_CL_CREATE_ACCOUNT_default_instance_._instance,
@@ -820,30 +817,30 @@ const char descriptor_table_protodef_Protocol_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "Result\022\r\n\005token\030\002 \001(\t\"\036\n\rCG_AUTH_TOKEN\022\r"
     "\n\005token\030\001 \001(\t\"a\n\rGC_AUTH_TOKEN\022 \n\006result"
     "\030\001 \001(\0162\020.Protocol.Result\022.\n\tsummaries\030\002 "
-    "\003(\0132\033.Protocol.ObjectSummaryData\"/\n\rCG_E"
-    "NTER_GAME\022\014\n\004dbId\030\001 \001(\004\022\020\n\010playerId\030\002 \001("
-    "\004\"F\n\rGC_ENTER_GAME\022\017\n\007success\030\001 \001(\010\022$\n\006o"
-    "bject\030\002 \001(\0132\024.Protocol.ObjectData\"!\n\rCG_"
-    "LEAVE_GAME\022\020\n\010objectId\030\001 \001(\004\"0\n\010GC_SPAWN"
-    "\022$\n\006object\030\001 \003(\0132\024.Protocol.ObjectData\"\036"
-    "\n\nGC_DESPAWN\022\020\n\010objectId\030\001 \003(\004\"F\n\tCG_REV"
-    "IVE\022\020\n\010objectId\030\001 \001(\004\022\'\n\006option\030\002 \001(\0162\027."
-    "Protocol.RespawnOption\"a\n\tGC_REVIVE\022(\n\007p"
-    "osData\030\001 \001(\0132\027.Protocol.ObjectPosData\022*\n"
-    "\010statData\030\002 \001(\0132\030.Protocol.ObjectStatDat"
-    "a\"5\n\007CG_MOVE\022*\n\010moveData\030\001 \001(\0132\030.Protoco"
-    "l.ObjectMoveData\"4\n\007GC_MOVE\022)\n\010moveData\030"
-    "\001 \003(\0132\027.Protocol.ObjectPosData\"W\n\tCG_ATT"
-    "ACK\022(\n\007posData\030\001 \001(\0132\027.Protocol.ObjectPo"
-    "sData\022\017\n\007targets\030\002 \003(\004\022\017\n\007skillId\030\003 \001(\004\""
-    "F\n\tGC_ATTACK\022(\n\007posData\030\001 \001(\0132\027.Protocol"
-    ".ObjectPosData\022\017\n\007skillId\030\002 \001(\004\"=\n\tGC_DA"
-    "MAGE\022\020\n\010objectId\030\001 \001(\004\022\016\n\006damage\030\002 \001(\004\022\016"
-    "\n\006isDead\030\003 \001(\010\"\030\n\tGC_REWARD\022\013\n\003exp\030\001 \001(\004"
-    "\"0\n\nGC_LEVELUP\022\"\n\004data\030\001 \001(\0132\024.Protocol."
-    "ObjectData\"9\n\007CG_CHAT\022\014\n\004chat\030\001 \001(\t\022 \n\004t"
-    "ype\030\002 \001(\0162\022.Protocol.ChatType\"%\n\007GC_CHAT"
-    "\022\014\n\004name\030\001 \001(\t\022\014\n\004chat\030\002 \001(\tb\006proto3"
+    "\003(\0132\033.Protocol.ObjectSummaryData\"!\n\rCG_E"
+    "NTER_GAME\022\020\n\010playerId\030\001 \001(\004\"F\n\rGC_ENTER_"
+    "GAME\022\017\n\007success\030\001 \001(\010\022$\n\006object\030\002 \001(\0132\024."
+    "Protocol.ObjectData\"!\n\rCG_LEAVE_GAME\022\020\n\010"
+    "objectId\030\001 \001(\004\"0\n\010GC_SPAWN\022$\n\006object\030\001 \003"
+    "(\0132\024.Protocol.ObjectData\"\036\n\nGC_DESPAWN\022\020"
+    "\n\010objectId\030\001 \003(\004\"F\n\tCG_REVIVE\022\020\n\010objectI"
+    "d\030\001 \001(\004\022\'\n\006option\030\002 \001(\0162\027.Protocol.Respa"
+    "wnOption\"a\n\tGC_REVIVE\022(\n\007posData\030\001 \001(\0132\027"
+    ".Protocol.ObjectPosData\022*\n\010statData\030\002 \001("
+    "\0132\030.Protocol.ObjectStatData\"5\n\007CG_MOVE\022*"
+    "\n\010moveData\030\001 \001(\0132\030.Protocol.ObjectMoveDa"
+    "ta\"4\n\007GC_MOVE\022)\n\010moveData\030\001 \003(\0132\027.Protoc"
+    "ol.ObjectPosData\"W\n\tCG_ATTACK\022(\n\007posData"
+    "\030\001 \001(\0132\027.Protocol.ObjectPosData\022\017\n\007targe"
+    "ts\030\002 \003(\004\022\017\n\007skillId\030\003 \001(\004\"F\n\tGC_ATTACK\022("
+    "\n\007posData\030\001 \001(\0132\027.Protocol.ObjectPosData"
+    "\022\017\n\007skillId\030\002 \001(\004\"=\n\tGC_DAMAGE\022\020\n\010object"
+    "Id\030\001 \001(\004\022\016\n\006damage\030\002 \001(\004\022\016\n\006isDead\030\003 \001(\010"
+    "\"\030\n\tGC_REWARD\022\013\n\003exp\030\001 \001(\004\"0\n\nGC_LEVELUP"
+    "\022\"\n\004data\030\001 \001(\0132\024.Protocol.ObjectData\"9\n\007"
+    "CG_CHAT\022\014\n\004chat\030\001 \001(\t\022 \n\004type\030\002 \001(\0162\022.Pr"
+    "otocol.ChatType\"%\n\007GC_CHAT\022\014\n\004name\030\001 \001(\t"
+    "\022\014\n\004chat\030\002 \001(\tb\006proto3"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_Protocol_2eproto_deps[2] = {
@@ -854,7 +851,7 @@ static ::absl::once_flag descriptor_table_Protocol_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
     false,
     false,
-    1316,
+    1302,
     descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once,
@@ -2700,12 +2697,7 @@ PROTOBUF_NDEBUG_INLINE CG_ENTER_GAME::Impl_::Impl_(
 
 inline void CG_ENTER_GAME::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  ::memset(reinterpret_cast<char*>(&_impl_) +
-               offsetof(Impl_, dbid_),
-           0,
-           offsetof(Impl_, playerid_) -
-               offsetof(Impl_, dbid_) +
-               sizeof(Impl_::playerid_));
+  _impl_.playerid_ = {};
 }
 CG_ENTER_GAME::~CG_ENTER_GAME() {
   // @@protoc_insertion_point(destructor:Protocol.CG_ENTER_GAME)
@@ -2764,16 +2756,16 @@ CG_ENTER_GAME::GetClassData() const {
   return CG_ENTER_GAME_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 0, 0, 2>
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2>
 CG_ENTER_GAME::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    1, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    1,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     CG_ENTER_GAME_class_data_.base(),
@@ -2783,21 +2775,15 @@ CG_ENTER_GAME::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::CG_ENTER_GAME>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // uint64 playerId = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(CG_ENTER_GAME, _impl_.playerid_), 1>(),
-     {16, 1, 0,
-      PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.playerid_)}},
-    // uint64 dbId = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(CG_ENTER_GAME, _impl_.dbid_), 0>(),
+    // uint64 playerId = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(CG_ENTER_GAME, _impl_.playerid_), 0>(),
      {8, 0, 0,
-      PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.dbid_)}},
+      PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.playerid_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // uint64 dbId = 1;
-    {PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.dbid_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
-    // uint64 playerId = 2;
-    {PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.playerid_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
+    // uint64 playerId = 1;
+    {PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.playerid_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
   }},
   // no aux_entries
   {{
@@ -2810,12 +2796,7 @@ PROTOBUF_NOINLINE void CG_ENTER_GAME::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    ::memset(&_impl_.dbid_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.playerid_) -
-        reinterpret_cast<char*>(&_impl_.dbid_)) + sizeof(_impl_.playerid_));
-  }
+  _impl_.playerid_ = ::uint64_t{0u};
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -2839,21 +2820,12 @@ PROTOBUF_NOINLINE void CG_ENTER_GAME::Clear() {
   (void)cached_has_bits;
 
   cached_has_bits = this_._impl_._has_bits_[0];
-  // uint64 dbId = 1;
+  // uint64 playerId = 1;
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (this_._internal_dbid() != 0) {
-      target = stream->EnsureSpace(target);
-      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
-          1, this_._internal_dbid(), target);
-    }
-  }
-
-  // uint64 playerId = 2;
-  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
     if (this_._internal_playerid() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
-          2, this_._internal_playerid(), target);
+          1, this_._internal_playerid(), target);
     }
   }
 
@@ -2880,18 +2852,10 @@ PROTOBUF_NOINLINE void CG_ENTER_GAME::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void)cached_has_bits;
 
-  ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-  cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    // uint64 dbId = 1;
+   {
+    // uint64 playerId = 1;
+    cached_has_bits = this_._impl_._has_bits_[0];
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      if (this_._internal_dbid() != 0) {
-        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
-            this_._internal_dbid());
-      }
-    }
-    // uint64 playerId = 2;
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
       if (this_._internal_playerid() != 0) {
         total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
             this_._internal_playerid());
@@ -2916,16 +2880,9 @@ void CG_ENTER_GAME::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      if (from._internal_dbid() != 0) {
-        _this->_impl_.dbid_ = from._impl_.dbid_;
-      }
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      if (from._internal_playerid() != 0) {
-        _this->_impl_.playerid_ = from._impl_.playerid_;
-      }
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (from._internal_playerid() != 0) {
+      _this->_impl_.playerid_ = from._impl_.playerid_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -2945,12 +2902,7 @@ void CG_ENTER_GAME::InternalSwap(CG_ENTER_GAME* PROTOBUF_RESTRICT PROTOBUF_NONNU
   using ::std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.playerid_)
-      + sizeof(CG_ENTER_GAME::_impl_.playerid_)
-      - PROTOBUF_FIELD_OFFSET(CG_ENTER_GAME, _impl_.dbid_)>(
-          reinterpret_cast<char*>(&_impl_.dbid_),
-          reinterpret_cast<char*>(&other->_impl_.dbid_));
+  swap(_impl_.playerid_, other->_impl_.playerid_);
 }
 
 ::google::protobuf::Metadata CG_ENTER_GAME::GetMetadata() const {

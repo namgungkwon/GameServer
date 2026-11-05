@@ -3,8 +3,8 @@
 
 #include "LoginWidget.h"
 
-#include "Client.h"
-#include "NetWork/Protocol.pb.h"
+#include "../Client.h"
+#include "../NetWork/Protocol.pb.h"
 
 void ULoginWidget::CreateAccount(FString id, FString password)
 {

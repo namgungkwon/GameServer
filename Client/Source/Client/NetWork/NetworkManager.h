@@ -12,12 +12,13 @@ class FSocket;
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class CLIENT_API UNetworkManager : public UGameInstanceSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
 public:
+	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
@@ -25,6 +26,12 @@ public:
 	PacketSessionRef GetLoginServer() {return LoginServer; }
 	PacketSessionRef GetGameServer() { return GameServer; }
 	void			SendPacket(const SendBufferRef& SendBuffer);
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenGameLevel();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenLoginLevel();
 
 public:
 	virtual void Tick(float DeltaTime) override;

@@ -2326,20 +2326,9 @@ class CG_ENTER_GAME final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kDbIdFieldNumber = 1,
-    kPlayerIdFieldNumber = 2,
+    kPlayerIdFieldNumber = 1,
   };
-  // uint64 dbId = 1;
-  void clear_dbid() ;
-  ::uint64_t dbid() const;
-  void set_dbid(::uint64_t value);
-
-  private:
-  ::uint64_t _internal_dbid() const;
-  void _internal_set_dbid(::uint64_t value);
-
-  public:
-  // uint64 playerId = 2;
+  // uint64 playerId = 1;
   void clear_playerid() ;
   ::uint64_t playerid() const;
   void set_playerid(::uint64_t value);
@@ -2353,7 +2342,7 @@ class CG_ENTER_GAME final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<1, 2,
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
                                    0, 0,
                                    2>
       _table_;
@@ -2375,7 +2364,6 @@ class CG_ENTER_GAME final : public ::google::protobuf::Message
         const CG_ENTER_GAME& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::uint64_t dbid_;
     ::uint64_t playerid_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -5189,37 +5177,12 @@ GC_AUTH_TOKEN::_internal_mutable_summaries() {
 
 // CG_ENTER_GAME
 
-// uint64 dbId = 1;
-inline void CG_ENTER_GAME::clear_dbid() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.dbid_ = ::uint64_t{0u};
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
-}
-inline ::uint64_t CG_ENTER_GAME::dbid() const {
-  // @@protoc_insertion_point(field_get:Protocol.CG_ENTER_GAME.dbId)
-  return _internal_dbid();
-}
-inline void CG_ENTER_GAME::set_dbid(::uint64_t value) {
-  _internal_set_dbid(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  // @@protoc_insertion_point(field_set:Protocol.CG_ENTER_GAME.dbId)
-}
-inline ::uint64_t CG_ENTER_GAME::_internal_dbid() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.dbid_;
-}
-inline void CG_ENTER_GAME::_internal_set_dbid(::uint64_t value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.dbid_ = value;
-}
-
-// uint64 playerId = 2;
+// uint64 playerId = 1;
 inline void CG_ENTER_GAME::clear_playerid() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.playerid_ = ::uint64_t{0u};
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
+                  0x00000001U);
 }
 inline ::uint64_t CG_ENTER_GAME::playerid() const {
   // @@protoc_insertion_point(field_get:Protocol.CG_ENTER_GAME.playerId)
@@ -5227,7 +5190,7 @@ inline ::uint64_t CG_ENTER_GAME::playerid() const {
 }
 inline void CG_ENTER_GAME::set_playerid(::uint64_t value) {
   _internal_set_playerid(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
   // @@protoc_insertion_point(field_set:Protocol.CG_ENTER_GAME.playerId)
 }
 inline ::uint64_t CG_ENTER_GAME::_internal_playerid() const {

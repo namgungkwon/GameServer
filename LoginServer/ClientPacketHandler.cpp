@@ -61,7 +61,7 @@ bool Handle_CL_LOGIN(PacketSessionRef& session, Protocol::CL_LOGIN& pkt)
                     SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
                     session->Send(sendBuffer);
                 });
-            
+
         }));
 
     return true;

@@ -8,6 +8,15 @@
 #include "Common/TcpSocketBuilder.h"
 #include "Protocol.pb.h"
 
+bool UNetworkManager::ShouldCreateSubsystem(UObject* Outer) const
+{
+	if (this->GetClass()->IsInBlueprint() && Super::ShouldCreateSubsystem(Outer))
+	{
+		return true;
+	}
+	return false;
+}
+
 void UNetworkManager::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -70,8 +79,8 @@ bool UNetworkManager::ConnectToGameServer()
 
 	GameServer->Run();
 
-	Protocol::CG_ENTER_GAME Pkt;
-	Pkt.set_playerid(1);
+	Protocol::CG_AUTH_TOKEN Pkt;
+	Pkt.set_token(TCHAR_TO_UTF8(*token));
 	SendBufferRef SendBuffer = GameServerPacketHandler::MakeSendBuffer(Pkt);
 	GameServer->SendPacket(SendBuffer);
 	return true;

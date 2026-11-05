@@ -48,7 +48,6 @@
     <ClCompile Include="DBManager.cpp" />
     <ClCompile Include="RedisManager.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
-    <ClCompile Include="TokenManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enum.pb.h">
@@ -87,6 +86,5 @@
     <ClInclude Include="RedisManager.h" />
     <ClInclude Include="DBManager.h" />
     <ClInclude Include="ConfigLoader.h" />
-    <ClInclude Include="TokenManager.h" />
   </ItemGroup>
 </Project>
