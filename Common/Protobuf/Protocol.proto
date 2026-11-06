@@ -51,6 +51,18 @@ message GC_AUTH_TOKEN
 	repeated ObjectSummaryData summaries = 2;
 }
 
+message CG_CREATE_CHARACTER
+{
+	string name = 1;
+	int32 templateId = 2;
+}
+
+message GC_CREATE_CHARACTER
+{
+	Result result = 1;
+	repeated ObjectSummaryData summaries = 2;
+}
+
 message CG_ENTER_GAME
 {
 	uint64 playerId = 1;

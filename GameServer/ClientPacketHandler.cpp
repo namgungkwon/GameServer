@@ -26,6 +26,7 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
 
             SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
             gameSession->Send(sendBuffer);
+            return ;
         }
 
         GDBManager->DoAsync(Job([accountId, gameSession]()
@@ -48,7 +49,61 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
 
         });
 
-    return false;
+    return true;
+}
+
+bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_CHARACTER& pkt)
+{
+    GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+    if (gameSession->IsAuthenticated() == false) return false;
+
+    uint64 accountId = gameSession->GetAccountDBId();
+    string name = pkt.name();
+    uint64 templateId = pkt.templateid();
+
+
+    if (name.size() == 0)
+    {
+        Protocol::GC_CREATE_CHARACTER res;
+        res.set_result(Protocol::CREATEACCOUNT_LENGTH);
+        SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+        session->Send(sendBuffer);
+        return true;
+    }
+
+    GDBManager->DoAsync(Job([gameSession, accountId, name, templateId]() {
+
+            Protocol::Result result = GDBManager->CreateCharacter(accountId, name, templateId);
+
+            if (result != Protocol::SUCCESS)
+            {
+                Protocol::GC_CREATE_CHARACTER res;
+                res.set_result(result);
+                SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+                gameSession->Send(sendBuffer);
+                return;
+            }
+
+            GDBManager->DoAsync(Job([accountId, gameSession]()
+                {
+                    Protocol::GC_CREATE_CHARACTER res;
+                    Vector<Protocol::ObjectSummaryData> summaries;
+
+                    res.set_result(GDBManager->GetPlayerList(accountId, summaries));
+
+                    for (auto& summary : summaries)
+                    {
+                        Protocol::ObjectSummaryData* target = res.add_summaries();
+                        *target = summary;
+                    }
+
+                    gameSession->SetAccountDBId(accountId);
+                    SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+                    gameSession->Send(sendBuffer);
+                }));
+        }));
+
+    return true;
 }
 
 bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pkt)

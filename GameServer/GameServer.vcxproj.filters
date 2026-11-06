@@ -79,23 +79,29 @@
     <ClInclude Include="Enum.pb.h">
       <Filter>Packet</Filter>
     </ClInclude>
-    <ClInclude Include="GameConfig.h" />
     <ClInclude Include="Monster.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="MovementSystem.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="AISystem.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneRequest.h" />
-    <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="NPC.h">
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="GameMacro.h">
       <Filter>pch</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneRequest.h">
+      <Filter>World\Request</Filter>
+    </ClInclude>
+    <ClInclude Include="AISystem.h">
+      <Filter>World\System</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.h">
+      <Filter>World\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatSystem.h">
+      <Filter>World\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConfig.h">
+      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -177,20 +183,26 @@
     <ClCompile Include="Enum.pb.cc">
       <Filter>Packet</Filter>
     </ClCompile>
-    <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="Monster.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="MovementSystem.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="AISystem.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneRequest.cpp" />
-    <ClCompile Include="CombatSystem.cpp" />
     <ClCompile Include="NPC.cpp">
       <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneRequest.cpp">
+      <Filter>World\Request</Filter>
+    </ClCompile>
+    <ClCompile Include="AISystem.cpp">
+      <Filter>World\System</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>World\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatSystem.cpp">
+      <Filter>World\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConfig.cpp">
+      <Filter>main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,20 +236,11 @@
     <Filter Include="World\System">
       <UniqueIdentifier>{27a81128-527d-4ca9-98ae-0b75ce5beda4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="World\Command">
+    <Filter Include="World\Request">
       <UniqueIdentifier>{7d307b0b-cc3b-4bb7-9640-e43bb8f5c170}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Protobuf\Protocol.proto">
-      <Filter>Packet\Proto</Filter>
-    </None>
-    <None Include="..\Common\Protobuf\Struct.proto">
-      <Filter>Packet\Proto</Filter>
-    </None>
-    <None Include="..\Common\Protobuf\Enum.proto">
-      <Filter>Packet\Proto</Filter>
-    </None>
     <None Include="..\GameData\SpawnData.json">
       <Filter>Data\json</Filter>
     </None>
@@ -255,6 +258,15 @@
     </None>
     <None Include="..\GameData\RespawnPoint.json">
       <Filter>Data\json</Filter>
+    </None>
+    <None Include="..\Common\Protobuf\Enum.proto">
+      <Filter>Packet\Proto</Filter>
+    </None>
+    <None Include="..\Common\Protobuf\Protocol.proto">
+      <Filter>Packet\Proto</Filter>
+    </None>
+    <None Include="..\Common\Protobuf\Struct.proto">
+      <Filter>Packet\Proto</Filter>
     </None>
   </ItemGroup>
 </Project>

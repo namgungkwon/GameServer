@@ -19,4 +19,11 @@ namespace Config
 		static constexpr uint64 PLAYER_FIND_TICK = 500;
 		static constexpr uint64 PATH_FIND_TICK = 500;
 	}
+
+	namespace CreatePlayer
+	{
+		static constexpr float pos_x = 50000.f;
+		static constexpr float pos_y = 50000.f;
+		static constexpr float pos_z = 0.f;
+	}
 };

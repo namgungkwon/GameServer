@@ -6,6 +6,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "WidgetManager.generated.h"
 
+class UCharacterListWidget;
 /**
  * 
  */
@@ -17,9 +18,15 @@ class CLIENT_API UWidgetManager : public UGameInstanceSubsystem
 public:
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 
+	void SetCharacterListWidget(TObjectPtr<UCharacterListWidget> widget) { CharacterListWidget = widget; }
+	TObjectPtr<UCharacterListWidget> GetCharacterListWidget() { return CharacterListWidget; };
+
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TSubclassOf<UUserWidget> MsgWidgetClass;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TSubclassOf<UUserWidget> CharacterListWidget;
+	TSubclassOf<UUserWidget> CharacterListWidgetClass;
+
+public:
+	TObjectPtr<UCharacterListWidget> CharacterListWidget;
 };

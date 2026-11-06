@@ -35,6 +35,7 @@ public:
 	void DoAsync(Job&& job);
 
 public:
+    Protocol::Result CreateCharacter(uint64 accountDBId, const string& name, int32 templateId);
     Protocol::Result GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries);
 	bool GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load);
     void SavePlayer(uint64 playerId, const PlayerLoadData* load);

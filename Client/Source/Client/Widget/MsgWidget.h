@@ -15,6 +15,7 @@ class CLIENT_API UMsgWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void SetMessage(const FString& Message);
 
 public:

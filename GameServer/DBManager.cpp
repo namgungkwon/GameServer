@@ -2,6 +2,7 @@
 #include "DBManager.h"
 #include "Jobqueue.h"
 
+#include "GameData.h"
 #include "DBBind.h"
 #include "player.h"
 
@@ -41,39 +42,128 @@ void DBManager::DoAsync(Job&& job)
 	_workers[idx]->DoAsync(std::move(job));
 }
 
-Protocol::Result DBManager::GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries)
+Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& name, int32 templateId)
 {
 	DBConn dbConn;
+	DBTransactionGuard guard(dbConn.conn);
+
+	WCHAR newId[20];
+	wstring wName = Utils::ToWString(name);
+	::wcsncpy_s(newId, wName.c_str(), 19);
+
+	uint64 oPlayerId;
+	{
+		DBBind<3, 0> bind(*dbConn.conn,
+			L"INSERT INTO Players (accountId, name, templateId) "
+			L"VALUES (?, ?, ?) ");
+
+		bind.BindParam(0, accountDBId);
+		bind.BindParam(1, newId);
+		bind.BindParam(2, templateId);
+
+		if (bind.Execute() == false)
+		{
+			return Protocol::CREATEACCOUNT_DUPLICATION;
+		}
+	}
+
+	{
+		DBBind<1, 1> bind(*dbConn.conn,
+			L"SELECT playerId "
+			L"FROM players "
+			L"WHERE name = ?"
+		);
+
+		bind.BindParam(0, newId);
+		bind.BindCol(0, oPlayerId);
+
+		if (bind.Execute() == false || bind.Fetch() == false)
+			return Protocol::DB_ERROR;
+	}
+
+	{
+		float posX = Config::CreatePlayer::pos_x;
+		float posY = Config::CreatePlayer::pos_y;
+		float posZ = Config::CreatePlayer::pos_z;
+		float yaw = 0;
+		float exp = 0;
+
+		DBBind<8, 0> bind(*dbConn.conn,
+			L"INSERT INTO playerDetail (playerId, pos_x, pos_y, pos_z, yaw, hp, mp, exp) "
+			L"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"	);
+
+		bind.BindParam(0, oPlayerId);
+		bind.BindParam(1, posX);
+		bind.BindParam(2, posY);
+		bind.BindParam(3, posZ);
+		bind.BindParam(4, yaw);
+		bind.BindParam(5, GGameData->GetPlayerData(1)->maxHp);
+		bind.BindParam(6, GGameData->GetPlayerData(1)->maxMp);
+		bind.BindParam(7, exp);
+
+		if (bind.Execute() == false)
+		{
+			return Protocol::DB_ERROR;
+		}
+	}
+
+	{
+		DBBind<1, 1> bind(*dbConn.conn,
+			L"SELECT playerId "
+			L"FROM players "
+			L"WHERE name = ?"
+		);
+
+		bind.BindParam(0, newId);
+		bind.BindCol(0, oPlayerId);
+
+		if (bind.Execute() == false || bind.Fetch() == false)
+			return Protocol::DB_ERROR;
+	}
+
+	if (guard.Commit() == false)
+		return Protocol::DB_ERROR;
+
+	return Protocol::SUCCESS;
+}
+
+Protocol::Result DBManager::GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries)
+{
 
 	uint64 oPlayerId;
 	uint64 oTemplateId;
 	WCHAR oName[255];
 	int32 oLevel;
 
-	DBBind<1, 4> bind(*dbConn.conn,
-		L"SELECT playerId, templateId, name, level "
-		L"FROM players "
-		L"WHERE accountId = ?;");
-
-	bind.BindParam(0, accoutDBId);
-	bind.BindCol(0, oPlayerId);
-	bind.BindCol(1, oTemplateId);
-	bind.BindCol(2, oName);
-	bind.BindCol(3, oLevel);
-
-	if (bind.Execute() == false)
-		return Protocol::DB_ERROR;
-
-	while (bind.Fetch())
 	{
-		Protocol::ObjectSummaryData summary;
-		summary.set_objectid(oPlayerId);
-		summary.set_name(Utils::ToString(wstring(oName)));
-		summary.set_templateid(oTemplateId);
-		summary.set_level(oLevel);
-		summaries.push_back(std::move(summary));
-	}
+		DBConn dbConn;
 
+
+		DBBind<1, 4> bind(*dbConn.conn,
+			L"SELECT playerId, templateId, name, level "
+			L"FROM players "
+			L"WHERE accountId = ?;");
+
+		bind.BindParam(0, accoutDBId);
+		bind.BindCol(0, oPlayerId);
+		bind.BindCol(1, oTemplateId);
+		bind.BindCol(2, oName);
+		bind.BindCol(3, oLevel);
+
+		if (bind.Execute() == false)
+			return Protocol::DB_ERROR;
+
+		while (bind.Fetch())
+		{
+			Protocol::ObjectSummaryData summary;
+			summary.set_objectid(oPlayerId);
+			summary.set_name(Utils::ToString(wstring(oName)));
+			summary.set_templateid(oTemplateId);
+			summary.set_level(oLevel);
+			summaries.push_back(std::move(summary));
+		}
+	}
+	
 	return Protocol::SUCCESS;
 }
 

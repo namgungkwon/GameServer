@@ -34,8 +34,6 @@ struct WorldConfig
 	int32 sceneCount = 8;
 };
 
-
-
 struct GameConfig
 {
 	ServerConfig gameServer;

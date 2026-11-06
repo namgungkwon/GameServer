@@ -29,12 +29,15 @@ class CLIENT_API UCharacterListWidget : public UUserWidget
 
 public:
 	void SetCharacterList(const Protocol::GC_AUTH_TOKEN& pkt);
+	void SetCharacterList(const Protocol::GC_CREATE_CHARACTER& pkt);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateCharacterList();
 
 	UFUNCTION(BlueprintCallable)
 	void SendEnterGamePkt(int32 listIdx);
+	UFUNCTION(BlueprintCallable)
+	void SendCreateCharacterPkt(FString name, FString templateId);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

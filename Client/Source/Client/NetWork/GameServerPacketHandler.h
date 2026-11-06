@@ -7,6 +7,7 @@
 #endif
 
 bool Handle_GC_AUTH_TOKEN(PacketSessionRef& session, Protocol::GC_AUTH_TOKEN& pkt);
+bool Handle_GC_CREATE_CHARACTER(PacketSessionRef& session, Protocol::GC_CREATE_CHARACTER& pkt);
 bool Handle_GC_ENTER_GAME(PacketSessionRef& session, Protocol::GC_ENTER_GAME& pkt);
 bool Handle_GC_SPAWN(PacketSessionRef& session, Protocol::GC_SPAWN& pkt);
 bool Handle_GC_DESPAWN(PacketSessionRef& session, Protocol::GC_DESPAWN& pkt);
@@ -27,6 +28,7 @@ public:
 	static void Init()
 	{
 		GPacketHandler[PKT_GC_AUTH_TOKEN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_AUTH_TOKEN>(Handle_GC_AUTH_TOKEN, session, buffer, len); };
+		GPacketHandler[PKT_GC_CREATE_CHARACTER] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_CREATE_CHARACTER>(Handle_GC_CREATE_CHARACTER, session, buffer, len); };
 		GPacketHandler[PKT_GC_ENTER_GAME] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_ENTER_GAME>(Handle_GC_ENTER_GAME, session, buffer, len); };
 		GPacketHandler[PKT_GC_SPAWN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_SPAWN>(Handle_GC_SPAWN, session, buffer, len); };
 		GPacketHandler[PKT_GC_DESPAWN] = [](PacketSessionRef& session, BYTE* buffer, int32 len) {return HandlePacket<Protocol::GC_DESPAWN>(Handle_GC_DESPAWN, session, buffer, len); };
@@ -47,6 +49,7 @@ public:
 
 
 	static SendBufferRef MakeSendBuffer(Protocol::CG_AUTH_TOKEN& pkt) { return MakeSendBuffer(pkt, PKT_CG_AUTH_TOKEN); }
+	static SendBufferRef MakeSendBuffer(Protocol::CG_CREATE_CHARACTER& pkt) { return MakeSendBuffer(pkt, PKT_CG_CREATE_CHARACTER); }
 	static SendBufferRef MakeSendBuffer(Protocol::CG_ENTER_GAME& pkt) { return MakeSendBuffer(pkt, PKT_CG_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::CG_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_CG_LEAVE_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::CG_REVIVE& pkt) { return MakeSendBuffer(pkt, PKT_CG_REVIVE); }

@@ -4,6 +4,7 @@
 #include "Client/Client.h"
 #include "Client/ObjectHandler.h"
 #include "Client/Widget/CharacterListWidget.h"
+#include "Client/Widget/MsgWidget.h"
 #include "Client/Widget/WidgetManager.h"
 
 UObjectHandler* GetObjectHandlerG(PacketSessionRef session)
@@ -82,14 +83,58 @@ bool Handle_GC_AUTH_TOKEN(PacketSessionRef& session, Protocol::GC_AUTH_TOKEN& pk
 	UWidgetManager* WidgetManager = GetWidgetManagerG(session);
 	if (WidgetManager)
 	{
-		UCharacterListWidget* Widget = CreateWidget<UCharacterListWidget>(WidgetManager->GetGameInstance(), WidgetManager->CharacterListWidget);
+		TObjectPtr<UCharacterListWidget> Widget = CreateWidget<UCharacterListWidget>(WidgetManager->GetGameInstance(), WidgetManager->CharacterListWidgetClass);
 		if (Widget)
 		{
+			WidgetManager->SetCharacterListWidget(Widget);
 			Widget->SetCharacterList(pkt);
+			Widget->AddToViewport();
 		}
-		Widget->AddToViewport();
 	}
 	
+	return true;
+}
+
+bool Handle_GC_CREATE_CHARACTER(PacketSessionRef& session, Protocol::GC_CREATE_CHARACTER& pkt)
+{
+	UWidgetManager* WidgetManager = GetWidgetManagerG(session);
+	if (WidgetManager == nullptr)
+		return true;
+
+	UMsgWidget* Widget = CreateWidget<UMsgWidget>(WidgetManager->GetGameInstance(), WidgetManager->MsgWidgetClass);
+	if (Widget == nullptr)
+		return true;
+	
+	switch (pkt.result())
+	{
+	case Protocol::CREATECHARACTER_LENGTH:
+		Widget->SetMessage(TEXT("캐릭터 이름 길이 오류"));
+		break;
+	case Protocol::CREATEACCOUNT_DUPLICATION:
+		Widget->SetMessage(TEXT("중복된 이름"));
+		break;
+	case Protocol::SUCCESS:
+		Widget->SetMessage(TEXT("캐릭터 생성 성공!"));
+		break;
+	}
+	
+	if (pkt.result() == Protocol::SUCCESS)
+	{
+		TObjectPtr<UCharacterListWidget> ListWidget = WidgetManager->GetCharacterListWidget();
+		if (IsValid(ListWidget) == false)
+		{
+			ListWidget = nullptr;
+			ListWidget = CreateWidget<UCharacterListWidget>(WidgetManager->GetGameInstance(), WidgetManager->CharacterListWidgetClass);
+		}
+
+		if (ListWidget != nullptr)
+		{
+			ListWidget->SetCharacterList(pkt);
+			ListWidget->AddToViewport();
+		}
+	}
+	Widget->AddToViewport();
+		
 	return true;
 }
 

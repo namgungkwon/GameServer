@@ -67,6 +67,10 @@ class CG_CHAT;
 struct CG_CHATDefaultTypeInternal;
 extern CG_CHATDefaultTypeInternal _CG_CHAT_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull CG_CHAT_class_data_;
+class CG_CREATE_CHARACTER;
+struct CG_CREATE_CHARACTERDefaultTypeInternal;
+extern CG_CREATE_CHARACTERDefaultTypeInternal _CG_CREATE_CHARACTER_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull CG_CREATE_CHARACTER_class_data_;
 class CG_ENTER_GAME;
 struct CG_ENTER_GAMEDefaultTypeInternal;
 extern CG_ENTER_GAMEDefaultTypeInternal _CG_ENTER_GAME_default_instance_;
@@ -103,6 +107,10 @@ class GC_CHAT;
 struct GC_CHATDefaultTypeInternal;
 extern GC_CHATDefaultTypeInternal _GC_CHAT_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull GC_CHAT_class_data_;
+class GC_CREATE_CHARACTER;
+struct GC_CREATE_CHARACTERDefaultTypeInternal;
+extern GC_CREATE_CHARACTERDefaultTypeInternal _GC_CREATE_CHARACTER_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull GC_CREATE_CHARACTER_class_data_;
 class GC_DAMAGE;
 struct GC_DAMAGEDefaultTypeInternal;
 extern GC_DAMAGEDefaultTypeInternal _GC_DAMAGE_default_instance_;
@@ -608,7 +616,7 @@ class GC_REWARD final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_REWARD*>(
         &_GC_REWARD_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 18;
+  static constexpr int kIndexInFileMessages = 20;
   friend void swap(GC_REWARD& a, GC_REWARD& b) { a.Swap(&b); }
   inline void Swap(GC_REWARD* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -798,7 +806,7 @@ class GC_DESPAWN final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_DESPAWN*>(
         &_GC_DESPAWN_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 10;
+  static constexpr int kIndexInFileMessages = 12;
   friend void swap(GC_DESPAWN& a, GC_DESPAWN& b) { a.Swap(&b); }
   inline void Swap(GC_DESPAWN* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -997,7 +1005,7 @@ class GC_DAMAGE final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_DAMAGE*>(
         &_GC_DAMAGE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 17;
+  static constexpr int kIndexInFileMessages = 19;
   friend void swap(GC_DAMAGE& a, GC_DAMAGE& b) { a.Swap(&b); }
   inline void Swap(GC_DAMAGE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1211,7 +1219,7 @@ class GC_CHAT final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_CHAT*>(
         &_GC_CHAT_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 21;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(GC_CHAT& a, GC_CHAT& b) { a.Swap(&b); }
   inline void Swap(GC_CHAT* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1847,7 +1855,7 @@ class CG_REVIVE final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_REVIVE*>(
         &_CG_REVIVE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 11;
+  static constexpr int kIndexInFileMessages = 13;
   friend void swap(CG_REVIVE& a, CG_REVIVE& b) { a.Swap(&b); }
   inline void Swap(CG_REVIVE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2049,7 +2057,7 @@ class CG_LEAVE_GAME final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_LEAVE_GAME*>(
         &_CG_LEAVE_GAME_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 8;
+  static constexpr int kIndexInFileMessages = 10;
   friend void swap(CG_LEAVE_GAME& a, CG_LEAVE_GAME& b) { a.Swap(&b); }
   inline void Swap(CG_LEAVE_GAME* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2239,7 +2247,7 @@ class CG_ENTER_GAME final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_ENTER_GAME*>(
         &_CG_ENTER_GAME_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 6;
+  static constexpr int kIndexInFileMessages = 8;
   friend void swap(CG_ENTER_GAME& a, CG_ENTER_GAME& b) { a.Swap(&b); }
   inline void Swap(CG_ENTER_GAME* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2374,6 +2382,213 @@ class CG_ENTER_GAME final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull CG_ENTER_GAME_class_data_;
 // -------------------------------------------------------------------
 
+class CG_CREATE_CHARACTER final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:Protocol.CG_CREATE_CHARACTER) */ {
+ public:
+  inline CG_CREATE_CHARACTER() : CG_CREATE_CHARACTER(nullptr) {}
+  ~CG_CREATE_CHARACTER() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(CG_CREATE_CHARACTER* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(CG_CREATE_CHARACTER));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR CG_CREATE_CHARACTER(::google::protobuf::internal::ConstantInitialized);
+
+  inline CG_CREATE_CHARACTER(const CG_CREATE_CHARACTER& from) : CG_CREATE_CHARACTER(nullptr, from) {}
+  inline CG_CREATE_CHARACTER(CG_CREATE_CHARACTER&& from) noexcept
+      : CG_CREATE_CHARACTER(nullptr, ::std::move(from)) {}
+  inline CG_CREATE_CHARACTER& operator=(const CG_CREATE_CHARACTER& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CG_CREATE_CHARACTER& operator=(CG_CREATE_CHARACTER&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CG_CREATE_CHARACTER& default_instance() {
+    return *reinterpret_cast<const CG_CREATE_CHARACTER*>(
+        &_CG_CREATE_CHARACTER_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 6;
+  friend void swap(CG_CREATE_CHARACTER& a, CG_CREATE_CHARACTER& b) { a.Swap(&b); }
+  inline void Swap(CG_CREATE_CHARACTER* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CG_CREATE_CHARACTER* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CG_CREATE_CHARACTER* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<CG_CREATE_CHARACTER>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const CG_CREATE_CHARACTER& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const CG_CREATE_CHARACTER& from) { CG_CREATE_CHARACTER::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(CG_CREATE_CHARACTER* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "Protocol.CG_CREATE_CHARACTER"; }
+
+  explicit CG_CREATE_CHARACTER(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  CG_CREATE_CHARACTER(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const CG_CREATE_CHARACTER& from);
+  CG_CREATE_CHARACTER(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, CG_CREATE_CHARACTER&& from) noexcept
+      : CG_CREATE_CHARACTER(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kNameFieldNumber = 1,
+    kTemplateIdFieldNumber = 2,
+  };
+  // string name = 1;
+  void clear_name() ;
+  const ::std::string& name() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_name(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_name();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_name();
+  void set_allocated_name(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_name() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_name(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_name();
+
+  public:
+  // int32 templateId = 2;
+  void clear_templateid() ;
+  ::int32_t templateid() const;
+  void set_templateid(::int32_t value);
+
+  private:
+  ::int32_t _internal_templateid() const;
+  void _internal_set_templateid(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:Protocol.CG_CREATE_CHARACTER)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<1, 2,
+                                   0, 41,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const CG_CREATE_CHARACTER& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr name_;
+    ::int32_t templateid_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull CG_CREATE_CHARACTER_class_data_;
+// -------------------------------------------------------------------
+
 class CG_CHAT final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:Protocol.CG_CHAT) */ {
  public:
@@ -2429,7 +2644,7 @@ class CG_CHAT final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_CHAT*>(
         &_CG_CHAT_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 20;
+  static constexpr int kIndexInFileMessages = 22;
   friend void swap(CG_CHAT& a, CG_CHAT& b) { a.Swap(&b); }
   inline void Swap(CG_CHAT* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2776,6 +2991,215 @@ class CG_AUTH_TOKEN final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull CG_AUTH_TOKEN_class_data_;
 // -------------------------------------------------------------------
 
+class GC_CREATE_CHARACTER final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:Protocol.GC_CREATE_CHARACTER) */ {
+ public:
+  inline GC_CREATE_CHARACTER() : GC_CREATE_CHARACTER(nullptr) {}
+  ~GC_CREATE_CHARACTER() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(GC_CREATE_CHARACTER* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(GC_CREATE_CHARACTER));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR GC_CREATE_CHARACTER(::google::protobuf::internal::ConstantInitialized);
+
+  inline GC_CREATE_CHARACTER(const GC_CREATE_CHARACTER& from) : GC_CREATE_CHARACTER(nullptr, from) {}
+  inline GC_CREATE_CHARACTER(GC_CREATE_CHARACTER&& from) noexcept
+      : GC_CREATE_CHARACTER(nullptr, ::std::move(from)) {}
+  inline GC_CREATE_CHARACTER& operator=(const GC_CREATE_CHARACTER& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GC_CREATE_CHARACTER& operator=(GC_CREATE_CHARACTER&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GC_CREATE_CHARACTER& default_instance() {
+    return *reinterpret_cast<const GC_CREATE_CHARACTER*>(
+        &_GC_CREATE_CHARACTER_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 7;
+  friend void swap(GC_CREATE_CHARACTER& a, GC_CREATE_CHARACTER& b) { a.Swap(&b); }
+  inline void Swap(GC_CREATE_CHARACTER* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GC_CREATE_CHARACTER* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GC_CREATE_CHARACTER* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<GC_CREATE_CHARACTER>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const GC_CREATE_CHARACTER& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const GC_CREATE_CHARACTER& from) { GC_CREATE_CHARACTER::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(GC_CREATE_CHARACTER* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "Protocol.GC_CREATE_CHARACTER"; }
+
+  explicit GC_CREATE_CHARACTER(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  GC_CREATE_CHARACTER(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const GC_CREATE_CHARACTER& from);
+  GC_CREATE_CHARACTER(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, GC_CREATE_CHARACTER&& from) noexcept
+      : GC_CREATE_CHARACTER(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kSummariesFieldNumber = 2,
+    kResultFieldNumber = 1,
+  };
+  // repeated .Protocol.ObjectSummaryData summaries = 2;
+  int summaries_size() const;
+  private:
+  int _internal_summaries_size() const;
+
+  public:
+  void clear_summaries() ;
+  ::Protocol::ObjectSummaryData* PROTOBUF_NONNULL mutable_summaries(int index);
+  ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>* PROTOBUF_NONNULL mutable_summaries();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>& _internal_summaries() const;
+  ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>* PROTOBUF_NONNULL _internal_mutable_summaries();
+  public:
+  const ::Protocol::ObjectSummaryData& summaries(int index) const;
+  ::Protocol::ObjectSummaryData* PROTOBUF_NONNULL add_summaries();
+  const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>& summaries() const;
+  // .Protocol.Result result = 1;
+  void clear_result() ;
+  ::Protocol::Result result() const;
+  void set_result(::Protocol::Result value);
+
+  private:
+  ::Protocol::Result _internal_result() const;
+  void _internal_set_result(::Protocol::Result value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:Protocol.GC_CREATE_CHARACTER)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<1, 2,
+                                   1, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const GC_CREATE_CHARACTER& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::RepeatedPtrField< ::Protocol::ObjectSummaryData > summaries_;
+    int result_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull GC_CREATE_CHARACTER_class_data_;
+// -------------------------------------------------------------------
+
 class GC_AUTH_TOKEN final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:Protocol.GC_AUTH_TOKEN) */ {
  public:
@@ -3040,7 +3464,7 @@ class GC_REVIVE final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_REVIVE*>(
         &_GC_REVIVE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 12;
+  static constexpr int kIndexInFileMessages = 14;
   friend void swap(GC_REVIVE& a, GC_REVIVE& b) { a.Swap(&b); }
   inline void Swap(GC_REVIVE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3252,7 +3676,7 @@ class GC_MOVE final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_MOVE*>(
         &_GC_MOVE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 14;
+  static constexpr int kIndexInFileMessages = 16;
   friend void swap(GC_MOVE& a, GC_MOVE& b) { a.Swap(&b); }
   inline void Swap(GC_MOVE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3449,7 +3873,7 @@ class GC_ATTACK final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_ATTACK*>(
         &_GC_ATTACK_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
+  static constexpr int kIndexInFileMessages = 18;
   friend void swap(GC_ATTACK& a, GC_ATTACK& b) { a.Swap(&b); }
   inline void Swap(GC_ATTACK* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3656,7 +4080,7 @@ class CG_MOVE final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_MOVE*>(
         &_CG_MOVE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 13;
+  static constexpr int kIndexInFileMessages = 15;
   friend void swap(CG_MOVE& a, CG_MOVE& b) { a.Swap(&b); }
   inline void Swap(CG_MOVE* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3851,7 +4275,7 @@ class CG_ATTACK final : public ::google::protobuf::Message
     return *reinterpret_cast<const CG_ATTACK*>(
         &_CG_ATTACK_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 15;
+  static constexpr int kIndexInFileMessages = 17;
   friend void swap(CG_ATTACK& a, CG_ATTACK& b) { a.Swap(&b); }
   inline void Swap(CG_ATTACK* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -4079,7 +4503,7 @@ class GC_SPAWN final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_SPAWN*>(
         &_GC_SPAWN_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 9;
+  static constexpr int kIndexInFileMessages = 11;
   friend void swap(GC_SPAWN& a, GC_SPAWN& b) { a.Swap(&b); }
   inline void Swap(GC_SPAWN* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -4276,7 +4700,7 @@ class GC_LEVELUP final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_LEVELUP*>(
         &_GC_LEVELUP_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 19;
+  static constexpr int kIndexInFileMessages = 21;
   friend void swap(GC_LEVELUP& a, GC_LEVELUP& b) { a.Swap(&b); }
   inline void Swap(GC_LEVELUP* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -4471,7 +4895,7 @@ class GC_ENTER_GAME final : public ::google::protobuf::Message
     return *reinterpret_cast<const GC_ENTER_GAME*>(
         &_GC_ENTER_GAME_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 7;
+  static constexpr int kIndexInFileMessages = 9;
   friend void swap(GC_ENTER_GAME& a, GC_ENTER_GAME& b) { a.Swap(&b); }
   inline void Swap(GC_ENTER_GAME* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -5169,6 +5593,179 @@ GC_AUTH_TOKEN::_internal_summaries() const {
 }
 inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>* PROTOBUF_NONNULL
 GC_AUTH_TOKEN::_internal_mutable_summaries() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.summaries_;
+}
+
+// -------------------------------------------------------------------
+
+// CG_CREATE_CHARACTER
+
+// string name = 1;
+inline void CG_CREATE_CHARACTER::clear_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.name_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000001U);
+}
+inline const ::std::string& CG_CREATE_CHARACTER::name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:Protocol.CG_CREATE_CHARACTER.name)
+  return _internal_name();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void CG_CREATE_CHARACTER::set_name(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:Protocol.CG_CREATE_CHARACTER.name)
+}
+inline ::std::string* PROTOBUF_NONNULL CG_CREATE_CHARACTER::mutable_name()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:Protocol.CG_CREATE_CHARACTER.name)
+  return _s;
+}
+inline const ::std::string& CG_CREATE_CHARACTER::_internal_name() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.name_.Get();
+}
+inline void CG_CREATE_CHARACTER::_internal_set_name(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.name_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL CG_CREATE_CHARACTER::_internal_mutable_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.name_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE CG_CREATE_CHARACTER::release_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:Protocol.CG_CREATE_CHARACTER.name)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000001U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  auto* released = _impl_.name_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.name_.Set("", GetArena());
+  }
+  return released;
+}
+inline void CG_CREATE_CHARACTER::set_allocated_name(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+  _impl_.name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.name_.IsDefault()) {
+    _impl_.name_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.CG_CREATE_CHARACTER.name)
+}
+
+// int32 templateId = 2;
+inline void CG_CREATE_CHARACTER::clear_templateid() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.templateid_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline ::int32_t CG_CREATE_CHARACTER::templateid() const {
+  // @@protoc_insertion_point(field_get:Protocol.CG_CREATE_CHARACTER.templateId)
+  return _internal_templateid();
+}
+inline void CG_CREATE_CHARACTER::set_templateid(::int32_t value) {
+  _internal_set_templateid(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_set:Protocol.CG_CREATE_CHARACTER.templateId)
+}
+inline ::int32_t CG_CREATE_CHARACTER::_internal_templateid() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.templateid_;
+}
+inline void CG_CREATE_CHARACTER::_internal_set_templateid(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.templateid_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GC_CREATE_CHARACTER
+
+// .Protocol.Result result = 1;
+inline void GC_CREATE_CHARACTER::clear_result() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.result_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline ::Protocol::Result GC_CREATE_CHARACTER::result() const {
+  // @@protoc_insertion_point(field_get:Protocol.GC_CREATE_CHARACTER.result)
+  return _internal_result();
+}
+inline void GC_CREATE_CHARACTER::set_result(::Protocol::Result value) {
+  _internal_set_result(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_set:Protocol.GC_CREATE_CHARACTER.result)
+}
+inline ::Protocol::Result GC_CREATE_CHARACTER::_internal_result() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::Protocol::Result>(_impl_.result_);
+}
+inline void GC_CREATE_CHARACTER::_internal_set_result(::Protocol::Result value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.result_ = value;
+}
+
+// repeated .Protocol.ObjectSummaryData summaries = 2;
+inline int GC_CREATE_CHARACTER::_internal_summaries_size() const {
+  return _internal_summaries().size();
+}
+inline int GC_CREATE_CHARACTER::summaries_size() const {
+  return _internal_summaries_size();
+}
+inline ::Protocol::ObjectSummaryData* PROTOBUF_NONNULL GC_CREATE_CHARACTER::mutable_summaries(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:Protocol.GC_CREATE_CHARACTER.summaries)
+  return _internal_mutable_summaries()->Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>* PROTOBUF_NONNULL GC_CREATE_CHARACTER::mutable_summaries()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000001U);
+  // @@protoc_insertion_point(field_mutable_list:Protocol.GC_CREATE_CHARACTER.summaries)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_summaries();
+}
+inline const ::Protocol::ObjectSummaryData& GC_CREATE_CHARACTER::summaries(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:Protocol.GC_CREATE_CHARACTER.summaries)
+  return _internal_summaries().Get(index);
+}
+inline ::Protocol::ObjectSummaryData* PROTOBUF_NONNULL GC_CREATE_CHARACTER::add_summaries()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::Protocol::ObjectSummaryData* _add =
+      _internal_mutable_summaries()->InternalAddWithArena(
+          ::google::protobuf::MessageLite::internal_visibility(), GetArena());
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000001U);
+  // @@protoc_insertion_point(field_add:Protocol.GC_CREATE_CHARACTER.summaries)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>& GC_CREATE_CHARACTER::summaries() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:Protocol.GC_CREATE_CHARACTER.summaries)
+  return _internal_summaries();
+}
+inline const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>&
+GC_CREATE_CHARACTER::_internal_summaries() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.summaries_;
+}
+inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectSummaryData>* PROTOBUF_NONNULL
+GC_CREATE_CHARACTER::_internal_mutable_summaries() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.summaries_;
 }
