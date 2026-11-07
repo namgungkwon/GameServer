@@ -115,7 +115,10 @@
     <ClInclude Include="Logger.h">
       <Filter>Log</Filter>
     </ClInclude>
-    <ClInclude Include="CoreConfig.h" />
+    <ClInclude Include="CoreConfig.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerStats.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -214,7 +217,10 @@
     <ClCompile Include="Logger.cpp">
       <Filter>Log</Filter>
     </ClCompile>
-    <ClCompile Include="CoreConfig.cpp" />
+    <ClCompile Include="CoreConfig.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerStats.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Main">

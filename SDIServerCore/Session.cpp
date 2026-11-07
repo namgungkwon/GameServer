@@ -259,6 +259,12 @@ void Session::ProcessRecv(int32 numOfBytes)
 		return;
 	}
 
+	if (GServerStats)
+	{
+		GServerStats->network.recvBytes.fetch_add(numOfBytes);
+	}
+
+
 	if (_recvBuffer.OnWrite(numOfBytes) == false)
 	{
 		Disconnect(L"OnWriteOverflow");
@@ -287,6 +293,12 @@ void Session::ProcessSend(int32 numOfBytes)
 	{
 		Disconnect(L"Send 0");
 		return;
+	}
+
+	if (GServerStats)
+	{
+		GServerStats->network.sendBytes.fetch_add(numOfBytes);
+		GServerStats->network.sendPackets.fetch_add(1);
 	}
 
 	OnSend(numOfBytes);
@@ -337,6 +349,11 @@ int32 PacketSession::OnRecv(BYTE* buffer, int32 len)
 			return -1;
 
 		OnRecvPacket(&buffer[processLen], header.size);
+
+		if (GServerStats)
+		{
+			GServerStats->network.recvPackets.fetch_add(1);
+		}
 
 		processLen += header.size;
 	}

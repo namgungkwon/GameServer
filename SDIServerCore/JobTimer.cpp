@@ -20,55 +20,63 @@ void JobTimer::Reserve(uint64 tickAfter, weak_ptr<JobQueue> owner, JobRef job)
 	_cv.notify_one();
 }
 
-void JobTimer::Distribute(uint64 now)
+void JobTimer::Distribute()
 {
-	Vector<TimerItem> items;
-	uint64 nextWaitTick = INT64_MAX;
+	while (true)
 	{
+		uint64 now = GetTickCount64();
+		Vector<TimerItem> items;
+		uint64 nextWaitTick = INT64_MAX;
 		{
-			UniqueLock lock(_mutex);
-
-			while (_items.empty() == false)
 			{
-				const TimerItem& timerItem = _items.top();
+				UniqueLock lock(_mutex);
 
-				if (now < timerItem.executeTick)
+				while (_items.empty() == false)
 				{
-					nextWaitTick = timerItem.executeTick;
-					break;
+					const TimerItem& timerItem = _items.top();
+
+					if (now < timerItem.executeTick)
+					{
+						nextWaitTick = timerItem.executeTick;
+						break;
+					}
+
+					items.push_back(timerItem);
+					_items.pop();
 				}
-
-				items.push_back(timerItem);
-				_items.pop();
 			}
-		}
 
-		for (TimerItem& item : items)
-		{
-			if (JobQueueRef owner = item.jobData->owner.lock())
-				owner->Push(item.jobData->job);
-
-			ObjectPool<JobData>::Push(item.jobData);
-		}
-
-		{
-			UniqueLock lock(_mutex);
-			if (_items.empty())
+			for (TimerItem& item : items)
 			{
-				// 스레드 슬립
-				_cv.wait(lock, [this] { return _items.empty() == false || _isStart == false; });
-				return;
-			}
-			else
-			{
-				const uint64 nowTick = ::GetTickCount64();
-				const uint64 nextWaitTick = _items.top().executeTick;
-				const uint64 delayTime = nextWaitTick > nowTick ? nextWaitTick - nowTick : 0;
+				if (JobQueueRef owner = item.jobData->owner.lock())
+					owner->Push(item.jobData->job);
 
-				_cv.wait_for(lock, std::chrono::milliseconds(delayTime));
+				ObjectPool<JobData>::Push(item.jobData);
 			}
+
+			{
+				UniqueLock lock(_mutex);
+				if (_items.empty())
+				{
+					// 스레드 슬립
+					_cv.wait(lock, [this] { return _items.empty() == false || _isStart == false; });
+					return;
+				}
+				else
+				{
+					const uint64 nowTick = ::GetTickCount64();
+					const uint64 nextWaitTick = _items.top().executeTick;
+					const uint64 delayTime = nextWaitTick > nowTick ? nextWaitTick - nowTick : 0;
+
+					_cv.wait_for(lock, std::chrono::milliseconds(delayTime));
+				}
+			}
+
+			if (_isStart == false)
+				break;
 		}
 	}
+	
 }
 
 

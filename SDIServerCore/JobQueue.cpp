@@ -21,6 +21,7 @@ void JobQueue::Push(JobRef job/*, bool pushOnly*/)
 void JobQueue::Execute()
 {
 	LCurrentJobQueue = this;
+	LEndTickCount = GetTickCount64() + WORKER_TICK;
 	while (true)
 	{
 		Vector<JobRef> jobs;
@@ -34,6 +35,10 @@ void JobQueue::Execute()
 
 		if (_jobCount.fetch_sub(jobCount) == jobCount)
 		{
+			if (GServerStats)
+			{
+				GServerStats->job.jobsExecuted.fetch_add(jobCount);
+			}
 			LCurrentJobQueue = nullptr;
 			break;
 		}

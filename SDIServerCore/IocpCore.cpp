@@ -3,6 +3,8 @@
 
 #include "IocpEvent.h"
 
+#include <chrono>
+
 
 ///////////////////////////////////////////////////////
 //	<	IocpCore	>
@@ -24,10 +26,24 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 	ULONG_PTR key = 0;
 	IocpEvent* iocpEvent = nullptr;
 
+	auto Process = [](IocpEvent* event, DWORD bytes) {
+
+		auto start = std::chrono::high_resolution_clock::now();
+		IocpObjectRef iocpObject = event->owner;
+		iocpObject->Dispatch(event, bytes);
+
+		if (GServerStats)
+		{
+			auto end = std::chrono::high_resolution_clock::now();
+			int64 delta = (end - start).count();
+			GServerStats->iocp.iocpCallCount.fetch_add(1);
+			GServerStats->iocp.totalProcessTImeUs.fetch_add(delta);
+		}
+	};
+
 	if (::GetQueuedCompletionStatus(_iocpHandle, OUT & numOfBytes, /* key */OUT & key, OUT reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), timeoutMs))
 	{
-		IocpObjectRef iocpObject = iocpEvent->owner;
-		iocpObject->Dispatch(iocpEvent, numOfBytes);
+		Process(iocpEvent, numOfBytes);
 	}
 	else
 	{

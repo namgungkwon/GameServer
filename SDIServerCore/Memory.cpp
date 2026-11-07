@@ -77,12 +77,16 @@ void* Memory::Allocate(size_t size)
 	{
 		// 메모리 풀링 최대 크기를 벗어나면 일반 할당
 		header = reinterpret_cast<MemoryHeader*>(::_aligned_malloc(allocSize, SLIST_ALIGNMENT));
+		if (GServerStats) GServerStats->memory.poolMissCount.fetch_add(1);
 	}
 	else
 	{
 		// 메모리 풀에서 꺼내온다
 		header = _poolTable[allocSize]->Pop();
+		if (GServerStats) GServerStats->memory.poolHitsCount.fetch_add(1);
 	}
+
+	if (GServerStats) GServerStats->memory.liveAllocCount.fetch_add(1);
 #endif	//_STOMP
 
 	return MemoryHeader::AttachHeader(header, allocSize);
@@ -108,5 +112,6 @@ void Memory::Release(void* ptr)
 		// 메모리 풀에 반납한다
 		_poolTable[allocSize]->Push(header);
 	}
+	if (GServerStats) GServerStats->memory.liveAllocCount.fetch_sub(1);
 #endif	//_STOMP
 }

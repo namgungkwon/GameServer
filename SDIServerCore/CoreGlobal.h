@@ -9,6 +9,7 @@ extern class JobTimer*			GJobTimer;
 extern class DeadLockProfiler*	GDeadLockProfiler;
 extern class DBConnectionPool*	GDBConnectionPool;
 extern class Logger*			GLogger;
+extern class ServerStats*		GServerStats;
 
 class CoreGlobal
 {
@@ -17,12 +18,13 @@ public:
 	static void Clear();
 
 private:
-	static std::unique_ptr<class Memory> _memory;
-	static std::unique_ptr<class ThreadManager> _threadManager;
-	static std::unique_ptr<class SendBufferManager> _sendBufferManager;
-	static std::unique_ptr<class GlobalQueue> _globalQueue;
-	static std::unique_ptr<class JobTimer>	_jobTimer;
-	static std::unique_ptr<class DeadLockProfiler> _deadLockProfiler;
-	static std::unique_ptr<class DBConnectionPool> _dbConnectionPool;
-	static std::unique_ptr<class Logger> _logger;
+	static std::unique_ptr<class Memory>				_memory;
+	static std::unique_ptr<class ThreadManager>			_threadManager;
+	static std::unique_ptr<class SendBufferManager>		_sendBufferManager;
+	static std::unique_ptr<class GlobalQueue>			_globalQueue;
+	static std::unique_ptr<class JobTimer>				_jobTimer;
+	static std::unique_ptr<class DeadLockProfiler>		_deadLockProfiler;
+	static std::unique_ptr<class DBConnectionPool>		_dbConnectionPool;
+	static std::unique_ptr<class Logger>				_logger;
+	static std::unique_ptr<class ServerStats>			_serverStats;
 };

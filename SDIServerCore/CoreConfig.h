@@ -1,5 +1,7 @@
 #pragma once
 
+#define WORKER_TICK 64
+
 namespace Config
 {
 	static constexpr uint32 KB = 1024;

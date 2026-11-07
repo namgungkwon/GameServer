@@ -42,7 +42,7 @@ public:
 
 public:
 	void							Reserve(uint64 tickAfter, weak_ptr<JobQueue> owner, JobRef job);
-	void							Distribute(uint64 now);
+	void							Distribute();
 	void							Clear();
 
 private:

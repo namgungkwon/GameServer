@@ -8,6 +8,7 @@
 #include "JobTimer.h"
 #include "DbconnectionPool.h"
 #include "Logger.h"
+#include "ServerStats.h"
 
 #ifdef _DEBUG
 #include "DeadLockProfiler.h"
@@ -26,6 +27,7 @@ std::unique_ptr<class GlobalQueue>		CoreGlobal::_globalQueue		= nullptr;
 std::unique_ptr<class JobTimer>			CoreGlobal::_jobTimer			= nullptr;
 std::unique_ptr<class DBConnectionPool>	CoreGlobal::_dbConnectionPool	= nullptr;
 std::unique_ptr<class Logger>			CoreGlobal::_logger				= nullptr;
+std::unique_ptr<class ServerStats>		CoreGlobal::_serverStats		= nullptr;
 
 
 Memory*									GMemory							= nullptr;
@@ -36,6 +38,7 @@ JobTimer*								GJobTimer						= nullptr;
 DeadLockProfiler*						GDeadLockProfiler				= nullptr;
 DBConnectionPool*						GDBConnectionPool				= nullptr;
 Logger*									GLogger							= nullptr;
+ServerStats*							GServerStats					= nullptr;
 
 
 
@@ -59,9 +62,11 @@ void CoreGlobal::Init()
 
 	_globalQueue				= std::make_unique<GlobalQueue>();
 	GGlobalQueue				= _globalQueue.get();
+	GGlobalQueue->Start();
 
 	_jobTimer					= std::make_unique<JobTimer>();
 	GJobTimer					= _jobTimer.get();
+	GJobTimer->Start();
 
 	_dbConnectionPool			= std::make_unique<DBConnectionPool>();
 	GDBConnectionPool			= _dbConnectionPool.get();
@@ -70,6 +75,11 @@ void CoreGlobal::Init()
 	_logger						= std::make_unique<Logger>();
 	GLogger						= _logger.get();
 	GLogger->Init(L"server.log");
+
+
+	_serverStats = std::make_unique<ServerStats>();
+	GServerStats = _serverStats.get();
+	GServerStats->Init();
 
 	LOG_INFO(L"=== [Server Engine Initialization Complete] ===");
 }
@@ -82,9 +92,16 @@ void CoreGlobal::Clear()
 	GDBConnectionPool			= nullptr;
 	_dbConnectionPool			= nullptr;
 
+	_serverStats				= nullptr;
+	GServerStats				= nullptr;
+
+	if (GJobTimer)
+		GJobTimer->Stop();
 	GJobTimer					= nullptr;
 	_jobTimer					= nullptr;
 
+	if (GGlobalQueue)
+		GGlobalQueue->Stop();
 	GGlobalQueue				= nullptr;
 	_globalQueue				= nullptr;
 

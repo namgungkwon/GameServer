@@ -12,7 +12,7 @@ ThreadManager::ThreadManager()
 {
 	InitTLS();
 
-	Launch([]() {	while (true) DistributeReserveJobs(); });
+	Launch([]() { DistributeReserveJobs(); });
 }
 
 ThreadManager::~ThreadManager()
@@ -62,7 +62,5 @@ void ThreadManager::DoGlobalQueueWork()
 
 void ThreadManager::DistributeReserveJobs()
 {
-	const uint64 now = ::GetTickCount64();
-
-	GJobTimer->Distribute(now);
+	GJobTimer->Distribute();
 }
