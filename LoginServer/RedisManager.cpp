@@ -7,6 +7,7 @@ bool RedisManager::Init(const RedisConfig& redisConfig)
 {
 	if (Connect(redisConfig) == false)
 		return false;
+	return true;
 }
 
 std::string RedisManager::SetToken(uint64 accountId)

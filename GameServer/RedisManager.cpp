@@ -6,6 +6,7 @@ bool RedisManager::Init(const RedisConfig& redisConfig, const ServerConfig& serv
 {
 	if (Connect(redisConfig) == false)
 		return false;
+	return true;
 }
 
 Protocol::Result RedisManager::AuthToken(const string& token, OUT uint64& accountId)

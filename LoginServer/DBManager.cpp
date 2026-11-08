@@ -53,18 +53,18 @@ Protocol::Result DBManager::CreateAccount(const string& id, const string& passwo
 	{
 		WCHAR newId[255];
 		wstring wId = Utils::ToWString(id);
-		::wcsncpy_s(newId, wId.c_str(), 254);
+		::wcsncpy_s(newId, wId.c_str(), wId.size());
 
 		WCHAR newPassword[100];
 		wstring wPassword = Utils::ToWString(password);
-		::wcsncpy_s(newPassword, wPassword.c_str(), 99);
+		::wcsncpy_s(newPassword, wPassword.c_str(), wPassword.size());
 
 		DBBind<2, 0> bind(*dbConn.conn,
 			L"INSERT INTO Accounts (id, password) "
 			L"VALUES (?, ?);");
 
-		bind.BindParam(0, newId);
-		bind.BindParam(1, newPassword);
+		bind.BindParam(0, newId, wId.size());
+		bind.BindParam(1, newPassword, wPassword.size());
 
 		if (bind.Execute() == false)
 		{
@@ -84,7 +84,7 @@ Protocol::Result DBManager::LoginGame(const string& id, const string& password, 
 {
 	WCHAR newId[255];
 	wstring wId = Utils::ToWString(id);
-	::wcsncpy_s(newId, wId.c_str(), 254);
+	::wcsncpy_s(newId, wId.c_str(), wId.size());
 
 	uint64 oAccountId;
 	WCHAR oPassword[100] = {};
@@ -98,7 +98,7 @@ Protocol::Result DBManager::LoginGame(const string& id, const string& password, 
 			L"FROM Accounts "
 			L"WHERE id = ?;");
 
-		bind.BindParam(0, newId);
+		bind.BindParam(0, newId, wId.size());
 		bind.BindCol(0, oPassword);
 		bind.BindCol(1, oAccountId);
 

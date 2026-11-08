@@ -49,7 +49,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 
 	WCHAR newId[20];
 	wstring wName = Utils::ToWString(name);
-	::wcsncpy_s(newId, wName.c_str(), 19);
+	::wcsncpy_s(newId, wName.c_str(), wName.size());
 
 	uint64 oPlayerId;
 	{
@@ -58,7 +58,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 			L"VALUES (?, ?, ?) ");
 
 		bind.BindParam(0, accountDBId);
-		bind.BindParam(1, newId);
+		bind.BindParam(1, newId, wName.size());
 		bind.BindParam(2, templateId);
 
 		if (bind.Execute() == false)
@@ -74,7 +74,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 			L"WHERE name = ?"
 		);
 
-		bind.BindParam(0, newId);
+		bind.BindParam(0, newId, wName.size());
 		bind.BindCol(0, oPlayerId);
 
 		if (bind.Execute() == false || bind.Fetch() == false)
@@ -114,7 +114,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 			L"WHERE name = ?"
 		);
 
-		bind.BindParam(0, newId);
+		bind.BindParam(0, newId, wName.size());
 		bind.BindCol(0, oPlayerId);
 
 		if (bind.Execute() == false || bind.Fetch() == false)

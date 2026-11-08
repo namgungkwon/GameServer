@@ -2,12 +2,6 @@
 
 #include "ThreadManager.h"
 
-
-enum
-{
-	WORKER_TICK = 64,
-};
-
 void DBTest();
 
 int main()
@@ -31,8 +25,6 @@ int main()
 	{
 		GThreadManager->Launch([&service]()
 			{
-				LEndTickCount = ::GetTickCount64() + WORKER_TICK;
-				while (true)
 					ThreadManager::DoGlobalQueueWork();
 			});
 	}
