@@ -24,7 +24,7 @@ void World::Start()
     for (GameSceneRef& scene : _scenes)
         scene->StartUpdate();
 
-    SpawnMonster();
+  //  SpawnMonster();
 }
 
 void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load)
@@ -64,6 +64,11 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
         {
             zone->SpawnPktToEnterPlayer(player);
         }
+    }
+
+    if (GServerStats)
+    {
+        GServerStats->game.activePlayers.fetch_add(1);
     }
 }
 
@@ -134,6 +139,11 @@ void World::LeaveEntity(EntityRef entity)
             }));
     }
     _entities.erase(entity->GetObjectId());
+
+    if (GServerStats)
+    {
+        GServerStats->game.activePlayers.fetch_sub(1);
+    }
 }
 
 void World::CreateScene()
@@ -246,12 +256,12 @@ ZoneRef World::GetZoneByPos(Vector3 pos)
     int32 zoneCount = _config.mapSize / _config.zoneSize;
 
     int32 x = static_cast<int32>(pos.x / _config.zoneSize);
-    int32 z = static_cast<int32>(pos.z / _config.zoneSize);
+    int32 y = static_cast<int32>(pos.y / _config.zoneSize);
 
-    if (x < 0 || x >= zoneCount || z < 0 || z >= zoneCount)
+    if (x < 0 || x >= zoneCount || y < 0 || y >= zoneCount)
         return nullptr;
 
-    return _zones[z * zoneCount + x];
+    return _zones[y * zoneCount + x];
 }
 
 ZoneRef World::GetZoneById(int32 id)

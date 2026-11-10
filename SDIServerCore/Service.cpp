@@ -15,6 +15,11 @@ Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, Session
 
 }
 
+Service::~Service()
+{
+	CloseService();
+}
+
 bool Service::Process(uint32 iocpTimeoutMs)
 {
 	if (_isClose) return false;
@@ -30,6 +35,7 @@ void Service::CloseService()
 	{
 		session->Disconnect(L"Close Service");
 	}
+	_sessions.clear();
 }
 
 void Service::Broadcast(SendBufferRef& sendBuffer)
@@ -84,15 +90,14 @@ bool ClientService::Start()
 	if (CanStart() == false)
 		return false;
 
-	const int32 sessionCount = GetMaxSessionCount();
-	for (int32 i = 0; i < sessionCount; ++i)
-	{
-		SessionRef session = CreateSession();
-		if (session->Connect() == false)
-			return false;
-	}
+	return Service::Start();
+}
 
-	return true;
+SessionRef ClientService::AddSession()
+{
+	SessionRef session = CreateSession();
+	session->Connect();
+	return session;
 }
 
 
@@ -119,11 +124,13 @@ bool ServerService::Start()
 	if (_listener->StartAccept(service) == false)
 		return false;
 
-	return true;
+	return Service::Start();
 }
 
 void ServerService::CloseService()
 {
 	// TODO
 	Service::CloseService();
+
+	_listener = nullptr;
 }

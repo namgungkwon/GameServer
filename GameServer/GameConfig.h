@@ -6,7 +6,13 @@ namespace Config
 {
 	namespace Packet
 	{
-		static constexpr uint32 DESPAWNPACKET_BYTES = 8; // objectId
+		static constexpr uint32 SPAWNPACKET_BYTES = 256;
+		static constexpr uint32 DESPAWNPACKET_BYTES = 10;
+		static constexpr uint32 MOVEPACKET_BYTES = 80; 
+
+		static constexpr uint32 MAXCOUNT_SPAWNPKT = (Config::Buffer::SEND_BUFFER_CHUNK_SIZE - sizeof(PacketHeader)) / SPAWNPACKET_BYTES;
+		static constexpr uint32 MAXCOUNT_DESPAWNPKT = (Config::Buffer::SEND_BUFFER_CHUNK_SIZE - sizeof(PacketHeader)) / DESPAWNPACKET_BYTES;
+		static constexpr uint32 MAXCOUNT_MOVEPKT = (Config::Buffer::SEND_BUFFER_CHUNK_SIZE - sizeof(PacketHeader)) / MOVEPACKET_BYTES;
 	}
 
 	namespace World

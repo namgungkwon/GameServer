@@ -7,6 +7,8 @@
 class Player : public Entity
 {
 public:
+	~Player();
+public:
 	bool Init(PlayerSummaryData& summary, PlayerLoadData& load);
 	void Respawn(const Vector3& respawnLocation) override;
 	void GainExp(int32 exp);

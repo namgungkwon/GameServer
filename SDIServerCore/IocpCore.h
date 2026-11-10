@@ -22,7 +22,7 @@ class IocpCore
 {
 public:
 	IocpCore();
-	~IocpCore() = default;
+	~IocpCore();
 
 public:
 	HANDLE			GetHandle() { return _iocpHandle; }

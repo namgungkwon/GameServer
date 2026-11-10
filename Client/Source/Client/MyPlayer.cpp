@@ -83,11 +83,11 @@ void AMyPlayer::MoveTick(float DeltaTime)
 
 	if (MovePacketTimer <= 0)
 	{
-		/*if (CurrentInput.IsNearlyZero())
+		if (CurrentInput.IsNearlyZero())
 		{
-			MovePacketTimer = MOVEPKT_DELAY;
+			MovePacketTimer = CONST_MOVEPKT_DELAY;
 		}
-		else*/
+		else
 		{
 			SendMovePkt();
 		}

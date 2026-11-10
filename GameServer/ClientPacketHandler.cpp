@@ -67,7 +67,7 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
         Protocol::GC_CREATE_CHARACTER res;
         res.set_result(Protocol::CREATEACCOUNT_LENGTH);
         SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
-        session->Send(sendBuffer);
+        gameSession->Send(sendBuffer);
         return true;
     }
 

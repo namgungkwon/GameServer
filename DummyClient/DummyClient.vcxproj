@@ -167,20 +167,30 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DummyClient.h" />
+    <ClInclude Include="DummyManager.h" />
     <ClInclude Include="Enum.pb.h" />
     <ClInclude Include="GameServerPacketHandler.h" />
     <ClInclude Include="GameLibraries.h" />
+    <ClInclude Include="GameServerSession.h" />
     <ClInclude Include="LoginServerPacketHandler.h" />
+    <ClInclude Include="LoginServerSession.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Struct.pb.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DummyClient.cpp" />
+    <ClCompile Include="DummyManager.cpp" />
     <ClCompile Include="Enum.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="GameServerPacketHandler.cpp" />
+    <ClCompile Include="GameServerSession.cpp" />
+    <ClCompile Include="LoginServerPacketHandler.cpp" />
+    <ClCompile Include="LoginServerSession.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="pch.cpp">

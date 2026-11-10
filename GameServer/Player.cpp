@@ -9,6 +9,15 @@
 #include "DBManager.h"
 #include "job.h"
 
+
+#pragma optimize(" ", off)
+Player::~Player()
+{
+	//LOG_INFO(L"DeletePlayer");
+}
+#pragma optimize(" ", on)
+
+
 bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 {
 	// PlayerLevelData

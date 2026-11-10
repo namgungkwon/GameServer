@@ -39,6 +39,10 @@
     <ClInclude Include="LoginServerPacketHandler.h">
       <Filter>Packet</Filter>
     </ClInclude>
+    <ClInclude Include="DummyClient.h" />
+    <ClInclude Include="LoginServerSession.h" />
+    <ClInclude Include="GameServerSession.h" />
+    <ClInclude Include="DummyManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Packet.cpp">
@@ -59,6 +63,16 @@
     <ClCompile Include="Struct.pb.cc">
       <Filter>Packet</Filter>
     </ClCompile>
+    <ClCompile Include="DummyClient.cpp" />
+    <ClCompile Include="LoginServerSession.cpp" />
+    <ClCompile Include="GameServerSession.cpp" />
+    <ClCompile Include="LoginServerPacketHandler.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServerPacketHandler.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="DummyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Common\Protobuf\Struct.proto">

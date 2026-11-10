@@ -63,6 +63,8 @@ void ServerStats::Rendering()
     system.Refresh();
 
     // Network
+    int32 connectedSession  = network.connectedSessions.load();
+    uint64 totalConnections = network.totalConnections.load();
     uint64 recvKB           = network.recvBytes.exchange(0) / (1 * Config::KB);
     uint64 sendKB           = network.sendBytes.exchange(0) / (1 * Config::KB);
     uint64 recvPackets      = network.recvPackets.exchange(0);
@@ -74,6 +76,7 @@ void ServerStats::Rendering()
     // Iocp
     uint64 iocpCallCount    = iocp.iocpCallCount.exchange(0);
     uint64 iocpTime         = iocp.totalProcessTImeUs.exchange(0);
+    uint64 avgIocpUs        = (iocpCallCount > 0) ? (iocpTime / iocpCallCount) : 0;
 
     // Memory
     uint64 poolHits         = memory.poolHitsCount.exchange(0);
@@ -89,6 +92,14 @@ void ServerStats::Rendering()
     double cpuUsage         = system.cpuUsage;
     size_t memUsageMB       = system.memUsageMB;
 
+    // Game
+    int32 activePlayers = game.activePlayers.load();;
+    uint64 tickCount = game.tickCount.exchange(0);
+    uint64 lagTickCount = game.lagTickCount.exchange(0);
+    uint64 lagTickMs = game.lagTickMs.exchange(0);
+    uint64 lagAvgMs = (lagTickCount > 0) ? (lagTickMs / lagTickCount) : 0;
+    uint64 lagTickMaxMs = game.lagTickMaxMs.exchange(0);
+
 
     // \033[K       - 줄 끝까지 지우기 - 잔상 제거
     // \033[31m     - 텍스트를 빨간색으로 설정
@@ -100,19 +111,22 @@ void ServerStats::Rendering()
     stream << L"\033[K\n";
 
     // Network
+    stream << L"[SESSION]";
+    stream << L"   sessions: " << connectedSession << L" (Total : " << totalConnections << L")";
+    stream << L"\033[K\n";
     stream << L"[NETWORK]";
-    stream << "   Recv: " << recvKB << L"KB/s (" << recvPackets << L"pkt/s)";
-    stream << L"  Send: " << sendKB << L"KB/s (" << sendPackets << L"pkt/s)";
+    stream << L"   Recv: " << recvKB << L"KB/s (" << recvPackets << L"pkt/s)";
+    stream << L"   Send: " << sendKB << L"KB/s (" << sendPackets << L"pkt/s)";
     stream << L"\033[K\n";
 
     // Job
     stream << L"[JOB]    ";
-    stream << "   Job: " << jobsExecute << L"/s";
+    stream << L"   Job: " << jobsExecute << L"/s";
     stream << L"\033[K\n";
 
     // Iocp
     stream << L"[IOCP]   ";
-    stream << "   Call: " << iocpCallCount << L"/s (" << iocpTime << L"us)";
+    stream << L"   Call: " << iocpCallCount << L"/s (" << avgIocpUs << L"us)";
     stream << L"\033[K\n";
 
     // Memory
@@ -135,6 +149,20 @@ void ServerStats::Rendering()
     stream << L"\033[K\n";
     stream << L"[MEM]    ";
     stream << L"   " << memUsageMB << L"MB";
+    stream << L"\033[K\n";
+
+    // Game
+    stream << L"============================= [ Game STATUS ] ===========================";
+    stream << L"\033[K\n";
+
+    stream << L"[TICK]   ";
+    stream << L"   Scene: " << tickCount << L"/s";
+    stream << L"   AvgLag: " << lagAvgMs << L"ms";
+    stream << L"   MaxLag: " << lagTickMaxMs << L"ms";
+    stream << L"\033[K\n";
+
+    stream << L"[WORLD]  ";
+    stream << L" Players: " << activePlayers;
     stream << L"\033[K\n";
 
     stream << L"============================================================================";

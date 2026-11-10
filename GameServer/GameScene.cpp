@@ -12,6 +12,27 @@ void GameScene::StartUpdate()
 void GameScene::Update()
 {
 	const uint64 now = ::GetTickCount64();
+	const uint64 updateTickMs = Config::World::WORLD_UPDATE_TICK;
+
+	if (GServerStats)
+	{
+		uint64 expectedTickCount = _lastUpdateTick + updateTickMs;
+		if (now > expectedTickCount)
+		{
+			uint64 lagMs = now - expectedTickCount;
+			GServerStats->game.lagTickCount.fetch_add(1);
+			GServerStats->game.lagTickMs.fetch_add(lagMs);
+
+			uint64 prevMax = GServerStats->game.lagTickMaxMs.load();
+			if (lagMs > prevMax)
+			{
+				GServerStats->game.lagTickMaxMs.store(lagMs);
+			}
+		}
+
+		GServerStats->game.tickCount.fetch_add(1);
+	}
+
 	uint64 deltaTime = now - _lastUpdateTick;
 	_lastUpdateTick = now;
 
@@ -119,13 +140,27 @@ void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VI
 		case VISION_TYPE::SPAWN:
 		{
 			for (const ZoneRef zone : zones)
+			{
 				zone->AddPendingSpawn(entity);
+
+				if (entity->GetType() == Protocol::OBJECT_CATEGORY_PLAYER)
+				{
+					zone->SpawnPktToEnterPlayer(static_pointer_cast<Player>(entity));
+				}
+			}
 		}
 		break;
 		case VISION_TYPE::DESPAWN:
 		{
 			for (const ZoneRef zone : zones)
+			{
 				zone->AddPendingDespawn(entity->GetObjectId());
+
+				if (entity->GetType() == Protocol::OBJECT_CATEGORY_PLAYER)
+				{
+					zone->DespawnPktToLeavePlayer(static_pointer_cast<Player>(entity));
+				}
+			}
 		}
 		break;
 		case VISION_TYPE::MOVE:

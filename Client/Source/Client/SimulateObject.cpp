@@ -55,5 +55,5 @@ void ASimulateObject::DespawnPkt()
 		Dead();
 	}
 
-	Super::DespawnPkt();
+	Despawn();
 }

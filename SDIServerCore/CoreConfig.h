@@ -9,7 +9,7 @@ namespace Config
 
 	namespace Packet
 	{
-		static constexpr uint32 MAX_PACKET_SIZE = 2 * KB;
+		static constexpr uint32 MAX_RECV_PACKET_SIZE = 4 * KB;
 	}
 
 	namespace Session

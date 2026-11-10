@@ -47,7 +47,7 @@ void GlobalQueue::Execute()
 
 		UniqueLock lock(_mutex);
 
-		_cv.wait(lock, [this] {return CheckEmpty() == false || _isStart == false; });
+		_cv.wait(lock, [this] {return _isStart == false || CheckEmpty() == false; });
 
 		if (_isStart == false)
 			break;

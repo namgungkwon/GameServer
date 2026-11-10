@@ -72,10 +72,20 @@ void Zone::SpawnPktToEnterPlayer(PlayerRef player)
 	for (auto& [id, object] : _players)
 	{
 		object->MakePkt(*pkt.add_object());
+		if (pkt.object_size() < Config::Packet::MAXCOUNT_SPAWNPKT)
+			continue;
+		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+		player->Send(sendBuffer);
+		pkt.Clear();
 	}
 	for (auto& [id, object] : _monsters)
 	{
 		object->MakePkt(*pkt.add_object());
+		if (pkt.object_size() < Config::Packet::MAXCOUNT_SPAWNPKT)
+			continue;
+		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+		player->Send(sendBuffer);
+		pkt.Clear();
 	}
 
 	if (pkt.object_size() > 0)
@@ -85,7 +95,7 @@ void Zone::SpawnPktToEnterPlayer(PlayerRef player)
 	}
 }
 
-void Zone::DespawnPtkAboutLeavePlayer(PlayerRef player)
+void Zone::DespawnPktToLeavePlayer(PlayerRef player)
 {
 	Protocol::GC_DESPAWN pkt;
 	for (auto& [id, object] : _players)
@@ -124,12 +134,26 @@ void Zone::GetAdjacentZoneInfo(OUT HashMap<GameScene*, Vector<ZoneRef>>& info)
 
 void Zone::ClearPengingJobs()
 {
+	if (_players.size() == 0)
+	{
+		_pendingSpawns.clear();
+		_pendingDespawns.clear();
+		_pendingMoves.clear();
+		return;
+	}
+
 	{
 		Protocol::GC_SPAWN pkt;
 		for (EntityRef& entity : _pendingSpawns)
 		{
 			entity->MakePkt(*pkt.add_object());
+			if (pkt.object_size() < Config::Packet::MAXCOUNT_SPAWNPKT)
+				continue;
+
+			BroadCast(pkt);
+			pkt.Clear();
 		}
+
 		if (pkt.object_size() > 0)
 			BroadCast(pkt);
 		_pendingSpawns.clear();
@@ -139,8 +163,14 @@ void Zone::ClearPengingJobs()
 		for (uint64 id : _pendingDespawns)
 		{
 			pkt.add_objectid(id);
+
+			if (pkt.objectid().size() < Config::Packet::MAXCOUNT_DESPAWNPKT)
+				continue;
+
+			BroadCast(pkt);
+			pkt.Clear();
 		}
-		if (pkt.objectid_size() > 0)
+		if (pkt.objectid_size() > 0) 
 			BroadCast(pkt);
 		_pendingDespawns.clear();
 	}
@@ -149,6 +179,12 @@ void Zone::ClearPengingJobs()
 		for (EntityRef entity : _pendingMoves)
 		{
 			entity->MakePkt(*pkt.add_movedata());
+
+			if (pkt.movedata().size() < Config::Packet::MAXCOUNT_MOVEPKT)
+				continue;
+
+			BroadCast(pkt);
+			pkt.Clear();
 		}
 		if (pkt.movedata_size() > 0)
 			BroadCast(pkt);

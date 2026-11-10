@@ -15,6 +15,14 @@ IocpCore::IocpCore()
 	ASSERT_CRASH(_iocpHandle != INVALID_HANDLE_VALUE);
 }
 
+#pragma optimize("", off)
+IocpCore::~IocpCore()
+{
+	if (_iocpHandle != INVALID_HANDLE_VALUE)
+		::CloseHandle(_iocpHandle);
+}
+#pragma optimize("", on)
+
 bool IocpCore::Register(IocpObjectRef iocpObject)
 {
 	return ::CreateIoCompletionPort(iocpObject->GetHandle(), _iocpHandle, /*key*/0, 0);

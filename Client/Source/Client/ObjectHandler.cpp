@@ -34,9 +34,11 @@ void UObjectHandler::Destroy(AGameObject* gameObject)
 {
 	if (SpawnedObjects.Find(gameObject->GetObjectId()) != nullptr)
 	{
-		AGameObject* go = SpawnedObjects[gameObject->GetObjectId()];
 		SpawnedObjects.Remove(gameObject->GetObjectId());
-		go->Destroy();
+	}
+	if (gameObject->Destroy(true))
+	{
+		int32 a = 5;
 	}
 }
 

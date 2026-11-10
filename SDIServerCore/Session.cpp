@@ -12,8 +12,8 @@ Session::Session()
 
 	_lastReceivedTime = ::GetTickCount64();
 }
-Session::~Session()
 
+Session::~Session()
 {
 	SocketUtils::Close(_socket);
 }
@@ -48,7 +48,7 @@ void Session::Disconnect(const WCHAR* cause)
 		return;
 
 	// TEMP
-	wcout << "Disconnect : " << cause << endl;
+	//LOG_INFO(L"Disconnect : " + wstring(cause));
 
 	RegisterDisconnect();
 }
@@ -317,6 +317,8 @@ void Session::HandleError(const int32 errorCode)
 	case WSAECONNRESET:
 	case WSAECONNABORTED:
 		break;
+	case 64:			// 세션 강제종료
+		break;
 	default:
 		// TODO : LOG
 		cout << "Handle Error : " << errorCode << endl;
@@ -330,6 +332,23 @@ void Session::HandleError(const int32 errorCode)
 ///////////////////////////////////////////////////////
 //	<	PacketSession	>
 ///////////////////////////////////////////////////////
+void PacketSession::OnConnected()
+{
+	if (GServerStats)
+	{
+		GServerStats->network.connectedSessions.fetch_add(1);
+		GServerStats->network.totalConnections.fetch_add(1);
+	}
+}
+
+void PacketSession::OnDisconnected()
+{
+	if (GServerStats)
+	{
+		GServerStats->network.connectedSessions.fetch_sub(1);
+	}
+}
+
 int32 PacketSession::OnRecv(BYTE* buffer, int32 len)
 {
 	int32 processLen = 0;
@@ -345,7 +364,7 @@ int32 PacketSession::OnRecv(BYTE* buffer, int32 len)
 		if (dataSize < header.size)
 			break;
 
-		if (header.size > Config::Packet::MAX_PACKET_SIZE)
+		if (header.size > Config::Packet::MAX_RECV_PACKET_SIZE)
 			return -1;
 
 		OnRecvPacket(&buffer[processLen], header.size);

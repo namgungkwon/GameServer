@@ -59,7 +59,7 @@ void JobTimer::Distribute()
 				if (_items.empty())
 				{
 					// 스레드 슬립
-					_cv.wait(lock, [this] { return _items.empty() == false || _isStart == false; });
+					_cv.wait(lock, [this] { return _isStart == false || _items.empty() == false; });
 				}
 				else
 				{

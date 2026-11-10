@@ -5,7 +5,7 @@
 #include <chrono>
 
 Mutex Logger::_consoleLock;
-int Logger::_statsPanelLines = 10;
+int Logger::_statsPanelLines = 15;
 
 void Logger::Init(const wstring& filename)
 {

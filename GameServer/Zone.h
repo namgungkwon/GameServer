@@ -16,7 +16,7 @@ public:
 	void EnterZone(EntityRef entity);
 	void LeaveZone(EntityRef entity);
 	void SpawnPktToEnterPlayer(PlayerRef player);
-	void DespawnPtkAboutLeavePlayer(PlayerRef player);
+	void DespawnPktToLeavePlayer(PlayerRef player);
 
 public:
 	HashMap<uint64, PlayerRef> GetPlayers() { return _players; }

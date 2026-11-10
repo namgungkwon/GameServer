@@ -23,10 +23,10 @@ class Service : public enable_shared_from_this<Service>
 
 public:
 	Service(ServiceType type, NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount = 1);
-	virtual ~Service()					= default;
+	virtual ~Service();
 
 public:
-	virtual bool				Start() abstract						{ return false; };
+	virtual bool				Start()									{ return true; }
 	bool						CanStart()								{ return _sessionFactory != nullptr; }
 	virtual bool				Process(uint32 iocpTimeoutMs = INFINITE);
 	virtual void				CloseService();
@@ -77,6 +77,7 @@ public:
 
 public:
 	virtual bool Start() override;
+	SessionRef AddSession();
 };
 
 

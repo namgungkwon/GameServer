@@ -54,7 +54,7 @@ public:
 	void 							Attack(const FInputActionValue& Value);
 	UFUNCTION(BlueprintImplementableEvent)
 	void AttackInputPressed();
-
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector CurrentInput;

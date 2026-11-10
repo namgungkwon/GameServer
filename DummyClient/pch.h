@@ -5,3 +5,8 @@
 #include "CorePch.h"
 
 #include "GameLibraries.h"
+
+useRef(LoginServerSession)
+useRef(GameServerSession)
+useRef(DummyClient)
+useRef(DummyManager)
