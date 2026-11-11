@@ -64,7 +64,7 @@ void GameScene::ProcessMovingEntity()
 
 			MoveResultRef result = GWorld->GetMoveResult(oldZone, newZone);
 			if (result == nullptr)
-				return;
+				continue;
 
 			if (oldZone != newZone)
 				HandleZoneChanged(entity, oldZone, newZone);
