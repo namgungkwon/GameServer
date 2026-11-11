@@ -10,6 +10,7 @@
 #include "World.h"
 #include "Packet.h"
 #include "ClientPacketHandler.h"
+#include "PacketSender.h"
 
 GameConfig GameGlobal::_config = {};
 std::shared_ptr<ServerService> GameGlobal::_service = nullptr;
@@ -19,6 +20,7 @@ std::shared_ptr<SessionManager> GameGlobal::_sessionManager = nullptr;
 std::shared_ptr<GameData> GameGlobal::_gameData = nullptr;
 std::shared_ptr<GridMap> GameGlobal::_gridMap = nullptr;
 std::shared_ptr<World> GameGlobal::_world = nullptr;
+std::shared_ptr<PacketSender> GameGlobal::_packetSender = nullptr;
 
 DBManager* GDBManager = nullptr;
 RedisManager* GRedisManager = nullptr;
@@ -26,6 +28,7 @@ SessionManager* GSessionManager = nullptr;
 GameData* GGameData = nullptr;
 GridMap* GGridMap = nullptr;
 World* GWorld = nullptr;
+PacketSender* GPacketSender = nullptr;
 
 
 void GameGlobal::Init()
@@ -46,6 +49,11 @@ void GameGlobal::Init()
 		LOG_INFO(L"GameData load complete");
 	else
 		LOG_ERROR(L"Failed to load GameData");
+
+	// 4. PacketSender
+	_packetSender = MakeShared<PacketSender>();
+	GPacketSender = _packetSender.get();
+	GPacketSender->Init(_config.world.sceneCount);
 
 	// 4. World
 	_world = MakeShared<World>();

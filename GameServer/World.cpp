@@ -11,6 +11,8 @@
 #include "Protocol.pb.h"
 #include "ClientPacketHandler.h"
 
+#include "PacketSender.h"
+
 void World::Init(const WorldConfig& config)
 {
 	_config = config;
@@ -173,13 +175,13 @@ void World::CreateZone()
         for (int32 x = 0; x < zoneCount; ++x)
         {
             int32   linearIdx = y * zoneCount + x;
-            ZoneRef zone = MakeShared<Zone>();
+            int32 sceneX = x * sceneCols / zoneCount;
+            int32 sceneY = y * sceneRows / zoneCount;
+            int32 sceneIdx = sceneY * sceneCols + sceneX;
+
+            ZoneRef zone = MakeShared<Zone>(GPacketSender->GetSender(sceneIdx));
             zone->SetZoneId(linearIdx);
             _zones.push_back(zone);
-
-            int32 sceneX = x * sceneCols / zoneCount;
-            int32 sceneZ = y * sceneRows / zoneCount;
-            int32 sceneIdx = sceneZ * sceneCols + sceneX;
 
             _scenes[sceneIdx]->AddZone(zone);
             zone->SetScene(_scenes[sceneIdx]);

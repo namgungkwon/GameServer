@@ -103,6 +103,7 @@
     <ClInclude Include="GameConfig.h">
       <Filter>main</Filter>
     </ClInclude>
+    <ClInclude Include="PacketSender.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -204,6 +205,7 @@
     <ClCompile Include="GameConfig.cpp">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="PacketSender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pch">

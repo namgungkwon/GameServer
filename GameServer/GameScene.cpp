@@ -3,6 +3,9 @@
 #include "Zone.h"
 #include "World.h"
 
+#include "Entity.h"
+#include "Player.h"
+
 void GameScene::StartUpdate()
 {
 	_lastUpdateTick = ::GetTickCount64();
@@ -200,13 +203,13 @@ void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, ui
 		if (scene == this)
 		{
 			for (ZoneRef& zone : zones)
-				zone->BroadCastBuffer(sendBuffer, exceptId);
+				zone->BufferBroadCast(sendBuffer, exceptId);
 		}
 		else
 		{
 			scene->DoAsync([scene, zones, sendBuffer, exceptId]() {
 				for (const ZoneRef& zone : zones)
-					zone->BroadCastBuffer(sendBuffer, exceptId);
+					zone->BufferBroadCast(sendBuffer, exceptId);
 				});
 		}
 	}
@@ -216,6 +219,6 @@ void GameScene::BroadCast(SendBufferRef sendBuffer, uint64 exceptId)
 {
 	for (auto& zone : _zones)
 	{
-		zone->BroadCastBuffer(sendBuffer, exceptId);
+		zone->BufferBroadCast(sendBuffer, exceptId);
 	}
 }

@@ -1,12 +1,11 @@
 #pragma once
 #include "Protocol.pb.h"
 #include "ClientPacketHandler.h"
-#include "Player.h"
 
 class Zone : public enable_shared_from_this<Zone>
 {
 public:
-	Zone() = default;
+	Zone(JobQueueRef sender) : _sender(sender) {};
 
 public:
 	void Update(uint64 now, uint64 deltaTime);
@@ -32,21 +31,21 @@ public:
 
 public:
 	template<typename T>
-	void BroadCast(T& pkt, uint64 expectId = -1)
+	void PacketSend(T& pkt, PlayerRef& player)
 	{
 		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-		BroadCastBuffer(sendBuffer);
+		BufferSend(sendBuffer, player);
+	}
+	void BufferSend(const SendBufferRef& sendBuffer, PlayerRef& player);
+
+	template<typename T>
+	void PacketBroadCast(T& pkt, uint64 expectId = -1)
+	{
+		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+		BufferBroadCast(sendBuffer);
 	}
 
-	void BroadCastBuffer(SendBufferRef sendBuffer, uint64 expectId = -1)
-	{
-		for (auto& [id, player] : _players)
-		{
-			if (expectId == id)
-				continue;
-			player->Send(sendBuffer);
-		}
-	}
+	void BufferBroadCast(const SendBufferRef& sendBuffer, uint64 expectId = -1);
 
 private:
 	GETSET(int32,					_zoneId,		ZoneId);
@@ -64,4 +63,7 @@ private:
 
 private:
 	Vector<EntityRef> _movingEntity;
+
+public:
+	JobQueueRef _sender;
 };

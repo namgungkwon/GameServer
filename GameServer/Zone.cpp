@@ -5,6 +5,7 @@
 #include "player.h"
 #include "Monster.h"
 #include "ClientPacketHandler.h"
+#include "PacketSender.h"
 
 #include "MovementSystem.h"
 #include "CombatSystem.h"
@@ -74,8 +75,7 @@ void Zone::SpawnPktToEnterPlayer(PlayerRef player)
 		object->MakePkt(*pkt.add_object());
 		if (pkt.object_size() < Config::Packet::MAXCOUNT_SPAWNPKT)
 			continue;
-		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-		player->Send(sendBuffer);
+		PacketSend(pkt, player);
 		pkt.Clear();
 	}
 	for (auto& [id, object] : _monsters)
@@ -83,15 +83,13 @@ void Zone::SpawnPktToEnterPlayer(PlayerRef player)
 		object->MakePkt(*pkt.add_object());
 		if (pkt.object_size() < Config::Packet::MAXCOUNT_SPAWNPKT)
 			continue;
-		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-		player->Send(sendBuffer);
+		PacketSend(pkt, player);
 		pkt.Clear();
 	}
 
 	if (pkt.object_size() > 0)
 	{
-		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-		player->Send(sendBuffer);
+		PacketSend(pkt, player);
 	}
 }
 
@@ -101,16 +99,22 @@ void Zone::DespawnPktToLeavePlayer(PlayerRef player)
 	for (auto& [id, object] : _players)
 	{
 		pkt.add_objectid(id);
+		if (pkt.objectid().size() < Config::Packet::MAXCOUNT_DESPAWNPKT)
+			continue;
+		PacketSend(pkt, player);
+		pkt.Clear();
 	}
 	for (auto& [id, object] : _monsters)
 	{
 		pkt.add_objectid(id);
+		if (pkt.objectid().size() < Config::Packet::MAXCOUNT_DESPAWNPKT)
+			continue;
+		PacketSend(pkt, player);
 	}
 
 	if (pkt.objectid_size() > 0)
 	{
-		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
-		player->Send(sendBuffer);
+		PacketSend(pkt, player);
 	}
 }
 
@@ -132,6 +136,37 @@ void Zone::GetAdjacentZoneInfo(OUT HashMap<GameScene*, Vector<ZoneRef>>& info)
 		info[zone->GetScene().get()].push_back(zone);
 }
 
+void Zone::BufferSend(const SendBufferRef& sendBuffer, PlayerRef& player)
+{
+	_sender->DoAsync([target = player, sendBuffer = std::move(sendBuffer)]() {
+			target->Send(sendBuffer);
+		});
+}
+
+
+#pragma optimize(" ", off)
+void Zone::BufferBroadCast(const SendBufferRef& sendBuffer, uint64 expectId)
+{
+	{
+		Vector<PlayerRef> targets;
+		targets.reserve(_players.size());
+		for (auto& [id, player] : _players)
+		{
+			if (expectId == id)
+				continue;
+			targets.push_back(player);
+		}
+
+		_sender->DoAsync([targets = std::move(targets), sendBuffer = std::move(sendBuffer)]() {
+			for (const PlayerRef& player : targets)
+			{
+				player->Send(sendBuffer);
+			}
+			});
+	}
+}
+#pragma optimize(" ", on)
+
 void Zone::ClearPengingJobs()
 {
 	if (_players.size() == 0)
@@ -150,12 +185,12 @@ void Zone::ClearPengingJobs()
 			if (pkt.object_size() < Config::Packet::MAXCOUNT_SPAWNPKT)
 				continue;
 
-			BroadCast(pkt);
+			PacketBroadCast(pkt);
 			pkt.Clear();
 		}
 
 		if (pkt.object_size() > 0)
-			BroadCast(pkt);
+			PacketBroadCast(pkt);
 		_pendingSpawns.clear();
 	}
 	{
@@ -167,11 +202,11 @@ void Zone::ClearPengingJobs()
 			if (pkt.objectid().size() < Config::Packet::MAXCOUNT_DESPAWNPKT)
 				continue;
 
-			BroadCast(pkt);
+			PacketBroadCast(pkt);
 			pkt.Clear();
 		}
 		if (pkt.objectid_size() > 0) 
-			BroadCast(pkt);
+			PacketBroadCast(pkt);
 		_pendingDespawns.clear();
 	}
 	{
@@ -183,11 +218,11 @@ void Zone::ClearPengingJobs()
 			if (pkt.movedata().size() < Config::Packet::MAXCOUNT_MOVEPKT)
 				continue;
 
-			BroadCast(pkt);
+			PacketBroadCast(pkt);
 			pkt.Clear();
 		}
 		if (pkt.movedata_size() > 0)
-			BroadCast(pkt);
+			PacketBroadCast(pkt);
 		_pendingMoves.clear();
 	}
 }

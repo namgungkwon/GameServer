@@ -8,6 +8,7 @@ extern class SessionManager* GSessionManager;
 extern class GameData* GGameData;
 extern class GridMap* GGridMap;
 extern class World* GWorld;
+extern class PacketSender* GPacketSender;
 
 class GameGlobal
 {
@@ -26,4 +27,5 @@ private:
 	static std::shared_ptr<class GameData> _gameData;
 	static std::shared_ptr<class GridMap> _gridMap;
 	static std::shared_ptr<class World> _world;
+	static std::shared_ptr<class PacketSender> _packetSender;
 };

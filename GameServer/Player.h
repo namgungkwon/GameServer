@@ -15,7 +15,7 @@ public:
 	void LevelUp();
 
 public:
-	void Send(SendBufferRef& sendBuffer);
+	void Send(const SendBufferRef& sendBuffer);
 
 public:
 	bool InitPlayerLevelData(int32 level);

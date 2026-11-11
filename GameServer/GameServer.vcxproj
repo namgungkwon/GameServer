@@ -172,6 +172,7 @@
     <ClInclude Include="CombatComponent.h" />
     <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="NPC.h" />
+    <ClInclude Include="PacketSender.h" />
     <ClInclude Include="SceneRequest.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="DBManager.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="CombatComponent.cpp" />
     <ClCompile Include="CombatSystem.cpp" />
     <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="PacketSender.cpp" />
     <ClCompile Include="SceneRequest.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="DBManager.cpp" />

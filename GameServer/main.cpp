@@ -18,7 +18,7 @@ int main()
 			});
 	}
 	
-	const size_t LogicThreadCount = 1;
+	const size_t LogicThreadCount = 10;
 	for (size_t i = 0; i < LogicThreadCount; ++i)
 	{
 		GThreadManager->Launch([&service]()
