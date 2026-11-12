@@ -15,15 +15,15 @@ public:
 	void							Stop() { _isStart = false; _cv.notify_all(); }
 
 public:
-	void			Push(JobQueueRef jobQueue);
-	JobQueueRef		Pop();
-	bool			CheckEmpty();
+	void							Push(JobQueueRef jobQueue);
+	JobQueueRef						Pop();
+	bool							CheckEmpty();
 
 public:
-	void			Execute();
+	void							Execute();
 
 private:
-	LockQueue<JobQueueRef> _jobQueues;
+	LockQueue<JobQueueRef>			_jobQueues;
 
 private:
 private:

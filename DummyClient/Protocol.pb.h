@@ -4399,14 +4399,14 @@ class CG_ATTACK final : public ::google::protobuf::Message
   ::Protocol::ObjectPosData* PROTOBUF_NONNULL _internal_mutable_posdata();
 
   public:
-  // uint64 skillId = 3;
+  // uint32 skillId = 3;
   void clear_skillid() ;
-  ::uint64_t skillid() const;
-  void set_skillid(::uint64_t value);
+  ::uint32_t skillid() const;
+  void set_skillid(::uint32_t value);
 
   private:
-  ::uint64_t _internal_skillid() const;
-  void _internal_set_skillid(::uint64_t value);
+  ::uint32_t _internal_skillid() const;
+  void _internal_set_skillid(::uint32_t value);
 
   public:
   // @@protoc_insertion_point(class_scope:Protocol.CG_ATTACK)
@@ -4438,7 +4438,7 @@ class CG_ATTACK final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<::uint64_t> targets_;
     ::google::protobuf::internal::CachedSize _targets_cached_byte_size_;
     ::Protocol::ObjectPosData* PROTOBUF_NULLABLE posdata_;
-    ::uint64_t skillid_;
+    ::uint32_t skillid_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -6600,27 +6600,27 @@ CG_ATTACK::_internal_mutable_targets() {
   return &_impl_.targets_;
 }
 
-// uint64 skillId = 3;
+// uint32 skillId = 3;
 inline void CG_ATTACK::clear_skillid() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.skillid_ = ::uint64_t{0u};
+  _impl_.skillid_ = 0u;
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000004U);
 }
-inline ::uint64_t CG_ATTACK::skillid() const {
+inline ::uint32_t CG_ATTACK::skillid() const {
   // @@protoc_insertion_point(field_get:Protocol.CG_ATTACK.skillId)
   return _internal_skillid();
 }
-inline void CG_ATTACK::set_skillid(::uint64_t value) {
+inline void CG_ATTACK::set_skillid(::uint32_t value) {
   _internal_set_skillid(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_set:Protocol.CG_ATTACK.skillId)
 }
-inline ::uint64_t CG_ATTACK::_internal_skillid() const {
+inline ::uint32_t CG_ATTACK::_internal_skillid() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.skillid_;
 }
-inline void CG_ATTACK::_internal_set_skillid(::uint64_t value) {
+inline void CG_ATTACK::_internal_set_skillid(::uint32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.skillid_ = value;
 }

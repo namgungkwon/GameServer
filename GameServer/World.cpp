@@ -13,6 +13,10 @@
 
 #include "PacketSender.h"
 
+
+///////////////////////////////////////////////////////
+//	<	World	>
+///////////////////////////////////////////////////////
 void World::Init(const WorldConfig& config)
 {
 	_config = config;
@@ -23,7 +27,7 @@ void World::Init(const WorldConfig& config)
 
 void World::Start()
 {
-    for (GameSceneRef& scene : _scenes)
+    for (const GameSceneRef& scene : _scenes)
         scene->StartUpdate();
 
   //  SpawnMonster();
@@ -41,7 +45,6 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
         pkt.set_success(false);
         SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
         session->Send(sendBuffer);
-        session->SetAccountDBId(0);
         session->ReleaseEnterGame();
         return;
     }
@@ -79,11 +82,11 @@ bool World::EnterEntity(EntityRef entity)
     if (entity == nullptr)
         return false;
 
-    ZoneRef mainZone = GetZoneByPos(entity->GetLocation());
+    const ZoneRef& mainZone = GetZoneByPos(entity->GetLocation());
     if (mainZone == nullptr)
         return false;
 
-    GameSceneRef mainScene = mainZone->GetScene();
+    const GameSceneRef& mainScene = mainZone->GetScene();
     if (mainScene == nullptr)
         return false;
 
@@ -95,7 +98,7 @@ bool World::EnterEntity(EntityRef entity)
 
     for (auto& [scene, zones] : _enterSceneGroups)
     {
-        scene->DoAsync(Job([scene, zones, entity, mainZone]() {
+        scene->DoAsync(Job([scene, zones = std::move(zones), entity, mainZone]() {
             for (const ZoneRef& zone : zones)
             {
                 if (zone == mainZone) 
@@ -109,7 +112,7 @@ bool World::EnterEntity(EntityRef entity)
     }
 
 
-    _entities[entity->GetObjectId()] = entity;
+    _entities[entity->GetObjectId()] = std::move(entity);
 }
 
 void World::LeaveEntity(EntityRef entity)
@@ -128,7 +131,7 @@ void World::LeaveEntity(EntityRef entity)
 
     for (auto& [scene, zones] : _leaveSceneGroups)
     {
-        scene->DoAsync(Job([scene, zones, entity, mainZone, objectId = entity->GetObjectId()]() {
+        scene->DoAsync(Job([scene, zones = std::move(zones), entity, mainZone, objectId = entity->GetObjectId()]() {
             for (const ZoneRef& zone : zones)
             {
                 if (zone == mainZone)
@@ -151,7 +154,7 @@ void World::LeaveEntity(EntityRef entity)
 void World::CreateScene()
 {
     int32 count = _config.sceneCount;
-    _scenes.resize(count);
+    _scenes.resize(static_cast<uint64>(count));
     for (int32 i = 0; i < count; ++i)
     {
         _scenes[i] = MakeShared<GameScene>();
@@ -161,9 +164,9 @@ void World::CreateScene()
 
 void World::CreateZone()
 {
-    int32 zoneCount = _config.mapSize / _config.zoneSize;
-    int32 totalZoneCount = zoneCount * zoneCount;
-    _zones.reserve(totalZoneCount);
+    const int32 zoneCount    = _config.mapSize / _config.zoneSize;
+    const int32 totalZoneCount = zoneCount * zoneCount;
+    _zones.reserve(static_cast<uint64>(totalZoneCount));
 
     int32 sceneCols = 1;
     for (int32 i = 1; i * i <= _config.sceneCount; ++i)
@@ -174,17 +177,17 @@ void World::CreateZone()
     {
         for (int32 x = 0; x < zoneCount; ++x)
         {
-            int32   linearIdx = y * zoneCount + x;
+            int32 linearIdx = y * zoneCount + x;
             int32 sceneX = x * sceneCols / zoneCount;
             int32 sceneY = y * sceneRows / zoneCount;
             int32 sceneIdx = sceneY * sceneCols + sceneX;
 
             ZoneRef zone = MakeShared<Zone>(GPacketSender->GetSender(sceneIdx));
             zone->SetZoneId(linearIdx);
-            _zones.push_back(zone);
-
-            _scenes[sceneIdx]->AddZone(zone);
             zone->SetScene(_scenes[sceneIdx]);
+            _scenes[sceneIdx]->AddZone(zone);
+
+            _zones.push_back(std::move(zone));
         }
     }
 
@@ -204,7 +207,7 @@ void World::CreateZone()
                         adjacent.push_back(_zones[ty * zoneCount + tx]);
                 }
             }
-            return std::move(adjacent);
+            return adjacent;
         };
 
     for (int32 y = 0; y < zoneCount; ++y)
@@ -228,14 +231,14 @@ void World::CreateMoveTable()
         {
             int32 newId = newZone->GetZoneId();
             if (oldId == newId) continue;
-            _moveTable[oldId][newId] = CalculateMoveResult(oldZone, newZone);
+            _moveTable[oldId][newId] = std::move(CalculateMoveResult(oldZone, newZone));
         }
     }
 }
 
 void World::SpawnMonster()
 {
-    Vector<MonsterSpawnData>& spawnDataList = GGameData->GetMonsterSpawnData();
+    const Vector<MonsterSpawnData>& spawnDataList = GGameData->GetMonsterSpawnData();
 
     for (const MonsterSpawnData& spawnData : spawnDataList)
     {
@@ -244,7 +247,7 @@ void World::SpawnMonster()
         if (monsterData == nullptr)
             return;
 
-        for (size_t i = 0; i < spawnData.spawnCount; ++i)
+        for (uint64 i = 0; i < spawnData.spawnCount; ++i)
         {
             MonsterRef monster = MakeShared<Monster>();
             monster->Init(spawnData, *monsterData);
@@ -253,7 +256,7 @@ void World::SpawnMonster()
     }
 }
 
-ZoneRef World::GetZoneByPos(Vector3 pos)
+ZoneRef World::GetZoneByPos(const Vector3& pos)
 {
     int32 zoneCount = _config.mapSize / _config.zoneSize;
 
@@ -274,7 +277,7 @@ ZoneRef World::GetZoneById(int32 id)
     return _zones[id];
 }
 
-MoveResultRef World::GetMoveResult(ZoneRef oldZone, ZoneRef newZone)
+MoveResultRef World::GetMoveResult(const ZoneRef& oldZone, const ZoneRef& newZone)
 {
     if (oldZone == nullptr || newZone == nullptr) return nullptr;
 
@@ -300,7 +303,7 @@ void World::BroadCast(SendBufferRef sendBuffer, uint64 exceptId)
     }
 }
 
-MoveResultRef World::CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone)
+MoveResultRef World::CalculateMoveResult(const ZoneRef& oldZone, const ZoneRef& newZone)
 {
     const Vector<ZoneRef>& oldAdj = oldZone->GetAdjacentZones();
     const Vector<ZoneRef>& newAdj = newZone->GetAdjacentZones();

@@ -9,7 +9,6 @@
 Session::Session()
 {
 	_socket = SocketUtils::CreateSocket();
-
 	_lastReceivedTime = ::GetTickCount64();
 }
 
@@ -27,7 +26,7 @@ void Session::Send(SendBufferRef sendBuffer)
 
 	{
 		WRITE_LOCK;
-		_sendQueue.push(sendBuffer);
+		_sendQueue.push(std::move(sendBuffer));
 
 		if (_sendRegistered.exchange(true) == false)
 			registerSend = true;
@@ -42,20 +41,16 @@ bool Session::Connect()
 	return RegisterConnect();
 }
 
-void Session::Disconnect(const WCHAR* cause)
+void Session::Disconnect()
 {
 	if (_connected.exchange(false) == false)
 		return;
-
-	// TEMP
-	//LOG_INFO(L"Disconnect : " + wstring(cause));
 
 	RegisterDisconnect();
 }
 
 void Session::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
 {
-	// TODO
 	switch (iocpEvent->eventType)
 	{
 	case EventType::Connect:
@@ -75,15 +70,15 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
 	}
 }
 
-void Session::HandleError(const IocpEvent* iocpEvent, const int32 errorCode)
+void Session::HandleError(IocpEvent* iocpEvent, int32 errorCode)
 {
-	// TODO
 	switch (iocpEvent->eventType)
 	{
 	case EventType::Connect:
 		_connectEvent.owner = nullptr;
 		break;
 	case EventType::Disconnect:
+		LOG_ERROR(L"Iocp Disconnect Failed");
 		_disconnectEvent.owner = nullptr;
 		break;
 	case EventType::Recv:
@@ -96,7 +91,7 @@ void Session::HandleError(const IocpEvent* iocpEvent, const int32 errorCode)
 		break;
 	}
 
-	HandleError(errorCode);
+	Disconnect();
 }
 
 bool Session::RegisterConnect()
@@ -168,8 +163,8 @@ void Session::RegisterRecv()
 		const int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
 		{
-			HandleError(errorCode);
 			_recvEvent.owner = nullptr;
+			Disconnect();
 		}
 	}
 }
@@ -193,7 +188,7 @@ void Session::RegisterSend()
 			writeSize += sendBuffer->WriteSize();
 
 			_sendQueue.pop();
-			_sendEvent.sendBuffers.push_back(sendBuffer);
+			_sendEvent.sendBuffers.push_back(std::move(sendBuffer));
 		}
 	}
 
@@ -213,10 +208,10 @@ void Session::RegisterSend()
 		const int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
 		{
-			HandleError(errorCode);
 			_sendEvent.owner = nullptr;
 			_sendEvent.sendBuffers.clear();
 			_sendRegistered.store(false);
+			Disconnect();
 		}
 	}
 }
@@ -229,7 +224,7 @@ void Session::ProcessConnect()
 	// 세션등록
 	if (GetService()->AddSession(GetSessionRef()) == false)
 	{
-		Disconnect(L"MaxSession");
+		Disconnect();
 		return;
 	}
 
@@ -245,6 +240,7 @@ void Session::ProcessDisconnect()
 	_disconnectEvent.owner = nullptr;
 
 	OnDisconnected();
+
 	GetService()->ReleaseSession(GetSessionRef());
 }
 
@@ -255,7 +251,7 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	if (numOfBytes == 0)
 	{
-		Disconnect(L"Recv 0");
+		Disconnect();
 		return;
 	}
 
@@ -267,7 +263,7 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	if (_recvBuffer.OnWrite(numOfBytes) == false)
 	{
-		Disconnect(L"OnWriteOverflow");
+		Disconnect();
 		return;
 	}
 
@@ -275,7 +271,7 @@ void Session::ProcessRecv(int32 numOfBytes)
 	const int32 processLen = OnRecv(_recvBuffer.ReadPos(), dataSize);
 	if (processLen < 0 || dataSize < processLen || _recvBuffer.OnRead(processLen) == false)
 	{
-		Disconnect(L"OnRead Fail");
+		Disconnect();
 		return;
 	}
 
@@ -291,7 +287,7 @@ void Session::ProcessSend(int32 numOfBytes)
 
 	if (numOfBytes == 0)
 	{
-		Disconnect(L"Send 0");
+		Disconnect();
 		return;
 	}
 
@@ -308,23 +304,6 @@ void Session::ProcessSend(int32 numOfBytes)
 			_sendRegistered.store(false);
 		else
 			RegisterSend();
-}
-
-void Session::HandleError(const int32 errorCode)
-{
-	switch (errorCode)
-	{
-	case WSAECONNRESET:
-	case WSAECONNABORTED:
-		break;
-	case 64:			// 세션 강제종료
-		break;
-	default:
-		// TODO : LOG
-		cout << "Handle Error : " << errorCode << endl;
-		break;
-	}
-	Disconnect(L"HandleError");
 }
 
 

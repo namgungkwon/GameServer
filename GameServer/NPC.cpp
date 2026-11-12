@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "NPC.h"
 
+
+///////////////////////////////////////////////////////
+//	<	NPC	>
+///////////////////////////////////////////////////////
 void NPC::ResetPath()
 {
 	_path.clear();
@@ -10,7 +14,7 @@ void NPC::ResetPath()
 Vector3 NPC::GetRandomLocationInPatrol()
 {
 	Vector3 ret = _spawnLocation;
-	int64 patrolRadiusHalf = static_cast<int64>(_patrolRadius) / 2;
+	const int64 patrolRadiusHalf = static_cast<int64>(_patrolRadius / 2);
 	ret.x += UtilMath::GetRandom(-patrolRadiusHalf, patrolRadiusHalf);
 	ret.y += UtilMath::GetRandom(-patrolRadiusHalf, patrolRadiusHalf);
 

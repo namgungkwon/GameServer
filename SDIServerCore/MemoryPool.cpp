@@ -5,7 +5,7 @@
 ///////////////////////////////////////////////////////
 //	<	MemoryHeader	>
 ///////////////////////////////////////////////////////
-void* MemoryHeader::AttachHeader(MemoryHeader* header, const size_t size)
+void* MemoryHeader::AttachHeader(MemoryHeader* header, size_t size)
 {
 	new(header)MemoryHeader(size); // placement new
 	return reinterpret_cast<void*>(++header);

@@ -6,7 +6,7 @@
 
 #include "GameLibraries.h"
 
-useRef(LoginServerSession)
-useRef(GameServerSession)
-useRef(DummyClient)
-useRef(DummyManager)
+useRef_Class(LoginServerSession)
+useRef_Class(GameServerSession)
+useRef_Class(DummyClient)
+useRef_Class(DummyManager)

@@ -20,31 +20,19 @@ Service::~Service()
 	CloseService();
 }
 
-bool Service::Process(uint32 iocpTimeoutMs)
+void Service::Process(uint32 iocpTimeoutMs)
 {
-	if (_isClose) return false;
-	return GetIocpCore()->Dispatch(iocpTimeoutMs);
+	GetIocpCore()->Dispatch(iocpTimeoutMs);
 }
 
 void Service::CloseService()
 {
-	_isClose = true;
-
 	WRITE_LOCK;
 	for (const auto& session : _sessions)
 	{
-		session->Disconnect(L"Close Service");
+		session->Disconnect();
 	}
 	_sessions.clear();
-}
-
-void Service::Broadcast(SendBufferRef& sendBuffer)
-{
-	WRITE_LOCK;
-	for (const auto& session : _sessions)
-	{
-		session->Send(sendBuffer);
-	}
 }
 
 SessionRef Service::CreateSession()

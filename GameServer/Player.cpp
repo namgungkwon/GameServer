@@ -9,28 +9,31 @@
 #include "DBManager.h"
 #include "job.h"
 
+
+///////////////////////////////////////////////////////
+//	<	Player	>
+///////////////////////////////////////////////////////
 Player::~Player()
 {
 	//LOG_INFO(L"DeletePlayer");
 }
 
-
-bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
+bool Player::Init(const PlayerSummaryData& summary, const PlayerLoadData& load)
 {
 	// PlayerLevelData
 	if (InitPlayerLevelData(summary.level) == false)
 		return false;
 
 	// Entity
-	SetObjectId(IdGenerator::Get());
-	SetName(summary.name);
-	SetLevel(summary.level);
-	SetLocation(load.location);
-	SetYaw(load.yaw);
-	SetType(Protocol::OBJECT_CATEGORY_PLAYER);
-	SetState(EntityState::Idle);
-	SetTemplateId(summary.templateId);
-	SetExp(load.exp);
+	SetObjectId		(IdGenerator::Get());
+	SetName			(summary.name);
+	SetLevel		(summary.level);
+	SetLocation		(load.location);
+	SetYaw			(load.yaw);
+	SetType			(Protocol::OBJECT_CATEGORY_PLAYER);
+	SetState		(EntityState::Idle);
+	SetTemplateId	(summary.templateId);
+	SetExp			(load.exp);
 
 	// Player
 	_playerDBId = summary.playerId;
@@ -38,6 +41,7 @@ bool Player::Init(PlayerSummaryData& summary, PlayerLoadData& load)
 	// Component
 	MovementComponent* mc = AddComponent<MovementComponent>(shared_from_this());
 	mc->SetPendingJob(MoveJob{ GetLocation(), Vector3(), GetYaw() });
+
 	StatComponent* sc = AddComponent<StatComponent>(shared_from_this());
 	sc->SetCurrentHP(load.hp);
 	sc->SetCurrentMP(load.mp);
@@ -61,25 +65,26 @@ void Player::Respawn(const Vector3& respawnLocation)
 	mc->SetPendingJob(MoveJob{ respawnLocation, Vector3(), GetYaw() });
 }
 
-void Player::GainExp(int32 exp)
+void Player::GainExp(uint64 exp)
 {
 	WRITE_LOCK;
-	int32 currentExp = GetExp();
+	uint64 currentExp = GetExp();
 	currentExp += exp;
 
-	int32 requiredExp = GetRequiredExp();
+	uint64 requiredExp = GetRequiredExp();
 
-	if (currentExp >= requiredExp)
+	while (currentExp >= requiredExp)
 	{
 		currentExp -= requiredExp;
 		SetExp(currentExp);
 		LevelUp();
+		requiredExp = GetRequiredExp();
 	}
 }
 
 void Player::LevelUp()
 {
-	int32 currentLevel = GetLevel();
+	const int32 currentLevel = GetLevel();
 	SetLevel(currentLevel + 1);
 	
 	InitPlayerLevelData(GetLevel());
@@ -103,14 +108,14 @@ PlayerLoadData Player::MakeLoadData()
 	StatComponent* sc = GetComponent<StatComponent>();
 	
 	PlayerLoadData data;
-	data.location = GetLocation();
-	data.yaw = GetYaw();
-	data.hp = sc->GetCurrentHP();
-	data.mp = sc->GetCurrentMP();
-	data.exp = GetExp();
+	data.location	= GetLocation();
+	data.yaw		= GetYaw();
+	data.hp			= sc->GetCurrentHP();
+	data.mp			= sc->GetCurrentMP();
+	data.exp		= GetExp();
 	
 	
-	return std::move(data);
+	return data;
 }
 
 void Player::Send(const SendBufferRef& sendBuffer)

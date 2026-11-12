@@ -7,6 +7,9 @@
 #include "player.h"
 
 
+///////////////////////////////////////////////////////
+//	<	DBManager	>
+///////////////////////////////////////////////////////
 bool DBManager::Init(const DBConfig& config)
 {
 	wstring connStr;
@@ -58,7 +61,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 			L"VALUES (?, ?, ?) ");
 
 		bind.BindParam(0, accountDBId);
-		bind.BindParam(1, newId, wName.size());
+		bind.BindParam(1, newId, static_cast<int32>(wName.size()));
 		bind.BindParam(2, templateId);
 
 		if (bind.Execute() == false)
@@ -74,7 +77,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 			L"WHERE name = ?"
 		);
 
-		bind.BindParam(0, newId, wName.size());
+		bind.BindParam(0, newId, static_cast<int32>(wName.size()));
 		bind.BindCol(0, oPlayerId);
 
 		if (bind.Execute() == false || bind.Fetch() == false)
@@ -82,11 +85,11 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 	}
 
 	{
-		float posX = Config::CreatePlayer::pos_x;
-		float posY = Config::CreatePlayer::pos_y;
-		float posZ = Config::CreatePlayer::pos_z;
-		float yaw = 0;
-		float exp = 0;
+		float posX	= Config::CreatePlayer::pos_x;
+		float posY	= Config::CreatePlayer::pos_y;
+		float posZ	= Config::CreatePlayer::pos_z;
+		float yaw	= 0;
+		float exp	= 0;
 
 		DBBind<8, 0> bind(*dbConn.conn,
 			L"INSERT INTO playerDetail (playerId, pos_x, pos_y, pos_z, yaw, hp, mp, exp) "
@@ -114,7 +117,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 			L"WHERE name = ?"
 		);
 
-		bind.BindParam(0, newId, wName.size());
+		bind.BindParam(0, newId, static_cast<int32>(wName.size()));
 		bind.BindCol(0, oPlayerId);
 
 		if (bind.Execute() == false || bind.Fetch() == false)
@@ -131,7 +134,7 @@ Protocol::Result DBManager::GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol
 {
 
 	uint64 oPlayerId;
-	uint64 oTemplateId;
+	int32 oTemplateId;
 	WCHAR oName[255];
 	int32 oLevel;
 
@@ -205,16 +208,16 @@ bool DBManager::GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummar
 	if (bind.Execute() == false || bind.Fetch() == false)
 		return false;
 
-	summary->playerId = playerId;
-	summary->templateId = oTemplateId;
-	summary->name = wstring(oName);
-	summary->level = oLevel;
+	summary->playerId		= playerId;
+	summary->templateId		= oTemplateId;
+	summary->name			= wstring(oName);
+	summary->level			= oLevel;
 
-	load->location = { oPosX, oPosY, oPosZ };
-	load->yaw = oYaw;
-	load->hp = oHp;
-	load->mp = oMp;
-	load->exp = oExp;
+	load->location			= { oPosX, oPosY, oPosZ };
+	load->yaw				= oYaw;
+	load->hp				= oHp;
+	load->mp				= oMp;
+	load->exp				= oExp;
 
 	return true;
 }
@@ -223,13 +226,13 @@ void DBManager::SavePlayer(uint64 playerId, const PlayerLoadData* load)
 {
 	DBConn dbConn;
 
-	int32 hp = load->hp;
-	int32 mp = load->mp;
-	int32 exp = load->exp;
-	float x = load->location.x;
-	float y = load->location.y;
-	float z = load->location.z;
-	float yaw = load->yaw;
+	int64 hp	= load->hp;
+	int64 mp	= load->mp;
+	int64 exp	= load->exp;
+	float x		= load->location.x;
+	float y		= load->location.y;
+	float z		= load->location.z;
+	float yaw	= load->yaw;
 
 	DBBind<8, 0> bind(*dbConn.conn,
 		L"UPDATE PlayerDetail "

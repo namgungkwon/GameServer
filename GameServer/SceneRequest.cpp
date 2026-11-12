@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "SceneRequest.h"
 
+#include "GameData.h"
+
 #include "GameScene.h"
 #include "World.h"
 #include "Zone.h"
@@ -14,7 +16,11 @@
 #include "SkillComponent.h"
 #include "MovementComponent.h"
 
-void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
+
+///////////////////////////////////////////////////////
+//	<	AttackRequest	>
+///////////////////////////////////////////////////////
+void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
 	if (attacker->GetState() == EntityState::Dead)
 		return;
@@ -39,7 +45,7 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 	if (aCombat == nullptr || aSkill == nullptr || aStat == nullptr)
 		return;
 
-	const uint64 skillId = pkt.skillid();
+	const uint32 skillId = pkt.skillid();
 
 	if (aSkill->HasSkill(skillId) == false)
 		return;
@@ -66,14 +72,14 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 	for (uint64 targetId : pkt.targets())
 	{
 		if (EntityRef entity = GWorld->FindEntity(targetId))
-			targets.push_back(entity);
+			targets.push_back(std::move(entity));
 	}
 
 	SkillData* skill = aSkill->GetSkill(skillId);
 	Vector<EntityRef> finalTargets = CombatSystem::SelectTargetInAttackCone(attacker, targets, skill->attackRange, skill->attackAngle);
 
 
-	auto fn = [](GameSceneRef scene, ZoneRef zone, DamageEvent event, EntityRef attacker, EntityRef target) {
+	auto fn = [](const GameSceneRef& scene, const ZoneRef& zone, const EntityRef& attacker, const EntityRef& target, DamageEvent event) {
 		if (CombatSystem::ApplyDamage(zone, event) == false)
 			return;
 
@@ -108,25 +114,28 @@ void AttackRequest::Execute(GameSceneRef scene, uint64 currentTick)
 
 	for (EntityRef finalTarget : finalTargets)
 	{
-		LOG_INFO(L"AttackSuccess!");
 		GameSceneRef targetScene = finalTarget->GetScene();
 		ZoneRef targetZone = finalTarget->GetZone();
 		DamageEvent event = CombatSystem::MakeDamageEvent(attacker, finalTarget, skillId, attacker->GetYaw());
 
 		if (targetScene == playerScene)
 		{
-			fn(targetScene, targetZone, event, attacker, finalTarget);
+			fn(targetScene, targetZone, attacker, finalTarget, event);
 		}
 		else
 		{
 			EntityRef attacker = attacker;
-			targetScene->DoAsync([fn, targetScene, targetZone, event, attacker, finalTarget]()
-				{ fn(targetScene, targetZone, event, attacker, finalTarget); });
+			targetScene->DoAsync([fn, targetScene = std::move(targetScene), targetZone = std::move(targetZone), event, attacker = std::move(attacker), finalTarget = std::move(finalTarget)]()
+				{ fn(targetScene, targetZone, attacker, finalTarget, event); });
 		}
 	}
 }
 
-void ReviveRequest::Execute(GameSceneRef scene, uint64 currentTick)
+
+///////////////////////////////////////////////////////
+//	<	ReviveRequest	>
+///////////////////////////////////////////////////////
+void ReviveRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
 	GameSceneRef targetScene = target->GetScene();
 	ZoneRef targetZone = target->GetZone();
@@ -155,9 +164,6 @@ void ReviveRequest::Execute(GameSceneRef scene, uint64 currentTick)
 		break;
 	}
 
-	targetZone->GetMovingEntity().push_back(target);
-	target->Respawn(respawnLocation);
-
 	{
 		Protocol::GC_REVIVE res;
 		target->MakePkt(*res.mutable_posdata());
@@ -165,9 +171,16 @@ void ReviveRequest::Execute(GameSceneRef scene, uint64 currentTick)
 		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
 		targetScene->BroadCastAdjacentZone(targetZone, sendBuffer);
 	}
+
+	target->Respawn(respawnLocation);
+	targetZone->GetMovingEntity().push_back(std::move(target));
 }
 
-void ChatRequest::Execute(GameSceneRef scene, uint64 currentTick)
+
+///////////////////////////////////////////////////////
+//	<	ChatRequest	>
+///////////////////////////////////////////////////////
+void ChatRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
 	GameSceneRef targetScene = player->GetScene();
 	ZoneRef targetZone = player->GetZone();
@@ -183,22 +196,24 @@ void ChatRequest::Execute(GameSceneRef scene, uint64 currentTick)
 
 	Protocol::ChatType type = pkt.type();
 
-	Protocol::GC_CHAT res;
-	res.set_name(Utils::ToString(player->GetName()));
-	res.set_chat(pkt.chat());
-	SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
+	{
+		Protocol::GC_CHAT res;
+		res.set_name(Utils::ToString(player->GetName()));
+		res.set_chat(pkt.chat());
+		SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
 
-	switch (type)
-	{
-	case Protocol::CHATTYPE_ADJACENT:
-	{
-		scene->BroadCastAdjacentZone(targetZone, sendBuffer, player->GetObjectId());
-	}
+		switch (type)
+		{
+		case Protocol::CHATTYPE_ADJACENT:
+		{
+			scene->BroadCastAdjacentZone(targetZone, sendBuffer, player->GetObjectId());
+		}
 		break;
-	case Protocol::CHATTYPE_WORLD:
-	{
-		GWorld->BroadCast(sendBuffer, player->GetObjectId());
-	}
+		case Protocol::CHATTYPE_WORLD:
+		{
+			GWorld->BroadCast(sendBuffer, player->GetObjectId());
+		}
 		break;
+		}
 	}
 }

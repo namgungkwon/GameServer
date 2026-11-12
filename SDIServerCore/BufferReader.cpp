@@ -10,7 +10,7 @@ bool BufferReader::Peek(void* dest, const uint32 len)
 	if (FreeSize() < len)
 		return false;
 
-	::memcpy(dest, &_buffer[_pos], len);
+	::memcpy(dest, &_buffer[_pos], static_cast<size_t>(len));
 	return true;
 }
 

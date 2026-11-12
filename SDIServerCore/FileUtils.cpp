@@ -24,7 +24,7 @@ Vector<BYTE> FileUtils::ReadFile(const WCHAR* path)
 	return ret;
 }
 
-String FileUtils::Convert(string str)
+String FileUtils::Convert(string& str)
 {
 	const int32 srcLen = static_cast<int32>(str.size());
 

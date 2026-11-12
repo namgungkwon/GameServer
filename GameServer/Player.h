@@ -4,29 +4,33 @@
 #include "ClientPacketHandler.h"
 #include "GameSession.h"
 
+
+///////////////////////////////////////////////////////
+//	<	Player	>
+///////////////////////////////////////////////////////
 class Player : public Entity
 {
 public:
 	~Player();
 public:
-	bool Init(PlayerSummaryData& summary, PlayerLoadData& load);
-	void Respawn(const Vector3& respawnLocation) override;
-	void GainExp(int32 exp);
-	void LevelUp();
+	bool						Init(const PlayerSummaryData& summary, const PlayerLoadData& load);
+	void						Respawn(const Vector3& respawnLocation) override;
+	void						GainExp(uint64 exp);
+	void						LevelUp();
 
 public:
-	void Send(const SendBufferRef& sendBuffer);
+	void						Send(const SendBufferRef& sendBuffer);
 
 public:
-	bool InitPlayerLevelData(int32 level);
+	bool						InitPlayerLevelData(int32 level);
 
 public:
-	PlayerLoadData MakeLoadData();
+	PlayerLoadData				MakeLoadData();
 
 private:
 	USE_LOCK;
-	GETSET_WEAK(GameSession, _ownerSession, Session);
-	GETSET(uint64, _playerDBId, DBId);
-	GET(int32, _requiredExp, RequiredExp);
+	GETSET_WEAK(GameSession,	_ownerSession,		Session);
+	GETSET		(uint64,		_playerDBId,		DBId);
+	GET			(uint64,		_requiredExp,		RequiredExp);
 };
 

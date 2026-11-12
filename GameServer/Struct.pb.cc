@@ -123,9 +123,9 @@ inline constexpr ObjectStatData::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         objectid_{::uint64_t{0u}},
-        hp_{0},
-        mp_{0},
-        exp_{0} {}
+        hp_{::int64_t{0}},
+        mp_{::int64_t{0}},
+        exp_{::int64_t{0}} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR ObjectStatData::ObjectStatData(::_pbi::ConstantInitialized)
@@ -484,7 +484,7 @@ const char descriptor_table_protodef_Struct_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "osData\022\020\n\010objectId\030\001 \001(\004\022#\n\010location\030\002 \001"
     "(\0132\021.Protocol.Vector3\022\013\n\003yaw\030\003 \001(\002\"G\n\016Ob"
     "jectStatData\022\020\n\010objectId\030\001 \001(\004\022\n\n\002hp\030\002 \001"
-    "(\005\022\n\n\002mp\030\003 \001(\005\022\013\n\003exp\030\004 \001(\005\"\210\001\n\nObjectDa"
+    "(\003\022\n\n\002mp\030\003 \001(\003\022\013\n\003exp\030\004 \001(\003\"\210\001\n\nObjectDa"
     "ta\022,\n\007summary\030\001 \001(\0132\033.Protocol.ObjectSum"
     "maryData\022$\n\003pos\030\002 \001(\0132\027.Protocol.ObjectP"
     "osData\022&\n\004stat\030\003 \001(\0132\030.Protocol.ObjectSt"
@@ -3315,20 +3315,20 @@ ObjectStatData::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::ObjectStatData>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // int32 exp = 4;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ObjectStatData, _impl_.exp_), 3>(),
+    // int64 exp = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(ObjectStatData, _impl_.exp_), 3>(),
      {32, 3, 0,
       PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.exp_)}},
     // uint64 objectId = 1;
     {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(ObjectStatData, _impl_.objectid_), 0>(),
      {8, 0, 0,
       PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.objectid_)}},
-    // int32 hp = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ObjectStatData, _impl_.hp_), 1>(),
+    // int64 hp = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(ObjectStatData, _impl_.hp_), 1>(),
      {16, 1, 0,
       PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.hp_)}},
-    // int32 mp = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ObjectStatData, _impl_.mp_), 2>(),
+    // int64 mp = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(ObjectStatData, _impl_.mp_), 2>(),
      {24, 2, 0,
       PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.mp_)}},
   }}, {{
@@ -3336,12 +3336,12 @@ ObjectStatData::_table_ = {
   }}, {{
     // uint64 objectId = 1;
     {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.objectid_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
-    // int32 hp = 2;
-    {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.hp_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
-    // int32 mp = 3;
-    {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.mp_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
-    // int32 exp = 4;
-    {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.exp_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    // int64 hp = 2;
+    {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.hp_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
+    // int64 mp = 3;
+    {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.mp_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
+    // int64 exp = 4;
+    {PROTOBUF_FIELD_OFFSET(ObjectStatData, _impl_.exp_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
   }},
   // no aux_entries
   {{
@@ -3392,29 +3392,29 @@ PROTOBUF_NOINLINE void ObjectStatData::Clear() {
     }
   }
 
-  // int32 hp = 2;
+  // int64 hp = 2;
   if (CheckHasBit(cached_has_bits, 0x00000002U)) {
     if (this_._internal_hp() != 0) {
       target =
-          ::google::protobuf::internal::WireFormatLite::WriteInt32ToArrayWithField<2>(
+          ::google::protobuf::internal::WireFormatLite::WriteInt64ToArrayWithField<2>(
               stream, this_._internal_hp(), target);
     }
   }
 
-  // int32 mp = 3;
+  // int64 mp = 3;
   if (CheckHasBit(cached_has_bits, 0x00000004U)) {
     if (this_._internal_mp() != 0) {
       target =
-          ::google::protobuf::internal::WireFormatLite::WriteInt32ToArrayWithField<3>(
+          ::google::protobuf::internal::WireFormatLite::WriteInt64ToArrayWithField<3>(
               stream, this_._internal_mp(), target);
     }
   }
 
-  // int32 exp = 4;
+  // int64 exp = 4;
   if (CheckHasBit(cached_has_bits, 0x00000008U)) {
     if (this_._internal_exp() != 0) {
       target =
-          ::google::protobuf::internal::WireFormatLite::WriteInt32ToArrayWithField<4>(
+          ::google::protobuf::internal::WireFormatLite::WriteInt64ToArrayWithField<4>(
               stream, this_._internal_exp(), target);
     }
   }
@@ -3452,24 +3452,24 @@ PROTOBUF_NOINLINE void ObjectStatData::Clear() {
             this_._internal_objectid());
       }
     }
-    // int32 hp = 2;
+    // int64 hp = 2;
     if (CheckHasBit(cached_has_bits, 0x00000002U)) {
       if (this_._internal_hp() != 0) {
-        total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
             this_._internal_hp());
       }
     }
-    // int32 mp = 3;
+    // int64 mp = 3;
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
       if (this_._internal_mp() != 0) {
-        total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
             this_._internal_mp());
       }
     }
-    // int32 exp = 4;
+    // int64 exp = 4;
     if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       if (this_._internal_exp() != 0) {
-        total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
             this_._internal_exp());
       }
     }

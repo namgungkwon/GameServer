@@ -7,6 +7,10 @@
 #include "entity.h"
 #include "Player.h"
 
+
+///////////////////////////////////////////////////////
+//	<	MovementSystem	>
+///////////////////////////////////////////////////////
 void MovementSystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT Vector<EntityRef>& movingPlayer)
 {
 	if (zone == nullptr)
@@ -14,41 +18,39 @@ void MovementSystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT 
 
 	for (auto& [id, player] : zone->GetPlayers())
 	{
-		if (UpdateEntityMove(player, nowTick, deltaTime))
+		if (UpdatePlayerMove(player, nowTick, deltaTime))
 			movingPlayer.push_back(player);
 	}
 }
 
-bool MovementSystem::UpdateEntityMove(EntityRef entity, uint64 nowTick, uint64 deltaTime)
+bool MovementSystem::UpdatePlayerMove(PlayerRef player, uint64 nowTick, uint64 deltaTime)
 {
-	if (entity == nullptr)
+	if (player == nullptr)
 		return false;
 
-	if (entity->GetType() == EntityState::Dead)
+	if (player->GetType() == EntityState::Dead)
 		return false;
 
-	MovementComponent* mc = entity->GetComponent<MovementComponent>();
+	MovementComponent* mc = player->GetComponent<MovementComponent>();
 	if (mc == nullptr)
 		return false;
 
-	MoveJob job = mc->GetPendingJob();
-	if (job.velocity.IsZero() && entity->GetYaw() == job.yaw)
+	MoveJob& job = mc->GetPendingJob();
+	if (job.velocity.IsZero() && player->GetYaw() == job.yaw)
 		return false;
 
-	entity->SetYaw(job.yaw);
+	player->SetYaw(job.yaw);
 
 	if (mc->CanMove(nowTick) == false)
 		return false;
 
-	Vector3 nextLocation = GetNextPos(entity, job, deltaTime);
-	entity->SetLocation(nextLocation);
+	Vector3 nextLocation = GetNextPos(mc, job, deltaTime);
+	player->SetLocation(nextLocation);
 	return true;
 }
 
-Vector3 MovementSystem::GetNextPos(EntityRef entity, MoveJob& job, uint64 deltaTime)
+Vector3 MovementSystem::GetNextPos(MovementComponent* mc, MoveJob& job, uint64 deltaTime)
 {
-	MovementComponent* mc = entity->GetComponent<MovementComponent>();
-
 	if (job.velocity.IsZero())
 	{
 		return job.location;
@@ -57,7 +59,7 @@ Vector3 MovementSystem::GetNextPos(EntityRef entity, MoveJob& job, uint64 deltaT
 	Vector3 location = job.location;
 	Vector3 Direction = UtilMath::GetMoveDirectionFromInput(job.velocity, job.yaw);
 
-	Vector3 nextLocation = location + (Direction * mc->GetMoveSpeed() * deltaTime * 0.001f /* ms 변환 */);
+	Vector3 nextLocation = location + (Direction * mc->GetMoveSpeed() * static_cast<float>(deltaTime) * 0.001f /* ms 변환 */);
 
 	if (GGridMap->CanGo(nextLocation) == false)
 		nextLocation = location;

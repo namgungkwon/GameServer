@@ -993,34 +993,34 @@ class ObjectStatData final : public ::google::protobuf::Message
   void _internal_set_objectid(::uint64_t value);
 
   public:
-  // int32 hp = 2;
+  // int64 hp = 2;
   void clear_hp() ;
-  ::int32_t hp() const;
-  void set_hp(::int32_t value);
+  ::int64_t hp() const;
+  void set_hp(::int64_t value);
 
   private:
-  ::int32_t _internal_hp() const;
-  void _internal_set_hp(::int32_t value);
+  ::int64_t _internal_hp() const;
+  void _internal_set_hp(::int64_t value);
 
   public:
-  // int32 mp = 3;
+  // int64 mp = 3;
   void clear_mp() ;
-  ::int32_t mp() const;
-  void set_mp(::int32_t value);
+  ::int64_t mp() const;
+  void set_mp(::int64_t value);
 
   private:
-  ::int32_t _internal_mp() const;
-  void _internal_set_mp(::int32_t value);
+  ::int64_t _internal_mp() const;
+  void _internal_set_mp(::int64_t value);
 
   public:
-  // int32 exp = 4;
+  // int64 exp = 4;
   void clear_exp() ;
-  ::int32_t exp() const;
-  void set_exp(::int32_t value);
+  ::int64_t exp() const;
+  void set_exp(::int64_t value);
 
   private:
-  ::int32_t _internal_exp() const;
-  void _internal_set_exp(::int32_t value);
+  ::int64_t _internal_exp() const;
+  void _internal_set_exp(::int64_t value);
 
   public:
   // @@protoc_insertion_point(class_scope:Protocol.ObjectStatData)
@@ -1050,9 +1050,9 @@ class ObjectStatData final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::uint64_t objectid_;
-    ::int32_t hp_;
-    ::int32_t mp_;
-    ::int32_t exp_;
+    ::int64_t hp_;
+    ::int64_t mp_;
+    ::int64_t exp_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3515,77 +3515,77 @@ inline void ObjectStatData::_internal_set_objectid(::uint64_t value) {
   _impl_.objectid_ = value;
 }
 
-// int32 hp = 2;
+// int64 hp = 2;
 inline void ObjectStatData::clear_hp() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.hp_ = 0;
+  _impl_.hp_ = ::int64_t{0};
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000002U);
 }
-inline ::int32_t ObjectStatData::hp() const {
+inline ::int64_t ObjectStatData::hp() const {
   // @@protoc_insertion_point(field_get:Protocol.ObjectStatData.hp)
   return _internal_hp();
 }
-inline void ObjectStatData::set_hp(::int32_t value) {
+inline void ObjectStatData::set_hp(::int64_t value) {
   _internal_set_hp(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_set:Protocol.ObjectStatData.hp)
 }
-inline ::int32_t ObjectStatData::_internal_hp() const {
+inline ::int64_t ObjectStatData::_internal_hp() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.hp_;
 }
-inline void ObjectStatData::_internal_set_hp(::int32_t value) {
+inline void ObjectStatData::_internal_set_hp(::int64_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.hp_ = value;
 }
 
-// int32 mp = 3;
+// int64 mp = 3;
 inline void ObjectStatData::clear_mp() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.mp_ = 0;
+  _impl_.mp_ = ::int64_t{0};
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000004U);
 }
-inline ::int32_t ObjectStatData::mp() const {
+inline ::int64_t ObjectStatData::mp() const {
   // @@protoc_insertion_point(field_get:Protocol.ObjectStatData.mp)
   return _internal_mp();
 }
-inline void ObjectStatData::set_mp(::int32_t value) {
+inline void ObjectStatData::set_mp(::int64_t value) {
   _internal_set_mp(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_set:Protocol.ObjectStatData.mp)
 }
-inline ::int32_t ObjectStatData::_internal_mp() const {
+inline ::int64_t ObjectStatData::_internal_mp() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.mp_;
 }
-inline void ObjectStatData::_internal_set_mp(::int32_t value) {
+inline void ObjectStatData::_internal_set_mp(::int64_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.mp_ = value;
 }
 
-// int32 exp = 4;
+// int64 exp = 4;
 inline void ObjectStatData::clear_exp() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.exp_ = 0;
+  _impl_.exp_ = ::int64_t{0};
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000008U);
 }
-inline ::int32_t ObjectStatData::exp() const {
+inline ::int64_t ObjectStatData::exp() const {
   // @@protoc_insertion_point(field_get:Protocol.ObjectStatData.exp)
   return _internal_exp();
 }
-inline void ObjectStatData::set_exp(::int32_t value) {
+inline void ObjectStatData::set_exp(::int64_t value) {
   _internal_set_exp(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:Protocol.ObjectStatData.exp)
 }
-inline ::int32_t ObjectStatData::_internal_exp() const {
+inline ::int64_t ObjectStatData::_internal_exp() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.exp_;
 }
-inline void ObjectStatData::_internal_set_exp(::int32_t value) {
+inline void ObjectStatData::_internal_set_exp(::int64_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.exp_ = value;
 }

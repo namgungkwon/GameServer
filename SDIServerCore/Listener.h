@@ -22,8 +22,8 @@ public:
 
 private:
 	virtual HANDLE			GetHandle() override { return reinterpret_cast<HANDLE>(_socket); };
-	virtual void			Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
-	virtual void			HandleError(const IocpEvent* iocpEvent, const int32 errorCode) override;
+	virtual void			Dispatch(IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
+	virtual void			HandleError(IocpEvent* iocpEvent, int32 errorCode) override;
 
 private:
 	void					RegisterAccept(AcceptEvent* acceptEvent);

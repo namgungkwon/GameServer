@@ -8,6 +8,10 @@
 #include "job.h"
 #include "World.h"
 
+
+///////////////////////////////////////////////////////
+//	<	GameSession	>
+///////////////////////////////////////////////////////
 void GameSession::OnConnected()
 {
 	PacketSession::OnConnected();
@@ -37,7 +41,6 @@ void GameSession::LeavePlayer()
 		return;
 
 	SetPlayer(nullptr);
-
 
 	GDBManager->DoAsync(Job([id = player->GetDBId(),data = player->MakeLoadData()]() {
 		GDBManager->SavePlayer(id, &data);

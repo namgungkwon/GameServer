@@ -74,7 +74,7 @@ void DummyClient::DisconnectLoginServer()
 	if (_loginServerSession)
 		return; 
 
-	_loginServerSession->Disconnect(L"");
+	_loginServerSession->Disconnect();
 
 	_loginServerSession = nullptr;
 }
@@ -84,7 +84,7 @@ void DummyClient::DisconnectGameServer()
 	if (_gameServerSession)
 		return;
 
-	_gameServerSession->Disconnect(L"");
+	_gameServerSession->Disconnect();
 
 	_gameServerSession = nullptr;
 }

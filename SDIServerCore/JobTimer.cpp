@@ -24,13 +24,13 @@ void JobTimer::Distribute()
 {
 	while (true)
 	{
-		uint64 now = GetTickCount64();
+		const uint64 now = GetTickCount64();
 		Vector<TimerItem> items;
 		uint64 nextWaitTick = INT64_MAX;
 		{
 			{
 				UniqueLock lock(_mutex);
-
+				// TimerQueue에서 현재 시간보다 이전인 아이템을 빼온다(Priority Queue)
 				while (_items.empty() == false)
 				{
 					const TimerItem& timerItem = _items.top();
@@ -46,6 +46,7 @@ void JobTimer::Distribute()
 				}
 			}
 
+			// item의 OwnerJobQueue를 찾아서 밀어넣는다.
 			for (TimerItem& item : items)
 			{
 				if (JobQueueRef owner = item.jobData->owner.lock())
@@ -58,11 +59,12 @@ void JobTimer::Distribute()
 				UniqueLock lock(_mutex);
 				if (_items.empty())
 				{
-					// 스레드 슬립
+					// 아이템이 없을 경우 스레드 슬립
 					_cv.wait(lock, [this] { return _isStart == false || _items.empty() == false; });
 				}
 				else
 				{
+					// 아이템이 있을 경우 새로 들어오거나, 가장 빠른 timer실행 시간까지 슬립
 					const uint64 nowTick = ::GetTickCount64();
 					const uint64 nextWaitTick = _items.top().executeTick;
 					const uint64 delayTime = nextWaitTick > nowTick ? nextWaitTick - nowTick : 0;

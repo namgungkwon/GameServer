@@ -2,36 +2,34 @@
 
 #include "Entity.h"
 
+
+///////////////////////////////////////////////////////
+//	<	StatComponent	>
+///////////////////////////////////////////////////////
 class StatComponent final : public IObjectComponent
 {
 public:
 	StatComponent(EntityRef& owner) : IObjectComponent(owner) {};
 public:
-	void Init(int32 currentHp, int32 maxHp, int32 currentMp, int32 maxMp)
-	{
-		SetMaxHP(maxHp);
-		SetCurrentHP(currentHp);
-		SetMaxMP(maxMp);
-		SetCurrentMP(currentMp);
-	};
+	void Init(int64 currentHp, int64 maxHp, int64 currentMp, int64 maxMp);
 
 public:
-	int32 GetCurrentHP() { return _currentHP; }
-	void SetCurrentHP(int32 hp) { _currentHP = UtilMath::Clamp(hp, 0, _maxHP); }
+	int64		GetCurrentHP()			{ return _currentHP; }
+	void		SetCurrentHP(int64 hp)	{ _currentHP = UtilMath::Clamp(hp, (int64)0, _maxHP); }
 
-	int32 GetMaxHP() { return _maxHP; }
-	void SetMaxHP(int32 hp) { _maxHP = UtilMath::Max(hp, 1); }
+	int64		GetMaxHP()				{ return _maxHP; }
+	void		SetMaxHP(int64 hp)		{ _maxHP = UtilMath::Max(hp, (int64)1); }
 
-	int32 GetCurrentMP() { return _currentMP; }
-	void SetCurrentMP(int32 mp) { _currentMP = UtilMath::Clamp(mp, 0, _maxMP); }
+	int64		GetCurrentMP()			{ return _currentMP; }
+	void		SetCurrentMP(int64 mp)	{ _currentMP = UtilMath::Clamp(mp, (int64)0, _maxMP); }
 
-	int32 GetMaxMP() { return _maxMP; }
-	void SetMaxMP(int32 mp) { _maxMP = UtilMath::Max(mp, 1); }
+	int64		GetMaxMP()				{ return _maxMP; }
+	void		SetMaxMP(int64 mp)		{ _maxMP = UtilMath::Max(mp, (int64)1); }
 
 private:
-	int32 _currentHP;
-	int32 _maxHP;
+	int64		_currentHP	= 0;
+	int64		_maxHP		= 0;
 
-	int32 _currentMP;
-	int32 _maxMP;
+	int64		_currentMP	= 0;
+	int64		_maxMP		= 0;
 };

@@ -20,10 +20,10 @@ class Lock
     };
 
 public:
-    void WriteLock(const char* name);
-    void WriteUnlock(const char* name);
-    void ReadLock(const char* name);
-    void ReadUnlock(const char* name);
+    void                    WriteLock(const char* name);
+    void                    WriteUnlock(const char* name);
+    void                    ReadLock(const char* name);
+    void                    ReadUnlock(const char* name);
 
 private:
     Atomic<uint32>          _lockFlag = EMPTY_FLAG;

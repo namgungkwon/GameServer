@@ -1,56 +1,33 @@
 #pragma once
 #include "Entity.h"
 
-#include "GameData.h"
 
 struct SkillState
 {
-	uint64 skillId = 1;
-	uint64 skillLevel = 1;
+	uint32 skillId = 1;
+	uint32 skillLevel = 1;
 	uint64 skillCooldownEndTick = 0;
 };
 
+///////////////////////////////////////////////////////
+//	<	SkillComponent	>
+///////////////////////////////////////////////////////
 class SkillComponent final : public IObjectComponent
 {
 public:
 	SkillComponent(EntityRef& owner) : IObjectComponent(owner) {};
+
 public:
+	void			Init(const Vector<SkillState>& skills);
 
-	void Init(Vector<SkillState>& skills)
-	{
-		for (SkillState& skill : skills)
-			AddSkill(skill);
-	}
-
-	void AddSkill(SkillState& skill)
-	{
-		_skills[skill.skillId] = skill;
-	}
-
-	bool HasSkill(uint64 skillId) { return _skills.find(skillId) != _skills.end(); }
-
-	uint64 UseSkill(uint64 skillId, uint64 now)
-	{
-		SkillData* skillData = GGameData->GetSkillData(skillId, _skills[skillId].skillLevel);
-		_skills[skillId].skillCooldownEndTick = now + skillData->cooldownMs;
-		return skillData->moveDelayMs;
-	}
-
-	SkillData* GetSkill(uint64 skillId)
-	{
-		return GGameData->GetSkillData(skillId, _skills[skillId].skillLevel);
-	}
-
-	bool CooldownReady(uint64 skillId, uint64 now)
-	{
-		if (HasSkill(skillId) == false)
-			return false;
-
-		return _skills[skillId].skillCooldownEndTick <= now;
-	};
-
-	SkillState& GetSkillState(uint64 skillId) { return _skills[skillId]; }
+public:
+	void			AddSkill(const SkillState& skill)	{ _skills[skill.skillId] = skill; }
+	SkillData*		GetSkill(uint32 skillId);
+	SkillState&		GetSkillState(uint32 skillId)		{ return _skills[skillId]; }
+	bool			HasSkill(uint32 skillId)			{ return _skills.find(skillId) != _skills.end(); }
+	uint64			UseSkill(uint32 skillId, uint64 now);
+	bool			CooldownReady(uint32 skillId, uint64 now);
 
 private:
-	HashMap<uint64, SkillState> _skills;
+	HashMap<uint32, SkillState>		_skills;
 };

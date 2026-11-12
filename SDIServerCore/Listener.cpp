@@ -14,8 +14,6 @@ Listener::~Listener()
 
 	for (AcceptEvent* acceptEvent : _acceptEvents)
 	{
-		//TODO
-
 		cdelete(acceptEvent);
 	}
 }
@@ -48,7 +46,7 @@ bool Listener::StartAccept(ServerServiceRef service)
 	if (SocketUtils::Listen(_socket) == false)
 		return false;
 
-	const int32 acceptCount = _service->GetAcceptPoolCount();
+	const size_t acceptCount = _service->GetAcceptPoolCount();
 	for (int32 i = 0; i < acceptCount; ++i)
 	{
 		AcceptEvent* acceptEvent = cnew<AcceptEvent>();
@@ -72,7 +70,7 @@ void Listener::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
 	ProcessAccept(acceptEvent);
 }
 
-void Listener::HandleError(const IocpEvent* iocpEvent, const int32 errorCode)
+void Listener::HandleError(IocpEvent* iocpEvent, int32 errorCode)
 {
 	CRASH("Listener IOCP Error");
 }
@@ -118,7 +116,6 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 		session->ProcessConnect();
 
 	} while (false);
-
 
 	RegisterAccept(acceptEvent);
 }

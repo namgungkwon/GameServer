@@ -6,6 +6,10 @@
 
 #define ROOT2 (1.4142f)
 
+
+///////////////////////////////////////////////////////
+//	<	GridMap	>
+///////////////////////////////////////////////////////
 bool GridMap::Init(const char* path)
 {
     _cells.resize(100'0000, false);
@@ -179,7 +183,7 @@ bool GridMap::FindPath(const Vector3& from, const Vector3& to, Vector<Vector3>& 
     return true;
 }
 
-bool GridMap::CanGo(Vector3& to)
+bool GridMap::CanGo(const Vector3& to)
 {
     int32 xIdx = 0;
     int32 yIdx = 0;

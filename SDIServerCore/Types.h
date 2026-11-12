@@ -34,17 +34,18 @@ using LockGuard			= std::lock_guard<Mutex>;
 ///////////////////////////////////////////////////////
 //	<	shared_ptr	>
 ///////////////////////////////////////////////////////
-#define useRef(className) using className##Ref = std::shared_ptr<class className>;
-useRef(IocpObject)
-useRef(IocpCore)
-useRef(Session)
-useRef(PacketSession)
-useRef(Listener)
-useRef(Service)
-useRef(ServerService)
-useRef(ClientService)
-useRef(SendBuffer)
-useRef(SendBufferChunk)
-useRef(Job)
-useRef(JobQueue)
-useRef(SessionAliveChecker)
+#define useRef_Class(className) using className##Ref = std::shared_ptr<class className>;
+#define useRef_Struct(structName) using structName##Ref = std::shared_ptr<struct structName>;
+useRef_Class(IocpObject)
+useRef_Class(IocpCore)
+useRef_Class(Session)
+useRef_Class(PacketSession)
+useRef_Class(Listener)
+useRef_Class(Service)
+useRef_Class(ServerService)
+useRef_Class(ClientService)
+useRef_Class(SendBuffer)
+useRef_Class(SendBufferChunk)
+useRef_Class(Job)
+useRef_Class(JobQueue)
+useRef_Class(SessionAliveChecker)

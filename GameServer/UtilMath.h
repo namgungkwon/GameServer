@@ -3,6 +3,10 @@
 #include "Protocol.pb.h"
 #define PI (3.1415926535)
 
+
+///////////////////////////////////////////////////////
+//	<	UtilMath	>
+///////////////////////////////////////////////////////
 class UtilMath
 {
 public:
@@ -20,14 +24,14 @@ public:
 
 	static int64 GetRandom(int64 min, int64 max);
 
-	static inline float GetYawFromVector(Vector3 vector)
+	static inline float GetYawFromVector(const Vector3& vector)
 	{
 		if (vector.IsZero())
 			return 0.f;
 
 		const float yawRadian = std::atan2(vector.y, vector.x);
 
-		float yawDegree = yawRadian * (180 / PI);
+		float yawDegree = yawRadian * static_cast<float>(180 / PI);
 
 		if (yawDegree < 0.f)
 			yawDegree += 360.f;
@@ -37,11 +41,11 @@ public:
 
 	static inline Vector3 GetForwardVectorFromYaw(float yaw)
 	{
-		const float yawRadian = yaw * (PI / 180);
+		const float yawRadian = yaw * static_cast<float>(PI / 180);
 		return Vector3{ std::cos(yawRadian), std::sin(yawRadian), 0.f };
 	}
 
-	static inline Vector3 GetMoveDirectionFromInput(const Vector3 input, float yaw)
+	static inline Vector3 GetMoveDirectionFromInput(const Vector3& input, float yaw)
 	{
 		const Vector3 forward = GetForwardVectorFromYaw(yaw);
 		const Vector3 right = Vector3{ -forward.y, forward.x, 0.f };

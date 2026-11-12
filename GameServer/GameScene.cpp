@@ -6,6 +6,10 @@
 #include "Entity.h"
 #include "Player.h"
 
+
+///////////////////////////////////////////////////////
+//	<	GameScene	>
+///////////////////////////////////////////////////////
 void GameScene::StartUpdate()
 {
 	_lastUpdateTick = ::GetTickCount64();
@@ -19,14 +23,14 @@ void GameScene::Update()
 
 	if (GServerStats)
 	{
-		uint64 expectedTickCount = _lastUpdateTick + updateTickMs;
+		const uint64 expectedTickCount = _lastUpdateTick + updateTickMs;
 		if (now > expectedTickCount)
 		{
-			uint64 lagMs = now - expectedTickCount;
+			const uint64 lagMs = now - expectedTickCount;
 			GServerStats->game.lagTickCount.fetch_add(1);
 			GServerStats->game.lagTickMs.fetch_add(lagMs);
 
-			uint64 prevMax = GServerStats->game.lagTickMaxMs.load();
+			const uint64 prevMax = GServerStats->game.lagTickMaxMs.load();
 			if (lagMs > prevMax)
 			{
 				GServerStats->game.lagTickMaxMs.store(lagMs);
@@ -36,19 +40,19 @@ void GameScene::Update()
 		GServerStats->game.tickCount.fetch_add(1);
 	}
 
-	uint64 deltaTime = now - _lastUpdateTick;
+	const uint64 deltaTime = now - _lastUpdateTick;
 	_lastUpdateTick = now;
 
 	DoTimer(Config::World::WORLD_UPDATE_TICK, &GameScene::Update);
 
-	for (ZoneRef& zone : _zones)
+	for (const ZoneRef& zone : _zones)
 	{
 		zone->Update(_lastUpdateTick, deltaTime);
 	}
 
 	ProcessMovingEntity();
 
-	for (ZoneRef& zone : _zones)
+	for (const ZoneRef& zone : _zones)
 	{
 		zone->ClearPengingJobs();
 	}
@@ -56,11 +60,11 @@ void GameScene::Update()
 
 void GameScene::ProcessMovingEntity()
 {
-	for (ZoneRef& zone : _zones)
+	for (const ZoneRef& zone : _zones)
 	{
 		Vector<EntityRef>& movingEntityList = zone->GetMovingEntity();
 
-		for (EntityRef& entity : movingEntityList)
+		for (const EntityRef& entity : movingEntityList)
 		{
 			ZoneRef oldZone = entity->GetZone();
 			ZoneRef newZone = GWorld->GetZoneByPos(entity->GetLocation());
@@ -93,7 +97,7 @@ void GameScene::HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef new
 
 	if (oldScene != newScene)
 	{
-		newScene->DoAsync([newScene, newZone, entity]()
+		newScene->DoAsync([newScene = std::move(newScene), newZone = std::move(newZone), entity = std::move(entity)]()
 			{
 				entity->SetZone(newZone);
 				entity->SetScene(newScene);
@@ -107,12 +111,12 @@ void GameScene::HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef new
 	}
 }
 
-EntityRef GameScene::FindNearestPlayer(Vector<ZoneRef> zones, Vector3 location, float searchRange)
+EntityRef GameScene::FindNearestPlayer(const Vector<ZoneRef>& zones, Vector3 location, float searchRange)
 {
 	float searchRangeSq = searchRange * searchRange;
 	EntityRef target = nullptr;
 	float minRangeSq = 1000000000.f;
-	for (ZoneRef& zone : zones)
+	for (const ZoneRef& zone : zones)
 	{
 		for (auto& [id, player] : zone->GetPlayers())
 		{
@@ -131,18 +135,18 @@ EntityRef GameScene::FindNearestPlayer(Vector<ZoneRef> zones, Vector3 location, 
 	return minRangeSq < searchRangeSq ? target : nullptr;
 }
 
-void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type)
+void GameScene::BroadcastMoveResult(const Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type)
 {
 	if (zones.size() == 0)
 		return;
 
-	auto fn = [type](Vector<ZoneRef> zones, EntityRef entity) {
+	auto fn = [type](const Vector<ZoneRef>& zones, const EntityRef& entity) {
 
 		switch (type)
 		{
 		case VISION_TYPE::SPAWN:
 		{
-			for (const ZoneRef zone : zones)
+			for (const ZoneRef& zone : zones)
 			{
 				zone->AddPendingSpawn(entity);
 
@@ -155,7 +159,7 @@ void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VI
 		break;
 		case VISION_TYPE::DESPAWN:
 		{
-			for (const ZoneRef zone : zones)
+			for (const ZoneRef& zone : zones)
 			{
 				zone->AddPendingDespawn(entity->GetObjectId());
 
@@ -168,7 +172,7 @@ void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VI
 		break;
 		case VISION_TYPE::MOVE:
 		{
-			for (const ZoneRef zone : zones)
+			for (const ZoneRef& zone : zones)
 				zone->AddPendingMove(entity);
 		}
 		break;
@@ -187,12 +191,12 @@ void GameScene::BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VI
 		}
 		else
 		{
-			scene->DoAsync([fn, zones, entity]() { fn(zones, entity); });
+			scene->DoAsync([fn, zones = std::move(zones), entity]() { fn(zones, entity); });
 		}
 	}
 }
 
-void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, uint64 exceptId)
+void GameScene::BroadCastAdjacentZone(const ZoneRef& zone, const SendBufferRef& sendBuffer, uint64 exceptId)
 {
 	HashMap<GameScene*, Vector<ZoneRef>> adjacentZoneInfo;
 	zone->GetAdjacentZoneInfo(OUT adjacentZoneInfo);
@@ -202,12 +206,12 @@ void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, ui
 	{
 		if (scene == this)
 		{
-			for (ZoneRef& zone : zones)
+			for (const ZoneRef& zone : zones)
 				zone->BufferBroadCast(sendBuffer, exceptId);
 		}
 		else
 		{
-			scene->DoAsync([scene, zones, sendBuffer, exceptId]() {
+			scene->DoAsync([zones = std::move(zones), sendBuffer, exceptId]() {
 				for (const ZoneRef& zone : zones)
 					zone->BufferBroadCast(sendBuffer, exceptId);
 				});
@@ -217,7 +221,7 @@ void GameScene::BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, ui
 
 void GameScene::BroadCast(SendBufferRef sendBuffer, uint64 exceptId)
 {
-	for (auto& zone : _zones)
+	for (const auto& zone : _zones)
 	{
 		zone->BufferBroadCast(sendBuffer, exceptId);
 	}

@@ -2,6 +2,10 @@
 #include "RedisManager.h"
 using namespace sw::redis;
 
+
+///////////////////////////////////////////////////////
+//	<	RedisManager	>
+///////////////////////////////////////////////////////
 bool RedisManager::Init(const RedisConfig& redisConfig, const ServerConfig& serverConfig)
 {
 	if (Connect(redisConfig) == false)
@@ -21,7 +25,7 @@ Protocol::Result RedisManager::AuthToken(const string& token, OUT uint64& accoun
 	}
 	catch (const Error& e)
 	{
-		LOG_ERROR(L"Redis GetAccountId Failed");
+		LOG_ERROR(L"Redis GetAccountId Failed: " + Utils::ToWString(e.what()));
 		return Protocol::REDIS_ERROR;
 	}
 }
@@ -44,7 +48,7 @@ bool RedisManager::Connect(const RedisConfig& redisConfig)
 	}
 	catch (const Error& e)
 	{
-		LOG_ERROR(L"Redis Connect Failed");
+		LOG_ERROR(L"Redis Connect Failed: " + Utils::ToWString(e.what()));
 		return false;
 	}
 }

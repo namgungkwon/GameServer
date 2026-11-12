@@ -10,29 +10,33 @@
 #include "GridMap.h"
 #include "World.h"
 
+
+///////////////////////////////////////////////////////
+//	<	Monster	>
+///////////////////////////////////////////////////////
 void Monster::Init(const MonsterSpawnData& spawnData, MonsterData& data)
 {
 	//Entity
-	SetObjectId(IdGenerator::Get());
-	SetName(data.name);
-	SetLevel(data.level);
-	SetLocation(spawnData.location);
-	SetYaw(0);
-	SetType(Protocol::OBJECT_CATEGORY_MONSTER);
-	SetState(EntityState::Idle);
-	SetTemplateId(data.id);
-	SetExp(data.rewardExp);
+	SetObjectId		(IdGenerator::Get());
+	SetName			(data.name);
+	SetLevel		(data.level);
+	SetLocation		(spawnData.location);
+	SetYaw			(0);
+	SetType			(Protocol::OBJECT_CATEGORY_MONSTER);
+	SetState		(EntityState::Idle);
+	SetTemplateId	(data.id);
+	SetExp			(data.rewardExp);
 
 	// NPC
 	SetSpawnLocation(spawnData.location);
-	SetPatrolRadius(spawnData.patrolRadius);
+	SetPatrolRadius	(spawnData.patrolRadius);
 
 	// Monster
-	_searchRange = data.searchRange;
+	_searchRange	= data.searchRange;
 	_maxSearchRange = data.maxSearchRange;
-	_attackRange = data.attackRange;
-	_attackDelayMs = data.attackDelayMs;
-	_respawnMs = spawnData.respawnMs;
+	_attackRange	= data.attackRange;
+	_attackDelayMs	= data.attackDelayMs;
+	_respawnMs		= spawnData.respawnMs;
 
 
 	// Component
@@ -139,7 +143,6 @@ void Monster::UpdateChase(uint64 nowMs, uint64 deltaTime)
 		float maxSearchRangeSq = _maxSearchRange * _maxSearchRange;
 		if (targetLocation.DistanceSq(GetSpawnLocation()) > maxSearchRangeSq)
 		{
-			LOG_INFO(L"target Out Of ChaseRange");
 			break;
 		}
 
@@ -231,7 +234,7 @@ void Monster::UpdateDead(uint64 nowMs, uint64 deltaTime)
 void Monster::EnterDead(uint64 nowMs, uint64 deltaTime)
 {
 	ResetPath();
-	GWorld->LeaveEntity(shared_from_this()); // Tick의 영향을 받지 않게 됨
+	GWorld->LeaveEntity(shared_from_this()); // 이 객체가 Tick의 영향을 받지 않게 됨
 	_nextRespawnTick = nowMs + _respawnMs;
 	GWorld->DoTimer(_respawnMs, [monster = static_pointer_cast<Monster>(shared_from_this())]() {
 		monster->Respawn(monster->GetSpawnLocation());
@@ -249,13 +252,13 @@ void Monster::FindPlayer(uint64 nowMs)
 
 	_nextPlayerFindTick = nowMs + Config::AI::PLAYER_FIND_TICK;
 
-	ZoneRef mainZone = GetZone();
-	GameScene* mainScene = GetScene().get();
+	const ZoneRef mainZone = GetZone();
+	const GameSceneRef mainScene = GetScene();
 	if (mainZone == nullptr || mainScene == nullptr)
 		return;
 
 
-	auto fn = [](MonsterRef monster, Vector3 entityLocation, EntityRef newTarget)
+	auto fn = [](const MonsterRef& monster, Vector3 monsterLocation, const EntityRef& newTarget)
 		{
 			monster->_leftTargetGahterSceneCount--;
 
@@ -270,8 +273,8 @@ void Monster::FindPlayer(uint64 nowMs)
 					break;
 				}
 
-				float currentDistSq = entityLocation.DistanceSq(target->GetLocation());
-				float newDistSq = entityLocation.DistanceSq(newTarget->GetLocation());
+				float currentDistSq = monsterLocation.DistanceSq(target->GetLocation());
+				float newDistSq = monsterLocation.DistanceSq(newTarget->GetLocation());
 
 				if (newDistSq < currentDistSq)
 					monster->_target = newTarget;
@@ -287,7 +290,6 @@ void Monster::FindPlayer(uint64 nowMs)
 					monster->_lastTargetLocation = target->GetLocation();
 					monster->ResetPath();
 					monster->SetState(EntityState::Chase);
-					LOG_INFO(L"Find Target");
 				}
 				else
 				{
@@ -305,7 +307,7 @@ void Monster::FindPlayer(uint64 nowMs)
 
 	for (auto& [scene, zones] : sceneGroups)
 	{
-		if (scene == mainScene)
+		if (scene == mainScene.get())
 		{
 			EntityRef nearestPlayer = mainScene->FindNearestPlayer(zones, location, _searchRange);
 			fn(static_pointer_cast<Monster>(shared_from_this()), location, nearestPlayer);
@@ -314,11 +316,11 @@ void Monster::FindPlayer(uint64 nowMs)
 		{
 			GameSceneRef targetScene = zones[0]->GetScene();
 			if (!targetScene) continue;
-			targetScene->DoAsync([mainScene, targetScene, zones, owner = static_pointer_cast<Monster>(shared_from_this()), location, searchRange = _searchRange, fn]()
+			targetScene->DoAsync([mainScene, targetScene, zones = std::move(zones), owner = static_pointer_cast<Monster>(shared_from_this()), location, searchRange = _searchRange, fn]()
 				{
 					EntityRef nearestPlayer = targetScene->FindNearestPlayer(zones, location, searchRange);
 
-					mainScene->DoAsync([owner, location, nearestPlayer, fn]() { fn(owner, location, nearestPlayer); });
+					mainScene->DoAsync([owner = std::move(owner), location, nearestPlayer = std::move(nearestPlayer), fn]() { fn(owner, location, nearestPlayer); });
 				});
 		}
 	}

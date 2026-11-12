@@ -18,6 +18,9 @@ void ReadWString(const json& j, const char* key, wstring& out)
 }
 
 
+///////////////////////////////////////////////////////
+//	<	ConfigLoader	>
+///////////////////////////////////////////////////////
 bool ConfigLoader::Load(const string& path, GameConfig& config)
 {
 	std::ifstream file(path);

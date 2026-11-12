@@ -10,11 +10,15 @@
 #include "GameScene.h"
 #include "MovementComponent.h"
 
+
+///////////////////////////////////////////////////////
+//	<	ClientPacketHandler	>
+///////////////////////////////////////////////////////
 bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
-    GRedisManager->DoAsync([token = pkt.token(), gameSession]() {
+    GRedisManager->DoAsync([token = pkt.token(), gameSession = std::move(gameSession)]() {
             
         uint64 accountId;
         Protocol::Result result = GRedisManager->AuthToken(token, OUT accountId);
@@ -26,15 +30,15 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
 
             SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
             gameSession->Send(sendBuffer);
-            return ;
+            return;
         }
 
-        GDBManager->DoAsync(Job([accountId, gameSession]()
+        GDBManager->DoAsync(Job([accountId, gameSession = std::move(gameSession)]()
             {
                 Protocol::GC_AUTH_TOKEN res;
                 Vector<Protocol::ObjectSummaryData> summaries;
 
-                res.set_result(GDBManager->GetPlayerList(accountId, summaries));
+                res.set_result(GDBManager->GetPlayerList(accountId, OUT summaries));
                 
                 for (auto& summary : summaries)
                 {
@@ -57,9 +61,9 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
     if (gameSession->IsAuthenticated() == false) return false;
 
-    uint64 accountId = gameSession->GetAccountDBId();
-    string name = pkt.name();
-    uint64 templateId = pkt.templateid();
+    const uint64 accountId = gameSession->GetAccountDBId();
+    const string name = pkt.name();
+    const int32 templateId = pkt.templateid();
 
 
     if (name.size() == 0)
@@ -71,7 +75,7 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
         return true;
     }
 
-    GDBManager->DoAsync(Job([gameSession, accountId, name, templateId]() {
+    GDBManager->DoAsync(Job([gameSession = std::move(gameSession), accountId, name = std::move(name), templateId]() {
 
             Protocol::Result result = GDBManager->CreateCharacter(accountId, name, templateId);
 
@@ -84,12 +88,12 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
                 return;
             }
 
-            GDBManager->DoAsync(Job([accountId, gameSession]()
+            GDBManager->DoAsync(Job([accountId, gameSession = std::move(gameSession)]()
                 {
                     Protocol::GC_CREATE_CHARACTER res;
                     Vector<Protocol::ObjectSummaryData> summaries;
 
-                    res.set_result(GDBManager->GetPlayerList(accountId, summaries));
+                    res.set_result(GDBManager->GetPlayerList(accountId, OUT summaries));
 
                     for (auto& summary : summaries)
                     {
@@ -97,7 +101,6 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
                         *target = summary;
                     }
 
-                    gameSession->SetAccountDBId(accountId);
                     SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
                     gameSession->Send(sendBuffer);
                 }));
@@ -111,7 +114,6 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
     if (gameSession->IsAuthenticated() == false) return false;
 
-
     // 중복 요청 검사
     if (gameSession->TryEnterGame() == false)
     {
@@ -119,18 +121,18 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
         return true;
     }
 
-    uint64 accountId = gameSession->GetAccountDBId();
+    const uint64 accountId = gameSession->GetAccountDBId();
 
     //temp
     //uint64 playerId = tempId.fetch_add(1);
     uint64 playerId = pkt.playerid();
     // DB에서 선택한 계정의 목록을 불러옴
-    GDBManager->DoAsync(Job([gameSession, accountId, playerId]()
+    GDBManager->DoAsync(Job([gameSession = std::move(gameSession), accountId, playerId]()
         {
             PlayerSummaryData summary;
             PlayerLoadData load;
 
-            if (GDBManager->GetPlayerDetail(accountId, playerId, &summary, &load) == false)
+            if (GDBManager->GetPlayerDetail(accountId, playerId, OUT &summary, OUT &load) == false)
             {
                 gameSession->ReleaseEnterGame();
                 Protocol::GC_ENTER_GAME res;
@@ -172,6 +174,8 @@ bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt)
         return false;
 
     scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<ReviveRequest>(pkt, player)));
+
+    return true;
 }
 
 bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)

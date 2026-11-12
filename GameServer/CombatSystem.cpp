@@ -9,7 +9,11 @@
 #include "StatComponent.h"
 #include "GameData.h"
 
-DamageEvent CombatSystem::MakeDamageEvent(EntityRef attacker, EntityRef target, uint64 skillId, float yaw)
+
+///////////////////////////////////////////////////////
+//	<	CombatSystem	>
+///////////////////////////////////////////////////////
+DamageEvent CombatSystem::MakeDamageEvent(const EntityRef& attacker, const EntityRef& target, uint32 skillId, float yaw)
 {
 	DamageEvent event;
 
@@ -31,7 +35,7 @@ DamageEvent CombatSystem::MakeDamageEvent(EntityRef attacker, EntityRef target, 
 	return event;
 }
 
-bool CombatSystem::ApplyDamage(ZoneRef zone, DamageEvent& event)
+bool CombatSystem::ApplyDamage(const ZoneRef& zone, DamageEvent& event)
 {
 	EntityRef target = zone->FindEntity(event.targetId);
 
@@ -40,8 +44,8 @@ bool CombatSystem::ApplyDamage(ZoneRef zone, DamageEvent& event)
 
 	StatComponent* tStat = target->GetComponent<StatComponent>();
 
-	int32 currentHp = tStat->GetCurrentHP();
-	const uint32 appliedDamage = event.finalDamage < currentHp ? event.finalDamage : currentHp;
+	const int64 currentHp = tStat->GetCurrentHP();
+	const int64 appliedDamage = event.finalDamage < currentHp ? event.finalDamage : currentHp;
 
 	tStat->SetCurrentHP(currentHp - appliedDamage);
 
@@ -49,7 +53,7 @@ bool CombatSystem::ApplyDamage(ZoneRef zone, DamageEvent& event)
 	return true;
 }
 
-const DamageResult CombatSystem::MakeDamageResult(ZoneRef zone, DamageEvent& event)
+const DamageResult CombatSystem::MakeDamageResult(const ZoneRef& zone, DamageEvent& event)
 {
 	DamageResult result;
 
@@ -80,17 +84,17 @@ const DamageResult CombatSystem::MakeDamageResult(ZoneRef zone, DamageEvent& eve
 	return result;
 }
 
-Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vector<EntityRef> targets, float AttackRange, float AttackAngle)
+Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(const EntityRef& attacker, Vector<EntityRef>& targets, float AttackRange, float AttackAngle)
 {
 	if (attacker == nullptr)
 		return Vector<EntityRef>();
 
 	Vector<EntityRef> ret;
 
-	Vector3 attackerLocation = attacker->GetLocation();
-	Vector3 forwardVector = UtilMath::GetForwardVectorFromYaw(attacker->GetYaw());
+	const Vector3 attackerLocation = attacker->GetLocation();
+	const Vector3 forwardVector = UtilMath::GetForwardVectorFromYaw(attacker->GetYaw());
 
-	const float halfAngleRadians = AttackAngle * 0.5f * PI / 180.f;
+	const float halfAngleRadians = AttackAngle * 0.5f * static_cast<float>(PI / 180.f);
 
 	const float minDot = std::cos(halfAngleRadians);
 	const float attackRangeSq = AttackRange * AttackRange;
@@ -100,20 +104,17 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vec
 		if (target == nullptr)
 			continue;
 
-		Vector3 targetLocation = target->GetLocation();
-		
-		float distanceSq = targetLocation.DistanceSq(attackerLocation);
+		const Vector3 targetLocation = target->GetLocation();
+		const float distanceSq = targetLocation.DistanceSq(attackerLocation);
 
-		LOG_INFO(L"DistanceSq : " + std::to_wstring(distanceSq));
 		// 사거리
 		if (distanceSq > attackRangeSq)
 			continue;
 
-		LOG_INFO(L"distance In");
 		const float distance =  ::sqrt(distanceSq);
 		if (distance <= 0.01f)
 		{
-			ret.push_back(target);
+			ret.push_back(std::move(target));
 			continue;
 		}
 
@@ -121,12 +122,10 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(EntityRef attacker, Vec
 
 		// 각도
 		const float AngleDot = forwardVector.Dot(toTarget);
-		const float Angle = std::acos(AngleDot) * 180 / PI;
-		LOG_INFO(L"Angle : " + std::to_wstring(Angle));
+		const float Angle = std::acos(AngleDot) * static_cast < float>(180 / PI);
 		if (AngleDot >= minDot)
 		{
-			LOG_INFO(L"Angle In");
-			ret.push_back(target);
+			ret.push_back(std::move(target));
 		}
 	}
 	return ret;
@@ -136,7 +135,7 @@ uint64 CombatSystem::CalculateDamage(DamageEvent& event)
 {
 	SkillData* skill = GGameData->GetSkillData(event.skillId, event.skillLevel);
 
-	uint64 finalDamage = (event.rawDamage * skill->attackRate) * 0.01f;
+	uint64 finalDamage = static_cast<uint64>((event.rawDamage * skill->attackRate) * 0.01f);
 
 	finalDamage = event.rawDamage - event.defense;
 

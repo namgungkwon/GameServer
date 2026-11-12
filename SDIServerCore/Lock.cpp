@@ -24,7 +24,7 @@ void Lock::WriteLock(const char* name)
 	}
 
 	// 아무도 소유 및 공유하고 있지 않을 때, 경합해서 소유권을 얻는다.
-	const int64 beginTick = ::GetTickCount64();
+	const uint64 beginTick = ::GetTickCount64();
 	const uint32 desired = ((LThreadId << 16) & WRITE_THREAD_MASK);
 	while (true)
 	{
@@ -55,7 +55,7 @@ void Lock::WriteUnlock(const char* name)
 	if ((_lockFlag.load() & READ_COUNT_MASK) != 0)
 		CRASH("INVALID_UNLOCK_ORDER");
 
-	const int32 lockCount = --_writeCount;
+	const uint16 lockCount = --_writeCount;
 	if (lockCount == 0)
 		_lockFlag.store(EMPTY_FLAG);
 }
@@ -75,7 +75,7 @@ void Lock::ReadLock(const char* name)
 	}
 
 	// 아무도 소유하고 있지 않을 때 경합해서 공유 카운트를 올린다.
-	const int64 beginTick = ::GetTickCount64();
+	const uint64 beginTick = ::GetTickCount64();
 	while (true)
 	{
 		for (uint32 spinCount = 0; spinCount < MAX_SPIN_COUNT; spinCount++)

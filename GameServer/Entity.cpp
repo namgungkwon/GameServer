@@ -3,9 +3,12 @@
 
 #include "StatComponent.h"
 
-
 Atomic<uint64> IdGenerator::id = 0;
 
+
+///////////////////////////////////////////////////////
+//	<	Entity	>
+///////////////////////////////////////////////////////
 void Entity::Respawn(const Vector3& respawnLocation)
 {
 	SetLocation(respawnLocation);
@@ -27,11 +30,11 @@ void Entity::MakePkt(Protocol::ObjectData& objectData)
 
 void Entity::MakePkt(Protocol::ObjectSummaryData& summary)
 {
-	summary.set_objectid(_objectId);
-	summary.set_objecttype(_type);
-	summary.set_name(Utils::ToString(_name));
-	summary.set_templateid(_templateId);
-	summary.set_level(_level);
+	summary.set_objectid	(_objectId);
+	summary.set_objecttype	(_type);
+	summary.set_name		(Utils::ToString(_name));
+	summary.set_templateid	(_templateId);
+	summary.set_level		(_level);
 }
 
 void Entity::MakePkt(Protocol::ObjectPosData& pos)

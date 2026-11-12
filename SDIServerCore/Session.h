@@ -16,11 +16,6 @@ class Session : public IocpObject
 	friend class Listener;
 	friend class Service;
 
-	enum
-	{
-		BUFFER_SIZE = 0x10000 // 64 KB
-	};
-
 public:
 	Session();
 	virtual ~Session();
@@ -29,7 +24,7 @@ public:
 	/* 외부에서 사용 */
 	void					Send(SendBufferRef sendBuffer);
 	bool					Connect();
-	void					Disconnect(const WCHAR* cause);
+	void					Disconnect();
 
 public:
 	/* get & set */
@@ -45,8 +40,8 @@ public:
 private:
 	/* interface */
 	virtual HANDLE			GetHandle() override					{ return reinterpret_cast<HANDLE>(_socket); };
-	virtual void			Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
-	virtual void			HandleError(const IocpEvent* iocpEvent, const int32 errorCode) override;
+	virtual void			Dispatch(IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
+	virtual void			HandleError(IocpEvent* iocpEvent, int32 errorCode) override;
 
 private:
 	/* transport */
@@ -59,10 +54,6 @@ private:
 	void					ProcessDisconnect();
 	void					ProcessRecv(int32 numOfBytes);
 	void					ProcessSend(int32 numOfBytes);
-
-public:
-	/* transport */
-	void					HandleError(const int32 errorCode);
 
 protected:
 	/* overriding for contents code */

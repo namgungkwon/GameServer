@@ -14,42 +14,54 @@ enum EntityState
 };
 
 class Entity;
+
+///////////////////////////////////////////////////////
+//	<	IObjectComponent	>
+///////////////////////////////////////////////////////
 class IObjectComponent
 {
 public:
 	IObjectComponent(EntityRef& owner) : _owner(owner) {};
 	virtual ~IObjectComponent() = default;
-	virtual void OnAttach(Entity& owner) {}
-	virtual void OnDetach(Entity& owner) {}
+
+public:
+	virtual void				OnAttach(Entity& owner) {}
+	virtual void				OnDetach(Entity& owner) {}
 
 protected:
-	std::weak_ptr<Entity> _owner;
+	std::weak_ptr<Entity>		_owner;
 };
 
 class IdGenerator
 {
 public:
-	static uint64 Get() { return id.fetch_add(1); }
+	static uint64				Get() { return id.fetch_add(1); }
 private:
-	static Atomic<uint64> id;
+	static Atomic<uint64>		id;
 };
 
+
+///////////////////////////////////////////////////////
+//	<	Entity	>
+///////////////////////////////////////////////////////
 class Entity : public enable_shared_from_this<Entity>
 {
 public:
+	~Entity() { Components.clear(); }
+public:
 	template <typename T>
-	T* AddComponent(EntityRef owner);
+	T*						AddComponent(EntityRef owner);
 	template<typename T>
-	T* GetComponent();
+	T*						GetComponent();
 
 public:
-	virtual void Respawn(const Vector3& respawnLocation);
+	virtual void			Respawn(const Vector3& respawnLocation);
 
 public:
-	void MakePkt(OUT Protocol::ObjectData& objectData);
-	void MakePkt(OUT Protocol::ObjectSummaryData& summary);
-	void MakePkt(OUT Protocol::ObjectPosData& pos);
-	void MakePkt(OUT Protocol::ObjectStatData& stat);
+	void					MakePkt(OUT Protocol::ObjectData& objectData);
+	void					MakePkt(OUT Protocol::ObjectSummaryData& summary);
+	void					MakePkt(OUT Protocol::ObjectPosData& pos);
+	void					MakePkt(OUT Protocol::ObjectStatData& stat);
 
 private:
 	HashMap<std::type_index, IObjectComponent*> Components;
@@ -59,11 +71,11 @@ public:
 	GETSET_WEAK(GameScene,					_ownerScene,	Scene);
 
 	GETSET		(uint64,					_objectId,		ObjectId);
-	GETSET		(uint64,					_templateId,	TemplateId);
+	GETSET		(int32,						_templateId,	TemplateId);
 	
 	GETSET_REF	(wstring,					_name,			Name);
 	GETSET		(int32,						_level,			Level);
-	GETSET		(int32,						_exp,			Exp);
+	GETSET		(uint64,					_exp,			Exp);
 	GETSET		(Vector3,					_location,		Location);
 	GETSET		(float,						_yaw,			Yaw);
 

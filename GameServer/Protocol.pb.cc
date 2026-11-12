@@ -566,7 +566,7 @@ inline constexpr CG_ATTACK::Impl_::Impl_(
         targets_{},
         _targets_cached_byte_size_{0},
         posdata_{nullptr},
-        skillid_{::uint64_t{0u}} {}
+        skillid_{0u} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR CG_ATTACK::CG_ATTACK(::_pbi::ConstantInitialized)
@@ -908,7 +908,7 @@ const char descriptor_table_protodef_Protocol_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "Data\"4\n\007GC_MOVE\022)\n\010moveData\030\001 \003(\0132\027.Prot"
     "ocol.ObjectPosData\"W\n\tCG_ATTACK\022(\n\007posDa"
     "ta\030\001 \001(\0132\027.Protocol.ObjectPosData\022\017\n\007tar"
-    "gets\030\002 \003(\004\022\017\n\007skillId\030\003 \001(\004\"F\n\tGC_ATTACK"
+    "gets\030\002 \003(\004\022\017\n\007skillId\030\003 \001(\r\"F\n\tGC_ATTACK"
     "\022(\n\007posData\030\001 \001(\0132\027.Protocol.ObjectPosDa"
     "ta\022\017\n\007skillId\030\002 \001(\004\"=\n\tGC_DAMAGE\022\020\n\010obje"
     "ctId\030\001 \001(\004\022\016\n\006damage\030\002 \001(\004\022\016\n\006isDead\030\003 \001"
@@ -6113,8 +6113,8 @@ CG_ATTACK::_table_ = {
     {::_pbi::TcParser::FastV64P1,
      {18, 0, 0,
       PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.targets_)}},
-    // uint64 skillId = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(CG_ATTACK, _impl_.skillid_), 2>(),
+    // uint32 skillId = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(CG_ATTACK, _impl_.skillid_), 2>(),
      {24, 2, 0,
       PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.skillid_)}},
   }}, {{
@@ -6124,8 +6124,8 @@ CG_ATTACK::_table_ = {
     {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.posdata_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // repeated uint64 targets = 2;
     {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.targets_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcRepeated | ::_fl::kPackedUInt64)},
-    // uint64 skillId = 3;
-    {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.skillid_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
+    // uint32 skillId = 3;
+    {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.skillid_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt32)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::Protocol::ObjectPosData>()},
@@ -6150,7 +6150,7 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
       _impl_.posdata_->Clear();
     }
   }
-  _impl_.skillid_ = ::uint64_t{0u};
+  _impl_.skillid_ = 0u;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -6192,11 +6192,11 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
     }
   }
 
-  // uint64 skillId = 3;
+  // uint32 skillId = 3;
   if (CheckHasBit(cached_has_bits, 0x00000004U)) {
     if (this_._internal_skillid() != 0) {
       target = stream->EnsureSpace(target);
-      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
+      target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
           3, this_._internal_skillid(), target);
     }
   }
@@ -6239,10 +6239,10 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.posdata_);
     }
-    // uint64 skillId = 3;
+    // uint32 skillId = 3;
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
       if (this_._internal_skillid() != 0) {
-        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
+        total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
             this_._internal_skillid());
       }
     }

@@ -7,16 +7,17 @@
 
 struct DBConn
 {
+public:
     DBConn() { conn = GDBConnectionPool->Pop();  }
     ~DBConn() { GDBConnectionPool->Push(conn); }
+
+public:
     DBConnection* conn;
 };
 
 struct DBTransactionGuard
 {
-    DBConnection* conn = nullptr;
-    bool          committed = false;
-
+public:
     explicit DBTransactionGuard(DBConnection* c) : conn(c) { if (conn) conn->SetAutoCommit(false); }
     ~DBTransactionGuard()
     {
@@ -25,24 +26,33 @@ struct DBTransactionGuard
         conn->SetAutoCommit(true);   // restore before the connection returns to the pool
     }
 
+public:
     bool Commit() { committed = (conn && conn->Commit()); return committed; }
+
+public:
+    DBConnection* conn = nullptr;
+    bool          committed = false;
 };
 
+
+///////////////////////////////////////////////////////
+//	<	DBManager	>
+///////////////////////////////////////////////////////
 class DBManager
 {
 public:
-	bool Init(const DBConfig& config);
-	void DoAsync(Job&& job);
+	bool                Init(const DBConfig& config);
+	void                DoAsync(Job&& job);
 
 public:
-    Protocol::Result CreateCharacter(uint64 accountDBId, const string& name, int32 templateId);
-    Protocol::Result GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries);
-	bool GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load);
-    void SavePlayer(uint64 playerId, const PlayerLoadData* load);
-    void SaveLevelUp(uint64 playerId, int32 level);
+    Protocol::Result    CreateCharacter(uint64 accountDBId, const string& name, int32 templateId);
+    Protocol::Result    GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol::ObjectSummaryData>& summaries);
+	bool                GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummaryData* summary, PlayerLoadData* load);
+    void                SavePlayer(uint64 playerId, const PlayerLoadData* load);
+    void                SaveLevelUp(uint64 playerId, int32 level);
 
 
 private:
 	Vector<JobQueueRef> _workers;
-	Atomic<uint32> _choiceWorker;
+	Atomic<uint32>      _choiceWorker;
 };

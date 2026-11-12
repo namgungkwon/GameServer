@@ -28,11 +28,8 @@ public:
 public:
 	virtual bool				Start()									{ return true; }
 	bool						CanStart()								{ return _sessionFactory != nullptr; }
-	virtual bool				Process(uint32 iocpTimeoutMs = INFINITE);
+	virtual void				Process(uint32 iocpTimeoutMs = INFINITE);
 	virtual void				CloseService();
-
-public:
-	void						Broadcast(SendBufferRef& sendBuffer);
 
 public:
 	void						SetSessionFactory(SessionFactory func)	{ _sessionFactory = func; }
@@ -60,8 +57,6 @@ protected:
 	int32						_sessionCount = 0;
 	int32						_maxSessionCount = 0;
 	SessionFactory				_sessionFactory;
-
-	bool						_isClose = false;
 };
 
 

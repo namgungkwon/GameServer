@@ -11,36 +11,39 @@ enum VISION_TYPE
 	MOVE,
 };
 
+
+///////////////////////////////////////////////////////
+//	<	GameScene	>
+///////////////////////////////////////////////////////
 class GameScene : public JobQueue
 {
 public:
-	void StartUpdate();
+	void			StartUpdate();
 
 private:
-	void Update();
+	void			Update();
 
 private:
-	void ProcessMovingEntity();
-	void HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef newZone);
+	void			ProcessMovingEntity();
+	void			HandleZoneChanged(EntityRef entity, ZoneRef oldZone, ZoneRef newZone);
 
 public:
-	EntityRef FindNearestPlayer(Vector<ZoneRef> zones, Vector3 location, float searchRange);
+	EntityRef		FindNearestPlayer(const Vector<ZoneRef>& zones, Vector3 location, float searchRange);
 
 public:
-	void AddZone(ZoneRef zone) { _zones.push_back(zone); }
-	void Request(SceneRequestRef request) { request->Execute(static_pointer_cast<GameScene>(shared_from_this()), _lastUpdateTick); }
+	void			AddZone(ZoneRef zone)				{ _zones.push_back(std::move(zone)); }
+	void			Request(SceneRequestRef request)	{ request->Execute(static_pointer_cast<GameScene>(shared_from_this()), _lastUpdateTick); }
 
-	void BroadCastAdjacentZone(ZoneRef zone, SendBufferRef sendBuffer, uint64 exceptId = -1);
-	void BroadCast(SendBufferRef sendBuffer, uint64 exceptId = -1);
-
-private:
-	void BroadcastMoveResult(Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type);
+	void			BroadCastAdjacentZone(const ZoneRef& zone, const SendBufferRef& sendBuffer, uint64 exceptId = -1);
+	void			BroadCast(SendBufferRef sendBuffer, uint64 exceptId = -1);
 
 private:
-	GETSET(int32, _id, Id);
+	void			BroadcastMoveResult(const Vector<ZoneRef>& zones, EntityRef entity, VISION_TYPE type);
+
+private:
+	GETSET(int32,	_id,		Id);
 	Vector<ZoneRef> _zones;
 
 private:
-	uint64 _lastUpdateTick = 0;
+	uint64			_lastUpdateTick = 0;
 };
-

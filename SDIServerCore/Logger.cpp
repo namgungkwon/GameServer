@@ -7,6 +7,10 @@
 Mutex Logger::_consoleLock;
 int Logger::_statsPanelLines = 15;
 
+
+///////////////////////////////////////////////////////
+//	<	Logger	>
+///////////////////////////////////////////////////////
 void Logger::Init(const wstring& filename)
 {
     if (_running) return;

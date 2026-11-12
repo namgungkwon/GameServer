@@ -10,6 +10,10 @@ extern class GridMap* GGridMap;
 extern class World* GWorld;
 extern class PacketSender* GPacketSender;
 
+
+///////////////////////////////////////////////////////
+//	<	GameGlobal	>
+///////////////////////////////////////////////////////
 class GameGlobal
 {
 public:

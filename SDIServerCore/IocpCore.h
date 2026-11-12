@@ -1,5 +1,6 @@
 #pragma once
 
+class IocpEvent;
 
 ///////////////////////////////////////////////////////
 //	<	IocpObject	>
@@ -9,8 +10,8 @@ class IocpObject : public enable_shared_from_this<IocpObject>
 	friend class IocpCore;
 private:
 	virtual HANDLE			GetHandle() abstract;
-	virtual void			Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) abstract;
-	virtual void			HandleError(const IocpEvent* iocpEvent, const int32 errorCode) abstract;
+	virtual void			Dispatch(IocpEvent* iocpEvent, int32 numOfBytes = 0) abstract;
+	virtual void			HandleError(IocpEvent* iocpEvent, int32 errorCode) abstract;
 };
 
 

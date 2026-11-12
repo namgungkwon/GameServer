@@ -5,7 +5,7 @@
 #include "SessionAliveChecker.h"
 
 ///////////////////////////////////////////////////////
-//	<	ClientSessionManager	>
+//	<	SessionManager	>
 ///////////////////////////////////////////////////////
 SessionManager::SessionManager()
 {
@@ -26,8 +26,8 @@ GameSessionRef SessionManager::FindSession(uint64 _clientId)
 void SessionManager::Add(GameSessionRef session)
 {
 	WRITE_LOCK;
-	_clientSessions[session->GetAccountDBId()] = session;
 	_clientChecker->DoAsync(&SessionAliveChecker::Push, session->GetSessionRef(), session->GetAccountDBId());
+	_clientSessions[session->GetAccountDBId()] = std::move(session);
 }
 
 void SessionManager::Remove(GameSessionRef session)
@@ -46,5 +46,5 @@ void SessionManager::CallBackSessionChecker(SessionRef session)
 		return;
 	}
 
-	gameSession->Disconnect(L"TimeOut");
+	gameSession->Disconnect();
 }

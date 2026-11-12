@@ -6,6 +6,10 @@
 
 #pragma comment(lib, "psapi.lib")
 
+
+///////////////////////////////////////////////////////
+//	<	ServerStats	>
+///////////////////////////////////////////////////////
 void SystemStats::Refresh()
 {
     PROCESS_MEMORY_COUNTERS pmc;
@@ -93,12 +97,12 @@ void ServerStats::Rendering()
     size_t memUsageMB       = system.memUsageMB;
 
     // Game
-    int32 activePlayers = game.activePlayers.load();;
-    uint64 tickCount = game.tickCount.exchange(0);
-    uint64 lagTickCount = game.lagTickCount.exchange(0);
-    uint64 lagTickMs = game.lagTickMs.exchange(0);
-    uint64 lagAvgMs = (lagTickCount > 0) ? (lagTickMs / lagTickCount) : 0;
-    uint64 lagTickMaxMs = game.lagTickMaxMs.exchange(0);
+    int32 activePlayers     = game.activePlayers.load();;
+    uint64 tickCount        = game.tickCount.exchange(0);
+    uint64 lagTickCount     = game.lagTickCount.exchange(0);
+    uint64 lagTickMs        = game.lagTickMs.exchange(0);
+    uint64 lagAvgMs         = (lagTickCount > 0) ? (lagTickMs / lagTickCount) : 0;
+    uint64 lagTickMaxMs     = game.lagTickMaxMs.exchange(0);
 
 
     // \033[K       - 줄 끝까지 지우기 - 잔상 제거

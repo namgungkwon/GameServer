@@ -41,7 +41,7 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 		if (GServerStats)
 		{
 			auto end = std::chrono::high_resolution_clock::now();
-			int64 delta = (end - start).count();
+			const int64 delta = (end - start).count();
 			GServerStats->iocp.iocpCallCount.fetch_add(1);
 			GServerStats->iocp.totalProcessTImeUs.fetch_add(delta);
 		}
@@ -59,7 +59,6 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 		case WAIT_TIMEOUT:
 			return false;
 		default:
-			// TODO : 로그 찍기
 			IocpObjectRef iocpObject = iocpEvent->owner;
 			iocpObject->HandleError(iocpEvent, errCode);
 			break;

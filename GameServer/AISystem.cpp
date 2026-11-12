@@ -5,6 +5,10 @@
 #include "Monster.h"
 #include "MovementComponent.h"
 
+
+///////////////////////////////////////////////////////
+//	<	AISystem	>
+///////////////////////////////////////////////////////
 void AISystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT Vector<EntityRef>& movingEntity)
 {
 	for (auto& [id, monster] : zone->GetMonsters())

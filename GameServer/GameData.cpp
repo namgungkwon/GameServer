@@ -28,13 +28,16 @@ bool LoadJsonArray(const char* path, json& outArray)
 }
 
 
+///////////////////////////////////////////////////////
+//	<	GameData	>
+///////////////////////////////////////////////////////
 bool GameData::LoadData()
 {
-	if (LoadPlayerData() == false) return false;
-    if (LoadMonsterSpawnData() == false) return false;
-    if (LoadMonsterData() == false) return false;
-    if (LoadSkillData() == false) return false;
-    if (LoadSpawnPointData() == false) return false;
+	if (LoadPlayerData()        == false) return false;
+    if (LoadMonsterSpawnData()  == false) return false;
+    if (LoadMonsterData()       == false) return false;
+    if (LoadSkillData()         == false) return false;
+    if (LoadSpawnPointData()    == false) return false;
 
 	return true;
 }
@@ -50,14 +53,14 @@ bool GameData::LoadPlayerData()
     for (const auto& item : data)
     {
         PlayerData data;
-        data.id = item["id"];
-        data.level = item["level"];
-        data.maxHp = item["maxHp"];
-        data.maxMp = item["maxMp"];
+        data.id         = item["id"];
+        data.level      = item["level"];
+        data.maxHp      = item["maxHp"];
+        data.maxMp      = item["maxMp"];
         data.requireExp = item["requireExp"];
-        data.attack = item["attack"];
-        data.defense = item["defense"];
-        data.speed = item["speed"];
+        data.attack     = item["attack"];
+        data.defense    = item["defense"];
+        data.speed      = item["speed"];
 
         _playerData[data.level] = std::move(data);
     }
@@ -75,13 +78,13 @@ bool GameData::LoadSkillData()
     for (const auto& item : data)
     {
         SkillData data;
-        data.id = item["id"];
-        data.level = item["level"];
-        data.attackRate = item["attackRate"];
-        data.attackRange = item["attackRange"];
-        data.attackAngle = item["attackAngle"];
-        data.cooldownMs = item["cooldownMs"];
-        data.moveDelayMs = item["moveDelayMs"];
+        data.id             = item["id"];
+        data.level          = item["level"];
+        data.attackRate     = item["attackRate"];
+        data.attackRange    = item["attackRange"];
+        data.attackAngle    = item["attackAngle"];
+        data.cooldownMs     = item["cooldownMs"];
+        data.moveDelayMs    = item["moveDelayMs"];
 
         _skillData[{data.id, data.level}] = std::move(data);
     }
@@ -99,12 +102,12 @@ bool GameData::LoadMonsterSpawnData()
     for (const auto& item : data)
     {
         MonsterSpawnData data;
-        data.monsterId = item["monsterId"];
-        data.location.x = item["xLocation"];
-        data.location.y = item["yLocation"];
-        data.respawnMs = item["respawnMs"];
-        data.spawnCount = item["spawnCount"];
-        data.patrolRadius = item["patrolRadius"];
+        data.monsterId      = item["monsterId"];
+        data.location.x     = item["xLocation"];
+        data.location.y     = item["yLocation"];
+        data.respawnMs      = item["respawnMs"];
+        data.spawnCount     = item["spawnCount"];
+        data.patrolRadius   = item["patrolRadius"];
 
         _monsterSpawnData.push_back(std::move(data));
     }
@@ -122,18 +125,18 @@ bool GameData::LoadMonsterData()
     for (const auto& item : data)
     {
         MonsterData data;
-        data.id = item["id"];
-        data.level = item["level"];
-        data.name = Utils::ToWString(item["name"].get<string>());
-        data.maxHp = item["maxHp"];
-        data.attack = item["attack"];
-        data.defense = item["defense"];
-        data.rewardExp = item["rewardExp"];
-        data.speed = item["speed"];
-        data.searchRange = item["searchRange"];
+        data.id             = item["id"];
+        data.level          = item["level"];
+        data.name           = Utils::ToWString(item["name"].get<string>());
+        data.maxHp          = item["maxHp"];
+        data.attack         = item["attack"];
+        data.defense        = item["defense"];
+        data.rewardExp      = item["rewardExp"];
+        data.speed          = item["speed"];
+        data.searchRange    = item["searchRange"];
         data.maxSearchRange = item["maxSearchRange"];
-        data.attackRange = item["attackRange"];
-        data.attackDelayMs = item["attackDelayMs"];
+        data.attackRange    = item["attackRange"];
+        data.attackDelayMs  = item["attackDelayMs"];
 
         _monsterData[data.id] = std::move(data);
     }
@@ -166,7 +169,7 @@ PlayerData* GameData::GetPlayerData(int32 level)
     return it != _playerData.end() ? &it->second : nullptr;
 }
 
-SkillData* GameData::GetSkillData(uint64 skillId, int32 skillLevel)
+SkillData* GameData::GetSkillData(uint32 skillId, uint32 skillLevel)
 {
     auto it = _skillData.find({ skillId, skillLevel });
     return it != _skillData.end() ? &it->second : nullptr;
@@ -181,7 +184,7 @@ MonsterData* GameData::GetMonsterData(uint64 monsterId)
 SpawnPointData* GameData::GetSpawnPoint(const Vector3& currentLocation)
 {
     SpawnPointData* ret = nullptr;
-    float minDistanceSq = 99999999999999999;
+    float minDistanceSq = 99999999999999999.f;
 
     for (auto& data : _spawnPointData)
     {

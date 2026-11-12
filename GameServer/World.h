@@ -4,51 +4,55 @@
 
 struct MoveResult
 {
-	Vector<ZoneRef> leaveZones;
-	Vector<ZoneRef> enterZones;
-	Vector<ZoneRef> keepZones;
+	Vector<ZoneRef>		leaveZones;
+	Vector<ZoneRef>		enterZones;
+	Vector<ZoneRef>		keepZones;
 };
 
+
+///////////////////////////////////////////////////////
+//	<	World	>
+///////////////////////////////////////////////////////
 class World : public JobQueue
 {
 public:
-	void Init(const WorldConfig& config);
-	void Start();
+	void				Init(const WorldConfig& config);
+	void				Start();
 
 public:
-	void EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load);
-	bool EnterEntity(EntityRef entity);
-	void LeaveEntity(EntityRef entity);
+	void				EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load);
+	bool				EnterEntity(EntityRef entity);
+	void				LeaveEntity(EntityRef entity);
 
 public:
-	EntityRef FindEntity(uint64 objectId) { return (_entities.find(objectId) != _entities.end()) ? _entities[objectId] : nullptr; }
+	EntityRef			FindEntity(uint64 objectId) { return (_entities.find(objectId) != _entities.end()) ? _entities[objectId] : nullptr; }
 
 public:
-	ZoneRef         GetZoneByPos(Vector3 pos);
-	ZoneRef         GetZoneById(int32 id);
-	MoveResultRef	GetMoveResult(ZoneRef oldZone, ZoneRef newZone);
+	ZoneRef				GetZoneByPos(const Vector3& pos);
+	ZoneRef				GetZoneById(int32 id);
+	MoveResultRef		GetMoveResult(const ZoneRef& oldZone, const ZoneRef& newZone);
 
 public:
-	void BroadCast(SendBufferRef sendBuffer, uint64 expectId = -1);
+	void				BroadCast(SendBufferRef sendBuffer, uint64 expectId = -1);
 
 private:
-	void CreateScene();
-	void CreateZone();
-	void CreateMoveTable();
-	void SpawnMonster();
+	void				CreateScene();
+	void				CreateZone();
+	void				CreateMoveTable();
+	void				SpawnMonster();
 	
-	MoveResultRef		CalculateMoveResult(ZoneRef oldZone, ZoneRef newZone);
+	MoveResultRef		CalculateMoveResult(const ZoneRef& oldZone, const ZoneRef& newZone);
 
 private:
-	WorldConfig _config;
+	WorldConfig										_config;
 
 
 private:
-	Vector<GameSceneRef> _scenes;
-	Vector<ZoneRef> _zones;
-	HashMap<uint64, EntityRef> _entities;
+	Vector<GameSceneRef>							_scenes;
+	Vector<ZoneRef>									_zones;
+	HashMap<uint64, EntityRef>						_entities;
 
-	HashMap<GameScene*, Vector<ZoneRef>> _enterSceneGroups;
-	HashMap<GameScene*, Vector<ZoneRef>> _leaveSceneGroups;
-	HashMap<int32, HashMap<int32, MoveResultRef>> _moveTable;
+	HashMap<GameScene*, Vector<ZoneRef>>			_enterSceneGroups;
+	HashMap<GameScene*, Vector<ZoneRef>>			_leaveSceneGroups;
+	HashMap<int32, HashMap<int32, MoveResultRef>>	_moveTable;
 };

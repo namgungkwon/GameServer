@@ -48,7 +48,7 @@ public:
 	void				ClearJob() { _jobs.Clear(); }
 
 private:
-	void				Push(JobRef job/*, bool pushOnly = false*/);
+	void				Push(JobRef job);
 	void				Execute();
 
 protected:

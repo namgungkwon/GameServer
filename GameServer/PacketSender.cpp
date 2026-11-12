@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "PacketSender.h"
 
+
+///////////////////////////////////////////////////////
+//	<	PacketSender	>
+///////////////////////////////////////////////////////
 void PacketSender::Init(size_t countOfSender)
 {
 	_size = countOfSender;

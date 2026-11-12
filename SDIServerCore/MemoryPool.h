@@ -17,7 +17,7 @@ public:
 
 public:
 	// 인자로 받은 헤더에 사이즈를 기입하고 헤더 이후의 주소를 반환
-	static void* AttachHeader(MemoryHeader* header, const size_t size);
+	static void* AttachHeader(MemoryHeader* header, size_t size);
 	// 메모리의 주소를 받아서 메모리 앞에 있는 헤더의 주소를 반환
 	static MemoryHeader* DetachHeader(void* ptr);
 

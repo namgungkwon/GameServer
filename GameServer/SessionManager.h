@@ -1,13 +1,16 @@
 #pragma once
 
 
+///////////////////////////////////////////////////////
+//	<	SessionManager	>
+///////////////////////////////////////////////////////
 class SessionManager
 {
 	friend class GameSession;
 public:
 	SessionManager();
 public:
-	GameSessionRef				FindSession(uint64 _clientId);
+	GameSessionRef					FindSession(uint64 _clientId);
 
 private:
 	void							Add(GameSessionRef session);

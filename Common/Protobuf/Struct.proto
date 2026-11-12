@@ -66,9 +66,9 @@ message ObjectPosData
 message ObjectStatData
 {
 	uint64 objectId = 1;
-	int32 hp = 2;
-	int32 mp = 3;
-	int32 exp = 4;
+	int64 hp = 2;
+	int64 mp = 3;
+	int64 exp = 4;
 }
 
 message ObjectData

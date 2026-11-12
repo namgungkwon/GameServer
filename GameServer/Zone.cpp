@@ -11,6 +11,10 @@
 #include "CombatSystem.h"
 #include "AISystem.h"
 
+
+///////////////////////////////////////////////////////
+//	<	Zone	>
+///////////////////////////////////////////////////////
 void Zone::Update(uint64 now, uint64 deltaTime)
 {
 	MovementSystem::Update(shared_from_this(), now, deltaTime, OUT _movingEntity);
@@ -22,20 +26,20 @@ void Zone::EnterZone(EntityRef entity)
 	if (entity == nullptr)
 		return;
 
-	uint64 objectId = entity->GetObjectId();
+	const uint64 objectId = entity->GetObjectId();
 
 	switch (entity->GetType())
 	{
 	case Protocol::OBJECT_CATEGORY_PLAYER:
 	{
 		PlayerRef player = static_pointer_cast<Player>(entity);
-		_players[objectId] = player;
+		_players[objectId] = std::move(player);
 		break;
 	}
 	case Protocol::OBJECT_CATEGORY_MONSTER:
 	{
 		MonsterRef monster = static_pointer_cast<Monster>(entity);
-		_monsters[objectId] = monster;
+		_monsters[objectId] = std::move(monster);
 		break;
 	}
 	default:
@@ -48,13 +52,19 @@ void Zone::LeaveZone(EntityRef entity)
 	if (entity == nullptr)
 		return;
 
-	uint64 objectId = entity->GetObjectId();
+	const uint64 objectId = entity->GetObjectId();
 
 	switch (entity->GetType())
 	{
 	case Protocol::OBJECT_CATEGORY_PLAYER:
 	{
 		_players.erase(objectId);
+		if (_players.empty())
+		{
+			_pendingSpawns.clear();
+			_pendingDespawns.clear();
+			_pendingMoves.clear();
+		}
 		break;
 	}
 	case Protocol::OBJECT_CATEGORY_MONSTER:
@@ -129,51 +139,43 @@ EntityRef Zone::FindEntity(uint64 objectId)
 
 void Zone::GetAdjacentZoneInfo(OUT HashMap<GameScene*, Vector<ZoneRef>>& info)
 {
-	Vector<ZoneRef> adjacentZone = GetAdjacentZones();
+	const Vector<ZoneRef>& adjacentZone = GetAdjacentZones();
 
 	info.clear();
 	for (const ZoneRef& zone : adjacentZone)
 		info[zone->GetScene().get()].push_back(zone);
 }
 
-void Zone::BufferSend(const SendBufferRef& sendBuffer, PlayerRef& player)
+void Zone::BufferSend(SendBufferRef sendBuffer, PlayerRef player)
 {
-	_sender->DoAsync([target = player, sendBuffer = std::move(sendBuffer)]() {
+	_sender->DoAsync([target = std::move(player), sendBuffer = std::move(sendBuffer)]() {
 			target->Send(sendBuffer);
 		});
 }
 
-
-#pragma optimize(" ", off)
-void Zone::BufferBroadCast(const SendBufferRef& sendBuffer, uint64 expectId)
+void Zone::BufferBroadCast(SendBufferRef sendBuffer, uint64 expectId)
 {
+	Vector<PlayerRef> targets;
+	targets.reserve(_players.size());
+	for (auto& [id, player] : _players)
 	{
-		Vector<PlayerRef> targets;
-		targets.reserve(_players.size());
-		for (auto& [id, player] : _players)
-		{
-			if (expectId == id)
-				continue;
-			targets.push_back(player);
-		}
-
-		_sender->DoAsync([targets = std::move(targets), sendBuffer = std::move(sendBuffer)]() {
-			for (const PlayerRef& player : targets)
-			{
-				player->Send(sendBuffer);
-			}
-			});
+		if (expectId == id)
+			continue;
+		targets.push_back(player);
 	}
+
+	_sender->DoAsync([targets = std::move(targets), sendBuffer = std::move(sendBuffer)]() {
+		for (const PlayerRef& player : targets)
+		{
+			player->Send(sendBuffer);
+		}
+		});
 }
-#pragma optimize(" ", on)
 
 void Zone::ClearPengingJobs()
 {
-	if (_players.size() == 0)
+	if (_players.empty())
 	{
-		_pendingSpawns.clear();
-		_pendingDespawns.clear();
-		_pendingMoves.clear();
 		return;
 	}
 
