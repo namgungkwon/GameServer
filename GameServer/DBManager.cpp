@@ -85,9 +85,9 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 	}
 
 	{
-		float posX	= Config::CreatePlayer::pos_x;
-		float posY	= Config::CreatePlayer::pos_y;
-		float posZ	= Config::CreatePlayer::pos_z;
+		float posX	= Config::Player::pos_x;
+		float posY	= Config::Player::pos_y;
+		float posZ	= Config::Player::pos_z;
 		float yaw	= 0;
 		float exp	= 0;
 

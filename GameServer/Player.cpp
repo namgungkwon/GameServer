@@ -103,6 +103,15 @@ void Player::LevelUp()
 		}));
 }
 
+bool Player::ShouldSendMovePacket(uint64 now)
+{
+	if (_nextSendMoveTick > now)
+		return false;
+
+	_nextSendMoveTick = now + Config::Player::SEND_MOVE_TERM;
+	return true;
+}
+
 PlayerLoadData Player::MakeLoadData()
 {
 	StatComponent* sc = GetComponent<StatComponent>();

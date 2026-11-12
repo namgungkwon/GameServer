@@ -12,11 +12,11 @@ Memory::Memory()
 #ifndef _STOMP
 	_pools.reserve(static_cast<size_t>(POOL_COUNT));
 
-	size_t size = 0;
+	size_t currentSize = 0;
 	size_t tableIndex = 0;
 	size_t poolIndex = 0;
 
-	for (size = 32; size <= 1024; size += 32)
+	for (size_t size = currentSize + 32; size <= 1024; size += 32)
 	{
 		MemoryPool* pool = new MemoryPool(size);
 		_pools[poolIndex] = pool;
@@ -27,9 +27,10 @@ Memory::Memory()
 			_poolTable[tableIndex] = pool;
 			tableIndex++;
 		}
+		currentSize = size;
 	}
 
-	for (; size <= 2048; size += 128)
+	for (size_t size = currentSize + 128; size <= 2048; size += 128)
 	{
 		MemoryPool* pool = new MemoryPool(size);
 		_pools[poolIndex] = pool;
@@ -40,9 +41,10 @@ Memory::Memory()
 			_poolTable[tableIndex] = pool;
 			tableIndex++;
 		}
+		currentSize = size;
 	}
 
-	for (; size <= 4096; size += 256)
+	for (size_t size = currentSize + 256; size <= 4096; size += 256)
 	{
 		MemoryPool* pool = new MemoryPool(size);
 		_pools[poolIndex] = pool;
@@ -53,6 +55,21 @@ Memory::Memory()
 			_poolTable[tableIndex] = pool;
 			tableIndex++;
 		}
+		currentSize = size;
+	}
+
+	for (size_t size = currentSize + 512; size <= 8192; size += 512)
+	{
+		MemoryPool* pool = new MemoryPool(size);
+		_pools[poolIndex] = pool;
+		poolIndex++;
+
+		while (tableIndex <= size)
+		{
+			_poolTable[tableIndex] = pool;
+			tableIndex++;
+		}
+		currentSize = size;
 	}
 #endif // _STOMP
 }
@@ -65,6 +82,7 @@ Memory::~Memory()
 	_pools.clear();
 }
 
+#pragma optimize("", off)
 void* Memory::Allocate(size_t size)
 {
 	MemoryHeader* header = nullptr;
@@ -91,6 +109,7 @@ void* Memory::Allocate(size_t size)
 
 	return MemoryHeader::AttachHeader(header, allocSize);
 }
+#pragma optimize("", on)
 
 void Memory::Release(void* ptr)
 {

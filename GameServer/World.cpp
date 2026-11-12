@@ -63,11 +63,17 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
     
     if (EnterEntity(player))
     {
-        const Vector<ZoneRef>& zones = player->GetZone()->GetAdjacentZones();
+
+        player->GetZone()->GetAdjacentZoneInfo(OUT _enterSceneGroups);
         
-        for (const ZoneRef& zone : zones)
+        for (auto& [scene, zones] : _enterSceneGroups)
         {
-            zone->SpawnPktToEnterPlayer(player);
+            scene->DoAsync([scene, zones = std::move(zones), player]() {
+                for (const ZoneRef& zone : zones)
+                {
+                    zone->SpawnPktToEnterPlayer(player);
+                }
+                });
         }
     }
 
@@ -98,7 +104,7 @@ bool World::EnterEntity(EntityRef entity)
 
     for (auto& [scene, zones] : _enterSceneGroups)
     {
-        scene->DoAsync(Job([scene, zones = std::move(zones), entity, mainZone]() {
+        scene->DoAsync([scene, zones = std::move(zones), entity, mainZone]() {
             for (const ZoneRef& zone : zones)
             {
                 if (zone == mainZone) 
@@ -108,7 +114,7 @@ bool World::EnterEntity(EntityRef entity)
                 }
                 zone->AddPendingSpawn(entity);
             }
-            }));
+            });
     }
 
 

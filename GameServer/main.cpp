@@ -8,7 +8,7 @@ int main()
 
 	ServerServiceRef& service = GameGlobal::GetService();
 	
-	const size_t networkThreadCount = 5;
+	const size_t networkThreadCount = 10;
 	for (size_t i = 0; i < networkThreadCount; ++i)
 	{
 		GThreadManager->Launch([&service]()
@@ -18,7 +18,7 @@ int main()
 			});
 	}
 	
-	const size_t LogicThreadCount = 10;
+	const size_t LogicThreadCount = 16;
 	for (size_t i = 0; i < LogicThreadCount; ++i)
 	{
 		GThreadManager->Launch([&service]()

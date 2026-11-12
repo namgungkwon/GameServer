@@ -10,9 +10,10 @@
 class Zone : public enable_shared_from_this<Zone>
 {
 public:
-	Zone(JobQueueRef sender) : _sender(sender) {};
+	Zone(JobQueueRef sender);
 
 public:
+	void								Init();
 	void								Update(uint64 now, uint64 deltaTime);
 	void								ClearPengingJobs();
 

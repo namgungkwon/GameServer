@@ -15,6 +15,13 @@
 ///////////////////////////////////////////////////////
 //	<	Zone	>
 ///////////////////////////////////////////////////////
+Zone::Zone(JobQueueRef sender) : _sender(sender)
+{
+	_pendingDespawns.reserve(1000);
+	_pendingSpawns.reserve(1000);
+	_pendingMoves.reserve(1000);
+}
+
 void Zone::Update(uint64 now, uint64 deltaTime)
 {
 	MovementSystem::Update(shared_from_this(), now, deltaTime, OUT _movingEntity);

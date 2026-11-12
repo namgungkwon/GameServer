@@ -17,6 +17,7 @@ public:
 	void						Respawn(const Vector3& respawnLocation) override;
 	void						GainExp(uint64 exp);
 	void						LevelUp();
+	bool						ShouldSendMovePacket(uint64 now);
 
 public:
 	void						Send(const SendBufferRef& sendBuffer);
@@ -32,5 +33,8 @@ private:
 	GETSET_WEAK(GameSession,	_ownerSession,		Session);
 	GETSET		(uint64,		_playerDBId,		DBId);
 	GET			(uint64,		_requiredExp,		RequiredExp);
+
+private:
+	uint64						_nextSendMoveTick = 0;
 };
 

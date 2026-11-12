@@ -21,12 +21,14 @@ void Entity::Respawn(const Vector3& respawnLocation)
 	SetState(EntityState::Idle);
 }
 
+#pragma optimize("", off)
 void Entity::MakePkt(Protocol::ObjectData& objectData)
 {
 	MakePkt(*objectData.mutable_summary());
 	MakePkt(*objectData.mutable_pos());
 	MakePkt(*objectData.mutable_stat());
 }
+#pragma optimize("", on)
 
 void Entity::MakePkt(Protocol::ObjectSummaryData& summary)
 {

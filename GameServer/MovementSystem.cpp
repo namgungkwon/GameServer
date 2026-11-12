@@ -19,7 +19,10 @@ void MovementSystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT 
 	for (auto& [id, player] : zone->GetPlayers())
 	{
 		if (UpdatePlayerMove(player, nowTick, deltaTime))
-			movingPlayer.push_back(player);
+		{
+			if (player->ShouldSendMovePacket(nowTick))
+				movingPlayer.push_back(player);
+		}
 	}
 }
 
