@@ -25,6 +25,7 @@ using namespace std;
 #include "Service.h"
 #include "LockQueue.h"
 #include "Logger.h"
+#include "Profiler.h"
 
 #include "Utils.h"
 

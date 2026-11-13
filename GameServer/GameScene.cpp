@@ -18,6 +18,7 @@ void GameScene::StartUpdate()
 
 void GameScene::Update()
 {
+	PROFILE_BEGIN(L"GameScene::Update");
 	const uint64 now = ::GetTickCount64();
 	const uint64 updateTickMs = Config::World::WORLD_UPDATE_TICK;
 
@@ -56,6 +57,7 @@ void GameScene::Update()
 	{
 		zone->ClearPengingJobs();
 	}
+	PROFILE_END(L"GameScene::Update");
 }
 
 void GameScene::ProcessMovingEntity()

@@ -5,7 +5,6 @@
 #include <chrono>
 
 Mutex Logger::_consoleLock;
-int Logger::_statsPanelLines = 15;
 
 
 ///////////////////////////////////////////////////////
@@ -39,22 +38,6 @@ void Logger::Shutdown()
     _cv.notify_all();
 }
 
-void Logger::ReserveStatsPanel(int lines)
-{
-    // ANSI 이스케이프 시퀀스 활성화 (Windows 10 이상 필수)
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    DWORD mode = 0;
-    GetConsoleMode(hOut, &mode);
-    SetConsoleMode(hOut, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-
-    _statsPanelLines = lines;
-
-    // 통계창이 들어갈 공간 확보
-    LockGuard guard(_consoleLock);
-    for (int i = 0; i < lines; i++)
-        std::wcout << L"\n";
-}
-
 void Logger::LogThreadMain()
 {
     std::wcout.imbue(std::locale("korean"));
@@ -74,9 +57,9 @@ void Logger::LogThreadMain()
         }
 
         wstring line = Timestamp()
-            + L" [" + LevelToString(entry.level) + L"]"
-            + L" [T" + std::to_wstring(entry.threadId) + L"]"
-            + L" " + entry.message + L"\n";
+            + L" ["     + LevelToString(entry.level)        + L"]"
+            + L" [T"    + std::to_wstring(entry.threadId)   + L"]"
+            + L" "      + entry.message                     + L"\n";
 
         {
             LockGuard consoleLock(_consoleLock);
@@ -85,10 +68,9 @@ void Logger::LogThreadMain()
             CONSOLE_SCREEN_BUFFER_INFO csbi;
             ::GetConsoleScreenBufferInfo(hOut, &csbi);
 
-            // [수정 핵심] 현재 커서가 통계 영역(상단) 안에 있다면 강제로 경계선 아래로 이동
-            if (csbi.dwCursorPosition.Y < _statsPanelLines)
+            if (csbi.dwCursorPosition.Y < LoggerLine)
             {
-                SetConsoleCursorPosition(hOut, { 0, (SHORT)_statsPanelLines });
+                SetConsoleCursorPosition(hOut, { 0, (SHORT)LoggerLine });
             }
 
             std::wcout << line;

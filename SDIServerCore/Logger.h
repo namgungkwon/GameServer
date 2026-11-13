@@ -7,6 +7,16 @@
 
 enum class LogLevel { INFO, WARN, ERR };
 
+enum
+{
+    ServerStatsPanelLines = 13,
+    ProfilerPanelLines = 5,
+
+    ServerStatsStartLine = 0,
+    ProfilerStartLine = ServerStatsStartLine + ServerStatsPanelLines,
+
+    LoggerLine = ProfilerStartLine + ProfilerPanelLines,
+};
 
 ///////////////////////////////////////////////////////
 //	<	Logger	>
@@ -22,7 +32,6 @@ public:
     void Shutdown();
 
     static Mutex& GetConsoleLock() { return _consoleLock; }
-    static void ReserveStatsPanel(int lines);
 
 private:
     void LogThreadMain();
@@ -38,7 +47,6 @@ private:
 
     static Mutex           _consoleLock;
     Mutex                  _queueLock;
-    static int             _statsPanelLines;
     std::wofstream         _file;
     bool                   _running = false;
 

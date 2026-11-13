@@ -9,6 +9,7 @@
 #include "DbconnectionPool.h"
 #include "Logger.h"
 #include "ServerStats.h"
+#include "Profiler.h"
 
 #ifdef _DEBUG
 #include "DeadLockProfiler.h"
@@ -28,7 +29,7 @@ std::unique_ptr<class JobTimer>			CoreGlobal::_jobTimer			= nullptr;
 std::unique_ptr<class DBConnectionPool>	CoreGlobal::_dbConnectionPool	= nullptr;
 std::unique_ptr<class Logger>			CoreGlobal::_logger				= nullptr;
 std::unique_ptr<class ServerStats>		CoreGlobal::_serverStats		= nullptr;
-
+std::unique_ptr<class Profiler>			CoreGlobal::_profiler			= nullptr;
 
 Memory*									GMemory							= nullptr;
 ThreadManager*							GThreadManager					= nullptr;
@@ -39,7 +40,7 @@ DeadLockProfiler*						GDeadLockProfiler				= nullptr;
 DBConnectionPool*						GDBConnectionPool				= nullptr;
 Logger*									GLogger							= nullptr;
 ServerStats*							GServerStats					= nullptr;
-
+Profiler*								GProfiler						= nullptr;
 
 
 void CoreGlobal::Init()
@@ -65,26 +66,31 @@ void CoreGlobal::Init()
 	_logger = std::make_unique<Logger>();
 	GLogger = _logger.get();
 	GLogger->Init(L"server.log");
+
+	// 6. Profiler
+	_profiler = std::make_unique<Profiler>();
+	GProfiler = _profiler.get();
+	GProfiler->Init(L"");
 	
-	// 6. SendBufferManager
+	// 7. SendBufferManager
 	_sendBufferManager			= std::make_unique<SendBufferManager>();
 	GSendBufferManager			= _sendBufferManager.get();
 
-	// 7. GlobalQueue
+	// 8. GlobalQueue
 	_globalQueue				= std::make_unique<GlobalQueue>();
 	GGlobalQueue				= _globalQueue.get();
 	GGlobalQueue->Start();
 
-	// 8. JobTimer
+	// 9. JobTimer
 	_jobTimer					= std::make_unique<JobTimer>();
 	GJobTimer					= _jobTimer.get();
 	GJobTimer->Start();
 
-	// 9. DBConnectionPool
+	// 10. DBConnectionPool
 	_dbConnectionPool			= std::make_unique<DBConnectionPool>();
 	GDBConnectionPool			= _dbConnectionPool.get();
 
-	// 10. ServerStat
+	// 11. ServerStat
 	_serverStats = std::make_unique<ServerStats>();
 	GServerStats = _serverStats.get();
 	GServerStats->Init();
@@ -119,6 +125,10 @@ void CoreGlobal::Clear()
 	// 5. SendBufferManager
 	GSendBufferManager			= nullptr;
 	_sendBufferManager			= nullptr;
+
+	// 6. Profiler
+	GProfiler					= nullptr;
+	_profiler					= nullptr;
 
 	// 6. Logger
 	if (GLogger)

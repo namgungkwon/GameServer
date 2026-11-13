@@ -181,12 +181,9 @@ void ServerStats::Rendering()
         GetConsoleScreenBufferInfo(hOut, &csbi);
         COORD prevPos = csbi.dwCursorPosition;
 
-        SetConsoleCursorPosition(hOut, { 0, 0 });
+        SetConsoleCursorPosition(hOut, { 0, ServerStatsStartLine });
         std::wcout << stream.str();
         std::wcout.flush();
-
-        //if (prevPos.Y < STATS_PANEL_LINES)
-        //   prevPos.Y = (SHORT)STATS_PANEL_LINES;
 
         SetConsoleCursorPosition(hOut, prevPos);
     }

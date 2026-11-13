@@ -10,6 +10,7 @@ extern class DeadLockProfiler*	GDeadLockProfiler;
 extern class DBConnectionPool*	GDBConnectionPool;
 extern class Logger*			GLogger;
 extern class ServerStats*		GServerStats;
+extern class Profiler*			GProfiler;
 
 class CoreGlobal
 {
@@ -27,4 +28,5 @@ private:
 	static std::unique_ptr<class DBConnectionPool>		_dbConnectionPool;
 	static std::unique_ptr<class Logger>				_logger;
 	static std::unique_ptr<class ServerStats>			_serverStats;
+	static std::unique_ptr<class Profiler>				_profiler;
 };

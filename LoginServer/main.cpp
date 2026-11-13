@@ -29,6 +29,8 @@ int main()
 			});
 	}
 
+	GThreadManager->Launch([]() { if (GServerStats) GServerStats->RunUpdateLoop(); });
+	GThreadManager->Launch([]() { if (GProfiler) GProfiler->UpdateProfiler(); });
 
 	DBTest();
 

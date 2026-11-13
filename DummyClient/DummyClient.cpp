@@ -115,7 +115,7 @@ void DummyClient::Login()
 		pkt.set_password(password.c_str());
 		SendBufferRef sendBuffer = LoginServerPacketHandler::MakeSendBuffer(pkt);
 		_loginServerSession->Send(sendBuffer);
-		LOG_INFO(L"Send LoginPkt");
+		//LOG_INFO(L"Send LoginPkt");
 	}
 	// 이후 처리는 LoginServerPacketHandler에서 진행
 }
@@ -130,7 +130,7 @@ void DummyClient::CreateAccount()
 	pkt.set_password(password.c_str());
 	SendBufferRef sendBuffer = LoginServerPacketHandler::MakeSendBuffer(pkt);
 	_loginServerSession->Send(sendBuffer);
-	LOG_INFO(L"Send CreateAccountPkt");
+	//LOG_INFO(L"Send CreateAccountPkt");
 }
 
 void DummyClient::RequestEnterGameServer(string token)
@@ -145,7 +145,7 @@ void DummyClient::RequestEnterGameServer(string token)
 		pkt.set_token(this->token);
 		SendBufferRef sendBuffer = GameServerPacketHandler::MakeSendBuffer(pkt);
 		_gameServerSession->Send(sendBuffer);
-		LOG_INFO(L"Send RequestEnterGameServerPkt");
+		//LOG_INFO(L"Send RequestEnterGameServerPkt");
 	}
 }
 
@@ -172,7 +172,7 @@ void DummyClient::RequestEnterGame(uint64 playerId)
 	pkt.set_playerid(playerId);
 	SendBufferRef sendBuffer = GameServerPacketHandler::MakeSendBuffer(pkt);
 	_gameServerSession->Send(sendBuffer);
-	LOG_INFO(L"Send RequestEnterGamePkt");
+	//LOG_INFO(L"Send RequestEnterGamePkt");
 }
 
 void DummyClient::EnterGame()
@@ -183,7 +183,7 @@ void DummyClient::EnterGame()
 	nextChatTick = currentTick + GetRandom(CHAT_TIME_MIN, CHAT_TIME_MAX);
 	nextWorldChatTick = currentTick + GetRandom(CHAT_WORLD_TIME_MIN, CHAT_WORLD_TIME_MAX);
 
-	LOG_INFO(L"EnterGame");
+	//LOG_INFO(L"EnterGame");
 	_isReady = true;
 }
 

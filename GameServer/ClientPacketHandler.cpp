@@ -52,7 +52,6 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
             }));
 
         });
-
     return true;
 }
 
@@ -118,6 +117,7 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
     if (gameSession->TryEnterGame() == false)
     {
         LOG_WARN(L"Request Client EnterGame Duplicate");
+        PROFILE_END(L"Handle_CG_ENTER_GAME");
         return true;
     }
 
