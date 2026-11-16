@@ -96,10 +96,10 @@ void DummyClient::Process()
 		uint64 tick = GetTickCount64();
 		deltaTick = tick - currentTick;
 		currentTick = tick;
-		//RequestAttack();
 		RequestMove();
-		//RequestChat();
-		//RequestWorldChat();
+		RequestAttack();
+		RequestChat();
+		RequestWorldChat();
 	}
 }
 
@@ -178,10 +178,10 @@ void DummyClient::RequestEnterGame(uint64 playerId)
 void DummyClient::EnterGame()
 {
 	currentTick = GetTickCount64();
-	nextMoveTick = currentTick + GetRandom(MOVE_TIME_MIN, MOVE_TIME_MAX);
+	nextMoveTick = currentTick + MOVE_TIME;
 	nextAttackTick = currentTick + GetRandom(ATTACK_TIME_MIN, ATTACK_TIME_MAX);
 	nextChatTick = currentTick + GetRandom(CHAT_TIME_MIN, CHAT_TIME_MAX);
-	nextWorldChatTick = currentTick + GetRandom(CHAT_WORLD_TIME_MIN, CHAT_WORLD_TIME_MAX);
+	nextWorldChatTick = currentTick + CHAT_WORLD_TIME;
 
 	//LOG_INFO(L"EnterGame");
 	_isReady = true;
@@ -189,11 +189,29 @@ void DummyClient::EnterGame()
 
 void DummyClient::RequestMove()
 {
-	Protocol::Vector3 normal = dir;
-	if (std::abs(dir.x()) > 0.1f && std::abs(dir.y()) > 0.f)
+	bool shouldSendMovePkt = false;
+	// 방향 전환
+	if (nextDirChange < currentTick)
 	{
-		dir.set_x(dir.x() * 0.707f);
-		dir.set_y(dir.y() * 0.707f);
+		nextDirChange = currentTick + GetRandom(MOVE_DIRECTION_CHANGE_MIN, MOVE_DIRECTION_CHANGE_MAX);
+		if (_isMove)
+		{
+			_isMove = false;
+			dir = Protocol::Vector3();
+		}
+		else
+		{
+			dir = GetRndVelocity();
+		}
+		shouldSendMovePkt = true;
+	}
+
+	// 값 계산
+	Protocol::Vector3 normal = dir;
+	if (std::abs(normal.x()) > 0.1f && std::abs(normal.y()) > 0.f)
+	{
+		normal.set_x(normal.x() * 0.707f);
+		normal.set_y(normal.y() * 0.707f);
 	}
 	Protocol::Vector3 location = posData.location();
 	location.set_x(std::clamp(location.x() + normal.x() * 300.f * deltaTick * 0.001f, 0.f, 100000.f));
@@ -201,16 +219,13 @@ void DummyClient::RequestMove()
 
 	*posData.mutable_location() = location;
 
-	if (nextMoveTick < currentTick)
+
+	// 이동 패킷 송신
+	bool check = shouldSendMovePkt || (_isMove && currentTick < nextMoveTick);
+	if (check == false)
 		return;
 
-	nextMoveTick = currentTick + GetRandom(MOVE_TIME_MIN, MOVE_TIME_MAX);
-
-	if (nextDirChange < currentTick)
-	{
-		nextDirChange = currentTick + GetRandom(MOVE_DIRECTION_CHANGE_MIN, MOVE_DIRECTION_CHANGE_MAX);
-		dir = GetRndVelocity();
-	}
+	nextMoveTick = currentTick + MOVE_TIME;
 
 	Protocol::CG_MOVE pkt;
 	Protocol::ObjectMoveData* move = pkt.mutable_movedata();
@@ -224,7 +239,7 @@ void DummyClient::RequestMove()
 
 void DummyClient::RequestAttack()
 {
-	if (nextAttackTick < currentTick)
+	if (_isMove || currentTick < nextAttackTick)
 		return;
 
 	nextAttackTick = currentTick + GetRandom(ATTACK_TIME_MIN, ATTACK_TIME_MAX);
@@ -238,7 +253,7 @@ void DummyClient::RequestAttack()
 
 void DummyClient::RequestChat()
 {
-	if (nextChatTick < currentTick)
+	if (currentTick < nextChatTick)
 		return;
 
 	nextChatTick = currentTick + GetRandom(CHAT_TIME_MIN, CHAT_TIME_MAX);
@@ -252,10 +267,13 @@ void DummyClient::RequestChat()
 
 void DummyClient::RequestWorldChat()
 {
-	if (nextWorldChatTick < currentTick)
+	if (currentTick < nextWorldChatTick)
 		return;
 
-	nextWorldChatTick = currentTick + GetRandom(CHAT_WORLD_TIME_MIN, CHAT_WORLD_TIME_MAX);
+	nextWorldChatTick = currentTick + CHAT_WORLD_TIME;
+
+	if (GetRandom(1, CHAT_WORLD_PERCENT) != 1)
+		return;
 
 	Protocol::CG_CHAT pkt;
 	pkt.set_chat(worldChat.c_str());
@@ -267,9 +285,11 @@ void DummyClient::RequestWorldChat()
 Protocol::Vector3 DummyClient::GetRndVelocity()
 {
 	Protocol::Vector3 vec;
-
-	vec.set_x(GetRandom(-1, 1));
-	vec.set_y(GetRandom(-1, 1));
+	int64 newX = GetRandom(-1, 1);
+	int64 newY = GetRandom(-1, 1);
+	_isMove = (newX != 0 || newY != 0);
+	vec.set_x(newX);
+	vec.set_y(newY);
 	vec.set_z(0);
 
 	return vec;

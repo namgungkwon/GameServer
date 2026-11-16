@@ -22,6 +22,8 @@
 ///////////////////////////////////////////////////////
 void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
+	Profile p(L"AttackRequest::Execute");
+
 	if (attacker->GetState() == EntityState::Dead)
 		return;
 
@@ -34,6 +36,21 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 	}
 
 	Protocol::ObjectPosData posData = pkt.posdata();
+	Vector3 attackPos = UtilMath::ToServerLocation(posData.location());
+
+	float posDiffSq = attacker->GetLocation().DistanceSq(attackPos);
+	if (posDiffSq > Config::Player::ATTACK_TOLERANCE_LENGTHSQ)
+	{
+		// 이상패킷
+		LOG_WARN(L"[SuspiciousPacket] Between AttackPos from PlayerPos : {1:.1f}", sqrt(posDiffSq));
+
+		if (GServerStats)
+		{
+			GServerStats->game.suspiciousPacket.fetch_add(1);
+		}
+		return;
+	}
+
 	attacker->SetLocation(UtilMath::ToServerLocation(posData.location()));
 	attacker->SetYaw(posData.yaw());
 
@@ -137,6 +154,9 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 ///////////////////////////////////////////////////////
 void ReviveRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
+	if (target->GetState() != EntityState::Dead)
+		return;
+
 	GameSceneRef targetScene = target->GetScene();
 	ZoneRef targetZone = target->GetZone();
 
@@ -182,6 +202,7 @@ void ReviveRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 ///////////////////////////////////////////////////////
 void ChatRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
+	Profile p(L"ChatRequest::Execute");
 	GameSceneRef targetScene = player->GetScene();
 	ZoneRef targetZone = player->GetZone();
 
@@ -211,7 +232,11 @@ void ChatRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 		break;
 		case Protocol::CHATTYPE_WORLD:
 		{
-			GWorld->BroadCast(sendBuffer, player->GetObjectId());
+			if (player->CanSendWorldChat(currentTick))
+			{
+				GWorld->BroadCast(sendBuffer, player->GetObjectId());
+			}
+			
 		}
 		break;
 		}

@@ -10,6 +10,18 @@
 #define PROFILE_END(TagName)
 #endif //PROFILE
 
+class Profiler;
+
+class Profile
+{
+public:
+	Profile(wstring tagName);
+	~Profile();
+
+private:
+	wstring _tagName;
+};
+
 
 struct ProfileSample
 {

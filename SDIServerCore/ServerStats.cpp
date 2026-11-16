@@ -104,6 +104,8 @@ void ServerStats::Rendering()
     uint64 lagAvgMs         = (lagTickCount > 0) ? (lagTickMs / lagTickCount) : 0;
     uint64 lagTickMaxMs     = game.lagTickMaxMs.exchange(0);
 
+    uint64 suspiciousPacket = game.suspiciousPacket.exchange(0);
+
 
     // \033[K       - 줄 끝까지 지우기 - 잔상 제거
     // \033[31m     - 텍스트를 빨간색으로 설정
@@ -121,6 +123,10 @@ void ServerStats::Rendering()
     stream << L"[NETWORK]";
     stream << L"   Recv: " << recvKB << L"KB/s (" << recvPackets << L"pkt/s)";
     stream << L"   Send: " << sendKB << L"KB/s (" << sendPackets << L"pkt/s)";
+    if (suspiciousPacket > 0)
+    {
+        stream << L"   \033[31mSuspicious: " << suspiciousPacket;
+    }
     stream << L"\033[K\n";
 
     // Job
@@ -134,7 +140,7 @@ void ServerStats::Rendering()
     stream << L"\033[K\n";
 
     // Memory
-    stream << L"[MEMORY] ";
+    stream << L"[Pool]   ";
     stream << L"   Hits: " << poolHits;
     stream << L"   Miss: " << poolMiss;
     stream << L"   Live: " << liveAllocCount;
@@ -168,6 +174,11 @@ void ServerStats::Rendering()
     stream << L"[WORLD]  ";
     stream << L" Players: " << activePlayers;
     stream << L"\033[K\n";
+
+    if (suspiciousPacket > 0)
+    {
+        stream << L"  \033[31mSuspicious: " << suspiciousPacket << L"\033[0m";
+    }
 
     stream << L"============================================================================";
     stream << L"\033[K\n";

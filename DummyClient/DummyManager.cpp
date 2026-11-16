@@ -50,38 +50,20 @@ void DummyManager::Start()
 			});
 	}
 
-	for (size_t i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 10; ++i)
 	{
 		GThreadManager->Launch([]() { ThreadManager::DoGlobalQueueWork(); });
 	}
-	
-	UpdateTick();
 }
 
 void DummyManager::Clear()
 {
 	_isStart.store(false);
 
-	for (DummyClientRef& dummy : dummyList)
-	{
-		dummy->Clear();
-	}
-
-	dummyList.clear();
+	_simulators.clear();
 
 	_loginServerService = nullptr;
 	_gameServerService = nullptr;
-}
-
-void DummyManager::UpdateTick()
-{
-	if (_isStart.load() == true)
-		DoTimer(DummyTick, &DummyManager::UpdateTick);
-
-	for (DummyClientRef& dummy : dummyList)
-	{
-		dummy->Process();
-	}
 }
 
 void DummyManager::AddDummyClient(int32 count)
@@ -89,15 +71,44 @@ void DummyManager::AddDummyClient(int32 count)
 	if (_isStart.load() == false)
 		return;
 
-
 	for (size_t i = 0; i < count; ++i)
 	{
 		DummyClientRef dummy = MakeShared<DummyClient>();
-		string id = "test" + std::to_string(dummyList.size());
+		string id = "test" + std::to_string(_dummyCount);
 		string password = "1";
 		dummy->Init(_gameServerService, _loginServerService, id, password);
-		dummyList.push_back(dummy);
 
-		DoTimer(500, [dummy]() {dummy->Login(); });
+		if (_dummyCount % SimulatorDummyMaxCount == 0)
+		{
+			_simulators.push_back(MakeShared<DummySimulator>());
+			DummySimulatorRef simulator = _simulators.back();
+			simulator->DoAsync(&DummySimulator::Start);
+		}
+		_dummyCount++;
+		DummySimulatorRef simulator = _simulators.back();
+		simulator->DoAsync(&DummySimulator::AddDummy, dummy);
 	}
+}
+
+void DummySimulator::Start()
+{
+	_isStart.store(true);
+	Process();
+}
+
+void DummySimulator::Process()
+{
+	if (_isStart.load() == true)
+		DoTimer(DummyTick, &DummySimulator::Process);
+
+	for (auto& dummy : _dummyList)
+	{
+		dummy->Process();
+	}
+}
+
+void DummySimulator::AddDummy(DummyClientRef dummy)
+{
+	DoTimer(500, [dummy]() {dummy->Login();});
+	_dummyList.push_back(std::move(dummy));
 }

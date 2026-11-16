@@ -22,9 +22,10 @@ void ASimulateObject::SimulateMovement(float DeltaTime)
 	FVector MoveDir = (serverPos - Location);
 
 	const float DistToDest = MoveDir.Length();
-	if (DistToDest <= KINDA_SMALL_NUMBER)
+	if (DistToDest <= 2.0)
 	{
 		abp_isMoving = false;
+		SetActorLocation(serverPos, true);
 		return;
 	}
 

@@ -50,6 +50,7 @@ struct GameStats
 	Atomic<uint64> lagTickCount = 0;
 	Atomic<uint64> lagTickMs = 0;
 	Atomic<uint64> lagTickMaxMs = 0;
+	Atomic<uint64> suspiciousPacket = 0;
 };
 
 

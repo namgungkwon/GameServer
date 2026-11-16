@@ -4,19 +4,18 @@
 
 enum
 {
-	MOVE_TIME_MIN = 500,
-	MOVE_TIME_MAX = 1000,
+	MOVE_TIME = 200,
 	MOVE_DIRECTION_CHANGE_MIN = 1000,
 	MOVE_DIRECTION_CHANGE_MAX = 5000,
 
-	ATTACK_TIME_MIN = 1500,
-	ATTACK_TIME_MAX = 5000,
+	ATTACK_TIME_MIN = 3000,
+	ATTACK_TIME_MAX = 50000,
 
 	CHAT_TIME_MIN = 10000,
 	CHAT_TIME_MAX = 20000,
 
-	CHAT_WORLD_TIME_MIN = 30000,
-	CHAT_WORLD_TIME_MAX = 100000,
+	CHAT_WORLD_TIME = 1000,		// N 미리초마다
+	CHAT_WORLD_PERCENT = 5000,  // (1 / N) 의 확률로 보냄
 };
 
 class DummyClient : public enable_shared_from_this<DummyClient>
@@ -69,6 +68,7 @@ private:
 
 private:
 	bool _isReady = false;
+	bool _isMove = false;
 	uint64 nextMoveTick = 0;
 	uint64 nextAttackTick = 0;
 	uint64 nextChatTick = 0;

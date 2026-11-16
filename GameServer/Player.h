@@ -14,16 +14,20 @@ public:
 	~Player();
 public:
 	bool						Init(const PlayerSummaryData& summary, const PlayerLoadData& load);
+	bool						InitPlayerLevelData(int32 level);
+
+public:
 	void						Respawn(const Vector3& respawnLocation) override;
 	void						GainExp(uint64 exp);
 	void						LevelUp();
+
+public:
 	bool						ShouldSendMovePacket(uint64 now);
+	bool						CanSendWorldChat(uint64 now);
 
 public:
 	void						Send(const SendBufferRef& sendBuffer);
-
-public:
-	bool						InitPlayerLevelData(int32 level);
+	SendBufferRef				SendInfoMessage(const string& message);
 
 public:
 	PlayerLoadData				MakeLoadData();
@@ -36,5 +40,6 @@ private:
 
 private:
 	uint64						_nextSendMoveTick = 0;
+	uint64						_availableWorldChatTick = 0;
 };
 

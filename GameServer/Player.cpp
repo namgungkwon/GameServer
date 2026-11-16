@@ -112,6 +112,19 @@ bool Player::ShouldSendMovePacket(uint64 now)
 	return true;
 }
 
+bool Player::CanSendWorldChat(uint64 now)
+{
+	if (_availableWorldChatTick > now)
+	{
+		uint64 leftTIme = (_availableWorldChatTick - now) * 0.001;
+		Send(SendInfoMessage("WorldChat Left " + std::to_string(leftTIme) + " second"));
+		return false;
+	}
+
+	_availableWorldChatTick = now + Config::Player::SEND_WORLDCHAT_TERM;
+	return true;
+}
+
 PlayerLoadData Player::MakeLoadData()
 {
 	StatComponent* sc = GetComponent<StatComponent>();
@@ -133,6 +146,15 @@ void Player::Send(const SendBufferRef& sendBuffer)
 	{
 		session->Send(sendBuffer);
 	}
+}
+
+SendBufferRef Player::SendInfoMessage(const string& message)
+{
+	Protocol::GC_CHAT pkt;
+	pkt.set_name("Server");
+	pkt.set_chat(message);
+
+	return ClientPacketHandler::MakeSendBuffer(pkt);
 }
 
 bool Player::InitPlayerLevelData(int32 level)

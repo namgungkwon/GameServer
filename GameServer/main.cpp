@@ -15,9 +15,10 @@ int main()
 			{
 				while (true)
 				{
-					PROFILE_BEGIN(L"service::Process");
+					Profile profile(L"service::Process");
+					//PROFILE_BEGIN(L"service::Process");
 					service->Process();
-					PROFILE_END(L"service::Process");
+					//PROFILE_END(L"service::Process");
 				}
 			});
 	}
@@ -32,7 +33,6 @@ int main()
 	}
 
 
-	
 	GThreadManager->Launch([]() { if (GServerStats) GServerStats->RunUpdateLoop(); });
 	GThreadManager->Launch([]() { if (GProfiler) GProfiler->UpdateProfiler(); });
 

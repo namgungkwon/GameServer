@@ -2,6 +2,7 @@
 #include "Profiler.h"
 #include <sstream>
 #include <chrono>
+#include <iomanip>
 
 #pragma optimize("", off)
 void ProfileSample::Begin()
@@ -9,9 +10,6 @@ void ProfileSample::Begin()
 	flag = true;
 
 	::QueryPerformanceCounter(&startTime);
-	
-	processTimeMin.store(-1);
-	processTimeMax.store(0);
 }
 
 
@@ -61,6 +59,8 @@ void Profiler::ProfileBegin(wstring tagName)
 		ProfileSample& newProfile = _profileList[tagName].emplace_back();
 		newProfile.threadId = LThreadId;
 		newProfile.Begin();
+		newProfile.processTimeMin.store(INT64_MAX);
+		newProfile.processTimeMax.store(0);
 	}
 }
 
@@ -105,22 +105,46 @@ void Profiler::ProfileRecord()
 		{
 			int64 totalTime = 0;
 			int64 callTimes = 0;
+			int64 timeMin = INT64_MAX;
+			int64 timeMax = 0;
+			int64 avg = 0;
 
 			for (ProfileSample& profile : profiles)
 			{
 				totalTime += profile.totalTime.exchange(0);
 				callTimes += profile.callTimes.exchange(0);
+
+				int64 dTimeMin = profile.processTimeMin.exchange(INT64_MAX);
+				int64 dTimeMax = profile.processTimeMax.exchange(0);
+
+				if (dTimeMin < timeMin) timeMin = dTimeMin;
+				if (dTimeMax > timeMax) timeMax = dTimeMax;
 			}
 
 			_sumProfile[tagName].totalTime.fetch_add(totalTime);
 			_sumProfile[tagName].callTimes.fetch_add(callTimes);
 
-			int64 avg = (callTimes > 0) ? totalTime / callTimes : 0;
-			avg = (avg * 1000000 / _freq.QuadPart);
+			if (callTimes > 0)
+			{
+				avg = totalTime / callTimes;
+				avg = (avg * 1000000 / _freq.QuadPart); // us 출력
+				timeMin = (timeMin * 1000000 / _freq.QuadPart);
+				timeMax = (timeMax * 1000000 / _freq.QuadPart);
+			}
+			else
+			{
+				timeMin = 0;
+				avg = 0;
+			}
+			
+			wstring tag = L"[" + tagName + L"]";
 
-			stream << L"[" << tagName << L"]";
-			stream << L"   call: " << callTimes << L"/s (Total: " << _sumProfile[tagName].callTimes.load() << L")";
-			stream << L"   avg: " << avg << L"us";
+			stream << std::left << std::setw(25) << tag;
+			stream << L"   call: "	<< std::right << std::setw(7)	<< callTimes	<< L"/s";
+			stream << L"   avg: "	<< std::right << std::setw(5)	<< avg			<< L"us";
+			stream << L"   min: "	<< std::right << std::setw(5)	<< timeMin		<< L"us";
+			stream << L"   max: "	<< std::right << std::setw(7)	<< timeMax		<< L"us";
+			stream << L" (Total: "	<< std::right << std::setw(10)	<< _sumProfile[tagName].callTimes.load() << L")";
 			stream << L"\033[K\n";
 		}
 	}
@@ -145,3 +169,13 @@ void Profiler::ProfileRecord()
 }
 
 #pragma optimize("", on)
+
+Profile::Profile(wstring tagName) : _tagName(tagName)
+{ 
+	PROFILE_BEGIN(tagName); 
+}
+Profile::~Profile()
+{
+	PROFILE_END(_tagName);
+}
+
