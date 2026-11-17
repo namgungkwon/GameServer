@@ -37,6 +37,6 @@ namespace Config
 		static constexpr uint64 SEND_MOVE_TERM = 500;
 		static constexpr uint64 SEND_WORLDCHAT_TERM = 30000;
 
-		static constexpr float ATTACK_TOLERANCE_LENGTHSQ = 10.f;
+		static constexpr float ATTACK_TOLERANCE_LENGTHSQ = 500.f;
 	}
 };

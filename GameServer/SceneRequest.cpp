@@ -3,6 +3,8 @@
 
 #include "GameData.h"
 
+#include "Skill.h"
+
 #include "GameScene.h"
 #include "World.h"
 #include "Zone.h"
@@ -16,7 +18,7 @@
 #include "SkillComponent.h"
 #include "MovementComponent.h"
 
-
+#pragma optimize("", off)
 ///////////////////////////////////////////////////////
 //	<	AttackRequest	>
 ///////////////////////////////////////////////////////
@@ -42,7 +44,7 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 	if (posDiffSq > Config::Player::ATTACK_TOLERANCE_LENGTHSQ)
 	{
 		// 이상패킷
-		LOG_WARN(L"[SuspiciousPacket] Between AttackPos from PlayerPos : {1:.1f}", sqrt(posDiffSq));
+		LOG_WARN(L"[SuspiciousPacket] Distance AttackPos from PlayerPos is to far -> distance :" + std::to_wstring(sqrt(posDiffSq)));
 
 		if (GServerStats)
 		{
@@ -70,8 +72,7 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 	if (aSkill->CooldownReady(skillId, currentTick) == false)
 		return;
 
-	const uint64 moveDelay = aSkill->UseSkill(skillId, currentTick);
-	aMovement->SetMoveDelayEndTick(currentTick + moveDelay);
+	SkillInstanceRef skillInstance = aSkill->UseSkill(skillId, currentTick);
 
 	{
 		Protocol::GC_ATTACK res;
@@ -92,62 +93,9 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 			targets.push_back(std::move(entity));
 	}
 
-	SkillData* skill = aSkill->GetSkill(skillId);
-	Vector<EntityRef> finalTargets = CombatSystem::SelectTargetInAttackCone(attacker, targets, skill->attackRange, skill->attackAngle);
-
-
-	auto fn = [](const GameSceneRef& scene, const ZoneRef& zone, const EntityRef& attacker, const EntityRef& target, DamageEvent event) {
-		if (CombatSystem::ApplyDamage(zone, event) == false)
-			return;
-
-		DamageResult result = CombatSystem::MakeDamageResult(zone, event);
-
-		{
-			Protocol::GC_DAMAGE res;
-			res.set_objectid(target->GetObjectId());
-			res.set_damage(result.damage);
-			res.set_isdead(result.isDead);
-			SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
-			scene->BroadCastAdjacentZone(attacker->GetZone(), sendBuffer);
-		}
-
-		if (result.isDead)
-		{
-			if (attacker->GetType() == Protocol::OBJECT_CATEGORY_PLAYER &&
-				target->GetType() == Protocol::OBJECT_CATEGORY_MONSTER)
-			{
-				PlayerRef player = static_pointer_cast<Player>(attacker);
-				{
-					Protocol::GC_REWARD res;
-					res.set_exp(target->GetExp());
-					SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
-					player->Send(sendBuffer);
-				}
-				player->GainExp(target->GetExp());
-			}
-		};
-	};
-
-
-	for (EntityRef finalTarget : finalTargets)
-	{
-		GameSceneRef targetScene = finalTarget->GetScene();
-		ZoneRef targetZone = finalTarget->GetZone();
-		DamageEvent event = CombatSystem::MakeDamageEvent(attacker, finalTarget, skillId, attacker->GetYaw());
-
-		if (targetScene == playerScene)
-		{
-			fn(targetScene, targetZone, attacker, finalTarget, event);
-		}
-		else
-		{
-			EntityRef attacker = attacker;
-			targetScene->DoAsync([fn, targetScene = std::move(targetScene), targetZone = std::move(targetZone), event, attacker = std::move(attacker), finalTarget = std::move(finalTarget)]()
-				{ fn(targetScene, targetZone, attacker, finalTarget, event); });
-		}
-	}
+	skillInstance->Execute(targets);
 }
-
+#pragma optimize("", on)
 
 ///////////////////////////////////////////////////////
 //	<	ReviveRequest	>

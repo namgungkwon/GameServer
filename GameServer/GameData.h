@@ -29,7 +29,7 @@ private:
 
 public:
 	PlayerData*					GetPlayerData(int32 level);
-	SkillData*					GetSkillData(uint32 skillId, uint32 skillLevel);
+	SkillDefinitionRef			GetSkillData(uint32 skillId, uint32 skillLevel);
 	Vector<MonsterSpawnData>&	GetMonsterSpawnData() {	return _monsterSpawnData; }
 	MonsterData*				GetMonsterData(uint64 monsterId);
 
@@ -38,7 +38,7 @@ public:
 
 private:
 	HashMap<int32, PlayerData>						_playerData; // Level, Data
-	HashMap<std::pair<uint32, uint32>, SkillData>	_skillData;
+	HashMap<std::pair<uint32, uint32>, SkillDefinitionRef> _skillData;
 	HashMap<uint64, MonsterData>					_monsterData;
 	Vector<MonsterSpawnData>						_monsterSpawnData;
 	Vector<SpawnPointData>							_spawnPointData;

@@ -17,6 +17,12 @@ useRef_Class(Player)
 useRef_Class(NPC)
 useRef_Class(Monster)
 
+useRef_Class(SkillDefinition)
+useRef_Class(SkillInstance)
+useRef_Class(SkillEffect)
+
+useRef_Struct(DamageEvent)
+
 
 ///////////////////////////////////////////////////////
 //	<	GetSet	>

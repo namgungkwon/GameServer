@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SkillComponent.h"
+#include "Skill.h"
 
 #include "GameData.h"
 
@@ -13,14 +14,37 @@ void SkillComponent::Init(const Vector<SkillState>& skills)
 		AddSkill(skill);
 }
 
-uint64 SkillComponent::UseSkill(uint32 skillId, uint64 now)
+SkillInstanceRef SkillComponent::UseSkill(uint32 skillId, uint64 now)
 {
-	SkillData* skillData = GGameData->GetSkillData(skillId, _skills[skillId].skillLevel);
-	_skills[skillId].skillCooldownEndTick = now + skillData->cooldownMs;
-	return skillData->moveDelayMs;
+	do
+	{
+		if (_castingSkill == nullptr)
+			break;
+
+		if (_castingSkill->GetDefinition()->GetSkillId() != skillId)
+		{
+			_castingSkill = nullptr;
+			break;
+		}
+
+		if (_castingSkill->AddCombo(now) == false)
+		{
+			_castingSkill = nullptr;
+			break;
+		}
+
+		return _castingSkill;
+	} while (false);
+	
+	SkillDefinitionRef skillDef = GetSkill(skillId);
+	_skills[skillId].skillCooldownEndTick = now + skillDef->GetCoolDown();
+	_castingSkill = MakeShared<SkillInstance>(_owner.lock(), skillDef);
+	_castingSkill->AddCombo(now);
+
+	return _castingSkill;
 }
 
-SkillData* SkillComponent::GetSkill(uint32 skillId)
+SkillDefinitionRef SkillComponent::GetSkill(uint32 skillId)
 {
 	return GGameData->GetSkillData(skillId, _skills[skillId].skillLevel);
 }

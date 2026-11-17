@@ -30,7 +30,7 @@ void World::Start()
     for (const GameSceneRef& scene : _scenes)
         scene->StartUpdate();
 
-  //  SpawnMonster();
+    //SpawnMonster();
 }
 
 void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, PlayerLoadData load)

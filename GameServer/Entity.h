@@ -65,6 +65,7 @@ public:
 
 private:
 	HashMap<std::type_index, IObjectComponent*> Components;
+	GETSET_REF	(Vector<SkillEffectRef>,	_effects,		Effects);
 
 public:
 	GETSET_WEAK(Zone,						_ownerZone,		Zone);

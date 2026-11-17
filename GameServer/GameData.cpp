@@ -3,6 +3,8 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#include "Skill.h"
+
 using json = nlohmann::json;
 
 bool LoadJsonArray(const char* path, json& outArray)
@@ -77,16 +79,46 @@ bool GameData::LoadSkillData()
 
     for (const auto& item : data)
     {
-        SkillData data;
-        data.id             = item["id"];
-        data.level          = item["level"];
-        data.attackRate     = item["attackRate"];
-        data.attackRange    = item["attackRange"];
-        data.attackAngle    = item["attackAngle"];
-        data.cooldownMs     = item["cooldownMs"];
-        data.moveDelayMs    = item["moveDelayMs"];
+        int32 skillId = item["id"];
+        string name = item["name"].get<string>();
+        
+        for (const auto& levelItem : item["levels"])
+        {
+            int32 level = levelItem["level"];
+            uint64 coolDownMs = levelItem["cooldownMs"];
 
-        _skillData[{data.id, data.level}] = std::move(data);
+            SkillDefinitionRef def = MakeShared<SkillDefinition>();
+            def->SetSkillId(skillId);
+            def->SetName(name);
+            def->SetCoolDown(coolDownMs);
+
+            for (const auto& comboItem : levelItem["combos"])
+            {
+                int32 step = comboItem["step"];
+                def->comboWindowMsList.push_back(comboItem["comboWindowMs"]);
+
+                def->effectFactory.push_back(Vector<SkillEffectRef>());
+
+                for (const auto& effect : comboItem["effects"])
+                {
+                    string className = effect["class"].get<string>();
+
+                    if (className == "MeleeAttack")
+                    {
+                        MeleeAttackInfo info;
+                        info.attackRate = effect["damageRate"];
+                        info.attackRange = effect["attackRange"];
+                        info.attackAngle = effect["attackAngle"];
+                        info.moveDelayMs = effect["moveDelayMs"];
+                        info.hitDelayMs = effect["hitDelayMs"];
+
+                        def->effectFactory.back().push_back(MakeShared<MeleeAttackEffect>(info));
+                    }
+                }
+            }
+
+            _skillData[{skillId, level}] = std::move(def);
+        }
     }
     return true;
 }
@@ -169,10 +201,10 @@ PlayerData* GameData::GetPlayerData(int32 level)
     return it != _playerData.end() ? &it->second : nullptr;
 }
 
-SkillData* GameData::GetSkillData(uint32 skillId, uint32 skillLevel)
+SkillDefinitionRef GameData::GetSkillData(uint32 skillId, uint32 skillLevel)
 {
     auto it = _skillData.find({ skillId, skillLevel });
-    return it != _skillData.end() ? &it->second : nullptr;
+    return it != _skillData.end() ? it->second : nullptr;
 }
 
 MonsterData* GameData::GetMonsterData(uint64 monsterId)

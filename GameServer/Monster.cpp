@@ -211,6 +211,8 @@ void Monster::UpdateAttack(uint64 nowMs, uint64 deltaTime)
 
 	SetYaw(UtilMath::GetYawFromVector(targetLocation - location));
 
+	// temp 
+	return;
 	// 공격
 	if (GetComponent<SkillComponent>()->CooldownReady(0, nowMs) == false)
 		return;

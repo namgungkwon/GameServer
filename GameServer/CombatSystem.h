@@ -4,6 +4,10 @@
 
 struct DamageEvent
 {
+public:
+	void AddTarget(EntityRef target);
+
+public:
 	uint64		attackerId		= 0;
 	uint64		targetId		= 0;
 
@@ -29,6 +33,7 @@ struct DamageResult
 	uint64		targetmaxHp		= 0;
 
 	bool		isDead			= false;
+	int64		rewardExp		= 0;
 };
 
 
@@ -41,7 +46,7 @@ public:
 	static void					Update(ZoneRef zone, float deltaTime);
 
 public:
-	static DamageEvent			MakeDamageEvent(const EntityRef& attacker, const EntityRef& target, uint32 skillId, float yaw);
+	static DamageEvent			MakeDamageEvent(const EntityRef& attacker, uint32 skillId, float yaw);
 	static bool					ApplyDamage(const ZoneRef& zone, DamageEvent& event);
 	static const DamageResult	MakeDamageResult(const ZoneRef& zone, DamageEvent& event);
 

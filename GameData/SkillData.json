@@ -2,12 +2,35 @@
   "data": [
     {
       "id": 0,
-      "level": 1,
-      "attackRate": 1.0,
-      "attackRange": 100.0,
-      "attackAngle": 90,
-      "cooldownMs": 500,
-      "moveDelayMs" : 500
+      "name": "기본공격",
+      "levels": [
+        {
+          "level": 1,
+          "cooldownMs": 500,
+
+          "combos": [
+            {
+              "step": 1,
+              "comboWindowMs": 0,
+
+              "effects": [
+                {
+                  "class": "MeleeAttack",
+                  "damageRate": 100,
+                  "attackRange": 100.0,
+                  "attackAngle": 90,
+                  "moveDelayMs": 500,
+                  "hitDelayMs": 200
+                }
+              ]
+
+            }
+          ]
+
+        }
+      ]
+
     }
   ]
+
 }

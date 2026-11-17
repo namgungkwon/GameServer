@@ -190,6 +190,7 @@
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Protocol.pb.h" />
+    <ClInclude Include="Skill.h" />
     <ClInclude Include="StatComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="pch.h" />
@@ -232,6 +233,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Skill.cpp" />
     <ClCompile Include="StatComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementComponent.cpp" />

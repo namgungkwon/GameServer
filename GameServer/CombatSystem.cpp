@@ -10,28 +10,33 @@
 #include "GameData.h"
 
 
+
+void DamageEvent::AddTarget(EntityRef target)
+{
+	targetId = target->GetObjectId();
+
+	CombatComponent* targetcc = target->GetComponent<CombatComponent>();
+	defense = targetcc->GetDefense();
+}
+
+
 ///////////////////////////////////////////////////////
 //	<	CombatSystem	>
 ///////////////////////////////////////////////////////
-DamageEvent CombatSystem::MakeDamageEvent(const EntityRef& attacker, const EntityRef& target, uint32 skillId, float yaw)
+DamageEvent CombatSystem::MakeDamageEvent(const EntityRef& attacker, uint32 skillId, float yaw)
 {
 	DamageEvent event;
 
 	event.attackerId = attacker->GetObjectId();
-	event.targetId = target->GetObjectId();
 
 	SkillComponent* sc = attacker->GetComponent<SkillComponent>();
 	event.skillId = skillId;
 	event.skillLevel = sc->GetSkillState(skillId).skillLevel;
 
 	CombatComponent* attackercc = attacker->GetComponent<CombatComponent>();
-	CombatComponent* targetcc = target->GetComponent<CombatComponent>();
-
 	event.rawDamage = attackercc->GetDamage();
-	event.defense = targetcc->GetDefense();
-	event.finalDamage = CalculateDamage(event);
-
 	event.yaw = yaw;
+
 	return event;
 }
 
@@ -76,6 +81,7 @@ const DamageResult CombatSystem::MakeDamageResult(const ZoneRef& zone, DamageEve
 			if (tStat->GetCurrentHP() == 0)
 			{
 				result.isDead = true;
+				result.rewardExp = target->GetExp();
 				target->SetState(EntityState::Dead);
 			}
 		}
@@ -129,18 +135,4 @@ Vector<EntityRef> CombatSystem::SelectTargetInAttackCone(const EntityRef& attack
 		}
 	}
 	return ret;
-}
-
-uint64 CombatSystem::CalculateDamage(DamageEvent& event)
-{
-	SkillData* skill = GGameData->GetSkillData(event.skillId, event.skillLevel);
-
-	uint64 finalDamage = static_cast<uint64>((event.rawDamage * skill->attackRate) * 0.01f);
-
-	finalDamage = event.rawDamage - event.defense;
-
-	if (finalDamage < 0)
-		finalDamage = 0;
-
-	return finalDamage;
 }

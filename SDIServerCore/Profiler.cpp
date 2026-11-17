@@ -4,7 +4,6 @@
 #include <chrono>
 #include <iomanip>
 
-#pragma optimize("", off)
 void ProfileSample::Begin()
 {
 	flag = true;
@@ -167,8 +166,6 @@ void Profiler::ProfileRecord()
 		SetConsoleCursorPosition(hOut, prevPos);
 	}
 }
-
-#pragma optimize("", on)
 
 Profile::Profile(wstring tagName) : _tagName(tagName)
 { 

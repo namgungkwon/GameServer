@@ -104,6 +104,7 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="PacketSender.h" />
+    <ClInclude Include="Skill.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -206,6 +207,7 @@
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="PacketSender.cpp" />
+    <ClCompile Include="Skill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="pch">
