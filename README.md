@@ -1,7 +1,8 @@
+
 # C++ IOCP 멀티플레이 게임 서버
 > Window IOCP 비동기 네트워크를 이용하여 CCU 3000 에서 안정화를 목표로 구현하고 있습니다.
 
-[패킷설계](https://github.com/namgungkwon/GameServer/tree/main/Docs/Protocol.md) |
+| [패킷설계](https://github.com/namgungkwon/GameServer/tree/main/Docs/Protocol.md) | [DB 설계](https://github.com/namgungkwon/GameServer/blob/main/Docs/Database.md) |
 
 ## 환경
 
@@ -33,7 +34,8 @@
 | GameServer | NetworkThread(10), LogicThread(16), PacketSender(8, SceneCount), ServerStat(1, 고정), Profiler(1, 고정) |
 
 4. 서버 구조
-![서버 구조](https://github.com/namgungkwon/GameServer/tree/main/Docs/Server.png)
+<img width="1371" height="720" alt="Server" src="https://github.com/user-attachments/assets/196e5d64-a7d8-47ab-8eb6-f3353cacf6ff" />
+- 일부 패킷을 제외하고(이동, 로그인 등 특수패킷) SceneRequest로 패킹되어 SceneTick에서 처리된다.
 
 ## 기능
 1. 요약
