@@ -125,7 +125,7 @@ void ServerStats::Rendering()
     stream << L"   Send: " << sendKB << L"KB/s (" << sendPackets << L"pkt/s)";
     if (suspiciousPacket > 0)
     {
-        stream << L"   \033[31mSuspicious: " << suspiciousPacket;
+        stream << L"   \033[31mSuspicious: " << suspiciousPacket << L"\033[0m";
     }
     stream << L"\033[K\n";
 
@@ -174,11 +174,6 @@ void ServerStats::Rendering()
     stream << L"[WORLD]  ";
     stream << L" Players: " << activePlayers;
     stream << L"\033[K\n";
-
-    if (suspiciousPacket > 0)
-    {
-        stream << L"  \033[31mSuspicious: " << suspiciousPacket << L"\033[0m";
-    }
 
     stream << L"============================================================================";
     stream << L"\033[K\n";

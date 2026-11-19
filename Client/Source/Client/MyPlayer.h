@@ -26,6 +26,8 @@ public:
 public:
 	void MoveTick(float DeltaTime);
 	void UpdateAnimState();
+	uint64 GetLocalTick();
+	
 public:
 	virtual void SpawnPkt(const Protocol::ObjectData& Pkt) override;
 	UFUNCTION(BlueprintImplementableEvent)
@@ -78,6 +80,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Message;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CorrectionStrength = 2.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxCorrectionSpeed = 10.f;
 
 public:
 	/** MappingContext */

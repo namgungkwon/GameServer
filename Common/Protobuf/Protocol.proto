@@ -115,7 +115,8 @@ message GC_REVIVE
 ///////////////////////////////////////////////////////
 message CG_MOVE
 {
-	ObjectMoveData moveData = 1;
+	uint64			clientTick = 1;
+	ObjectMoveData moveData = 2;
 }
 
 message GC_MOVE
@@ -131,6 +132,7 @@ message CG_ATTACK
 	ObjectPosData posData = 1;
 	repeated uint64 targets = 2;
 	uint32 skillId = 3;
+	uint64			clientTick = 4;
 }
 
 message GC_ATTACK

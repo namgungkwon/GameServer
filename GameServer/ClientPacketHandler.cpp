@@ -191,11 +191,24 @@ bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
     if (scene == nullptr)
         return false;
 
+    MovementComponent* mc = player->GetComponent<MovementComponent>();
+    if (mc == nullptr)
+        return false;
+
+    uint64 clientTick = pkt.clienttick();
+
+    MoveJob oldJob = mc->GetPendingJob();
+    if (clientTick < oldJob.sendClientTick)
+    {
+        return false;
+    }
+
     MoveJob job;
     Protocol::Vector3 rawVelocity = pkt.movedata().velocity();
     job.velocity = Vector3(rawVelocity.x(), rawVelocity.y(), rawVelocity.z());
     job.location = UtilMath::ToServerLocation(pkt.movedata().location());
     job.yaw = pkt.movedata().yaw();
+    job.sendClientTick = pkt.clienttick();
 
     player->GetComponent<MovementComponent>()->SetPendingJob(job);
 

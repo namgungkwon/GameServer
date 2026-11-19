@@ -40,7 +40,7 @@ bool MovementSystem::UpdatePlayerMove(PlayerRef player, uint64 nowTick, uint64 d
 	if (mc == nullptr)
 		return false;
 
-	MoveJob& job = mc->GetPendingJob();
+	MoveJob job = mc->GetPendingJob();
 	if (job.velocity.IsZero() && player->GetYaw() == job.yaw)
 		return false;
 

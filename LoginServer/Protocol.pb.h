@@ -3978,14 +3978,14 @@ class GC_ATTACK final : public ::google::protobuf::Message
   ::Protocol::ObjectPosData* PROTOBUF_NONNULL _internal_mutable_posdata();
 
   public:
-  // uint64 skillId = 2;
+  // uint32 skillId = 2;
   void clear_skillid() ;
-  ::uint64_t skillid() const;
-  void set_skillid(::uint64_t value);
+  ::uint32_t skillid() const;
+  void set_skillid(::uint32_t value);
 
   private:
-  ::uint64_t _internal_skillid() const;
-  void _internal_set_skillid(::uint64_t value);
+  ::uint32_t _internal_skillid() const;
+  void _internal_set_skillid(::uint32_t value);
 
   public:
   // @@protoc_insertion_point(class_scope:Protocol.GC_ATTACK)
@@ -4015,7 +4015,7 @@ class GC_ATTACK final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::Protocol::ObjectPosData* PROTOBUF_NULLABLE posdata_;
-    ::uint64_t skillid_;
+    ::uint32_t skillid_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -4167,9 +4167,10 @@ class CG_MOVE final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kMoveDataFieldNumber = 1,
+    kMoveDataFieldNumber = 2,
+    kClientTickFieldNumber = 1,
   };
-  // .Protocol.ObjectMoveData moveData = 1;
+  // .Protocol.ObjectMoveData moveData = 2;
   bool has_movedata() const;
   void clear_movedata() ;
   const ::Protocol::ObjectMoveData& movedata() const;
@@ -4184,11 +4185,21 @@ class CG_MOVE final : public ::google::protobuf::Message
   ::Protocol::ObjectMoveData* PROTOBUF_NONNULL _internal_mutable_movedata();
 
   public:
+  // uint64 clientTick = 1;
+  void clear_clienttick() ;
+  ::uint64_t clienttick() const;
+  void set_clienttick(::uint64_t value);
+
+  private:
+  ::uint64_t _internal_clienttick() const;
+  void _internal_set_clienttick(::uint64_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:Protocol.CG_MOVE)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<0, 1,
+  static const ::google::protobuf::internal::TcParseTable<1, 2,
                                    1, 0,
                                    2>
       _table_;
@@ -4211,6 +4222,7 @@ class CG_MOVE final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::Protocol::ObjectMoveData* PROTOBUF_NULLABLE movedata_;
+    ::uint64_t clienttick_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -4364,6 +4376,7 @@ class CG_ATTACK final : public ::google::protobuf::Message
   enum : int {
     kTargetsFieldNumber = 2,
     kPosDataFieldNumber = 1,
+    kClientTickFieldNumber = 4,
     kSkillIdFieldNumber = 3,
   };
   // repeated uint64 targets = 2;
@@ -4399,6 +4412,16 @@ class CG_ATTACK final : public ::google::protobuf::Message
   ::Protocol::ObjectPosData* PROTOBUF_NONNULL _internal_mutable_posdata();
 
   public:
+  // uint64 clientTick = 4;
+  void clear_clienttick() ;
+  ::uint64_t clienttick() const;
+  void set_clienttick(::uint64_t value);
+
+  private:
+  ::uint64_t _internal_clienttick() const;
+  void _internal_set_clienttick(::uint64_t value);
+
+  public:
   // uint32 skillId = 3;
   void clear_skillid() ;
   ::uint32_t skillid() const;
@@ -4413,7 +4436,7 @@ class CG_ATTACK final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<2, 3,
+  static const ::google::protobuf::internal::TcParseTable<2, 4,
                                    1, 0,
                                    2>
       _table_;
@@ -4438,6 +4461,7 @@ class CG_ATTACK final : public ::google::protobuf::Message
     ::google::protobuf::RepeatedField<::uint64_t> targets_;
     ::google::protobuf::internal::CachedSize _targets_cached_byte_size_;
     ::Protocol::ObjectPosData* PROTOBUF_NULLABLE posdata_;
+    ::uint64_t clienttick_;
     ::uint32_t skillid_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -6306,7 +6330,32 @@ inline void GC_REVIVE::set_allocated_statdata(::Protocol::ObjectStatData* PROTOB
 
 // CG_MOVE
 
-// .Protocol.ObjectMoveData moveData = 1;
+// uint64 clientTick = 1;
+inline void CG_MOVE::clear_clienttick() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.clienttick_ = ::uint64_t{0u};
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline ::uint64_t CG_MOVE::clienttick() const {
+  // @@protoc_insertion_point(field_get:Protocol.CG_MOVE.clientTick)
+  return _internal_clienttick();
+}
+inline void CG_MOVE::set_clienttick(::uint64_t value) {
+  _internal_set_clienttick(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_set:Protocol.CG_MOVE.clientTick)
+}
+inline ::uint64_t CG_MOVE::_internal_clienttick() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.clienttick_;
+}
+inline void CG_MOVE::_internal_set_clienttick(::uint64_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.clienttick_ = value;
+}
+
+// .Protocol.ObjectMoveData moveData = 2;
 inline bool CG_MOVE::has_movedata() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
   PROTOBUF_ASSUME(!value || _impl_.movedata_ != nullptr);
@@ -6605,7 +6654,7 @@ inline void CG_ATTACK::clear_skillid() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.skillid_ = 0u;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000008U);
 }
 inline ::uint32_t CG_ATTACK::skillid() const {
   // @@protoc_insertion_point(field_get:Protocol.CG_ATTACK.skillId)
@@ -6613,7 +6662,7 @@ inline ::uint32_t CG_ATTACK::skillid() const {
 }
 inline void CG_ATTACK::set_skillid(::uint32_t value) {
   _internal_set_skillid(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:Protocol.CG_ATTACK.skillId)
 }
 inline ::uint32_t CG_ATTACK::_internal_skillid() const {
@@ -6623,6 +6672,31 @@ inline ::uint32_t CG_ATTACK::_internal_skillid() const {
 inline void CG_ATTACK::_internal_set_skillid(::uint32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.skillid_ = value;
+}
+
+// uint64 clientTick = 4;
+inline void CG_ATTACK::clear_clienttick() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.clienttick_ = ::uint64_t{0u};
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline ::uint64_t CG_ATTACK::clienttick() const {
+  // @@protoc_insertion_point(field_get:Protocol.CG_ATTACK.clientTick)
+  return _internal_clienttick();
+}
+inline void CG_ATTACK::set_clienttick(::uint64_t value) {
+  _internal_set_clienttick(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_set:Protocol.CG_ATTACK.clientTick)
+}
+inline ::uint64_t CG_ATTACK::_internal_clienttick() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.clienttick_;
+}
+inline void CG_ATTACK::_internal_set_clienttick(::uint64_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.clienttick_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -6722,27 +6796,27 @@ inline void GC_ATTACK::set_allocated_posdata(::Protocol::ObjectPosData* PROTOBUF
   // @@protoc_insertion_point(field_set_allocated:Protocol.GC_ATTACK.posData)
 }
 
-// uint64 skillId = 2;
+// uint32 skillId = 2;
 inline void GC_ATTACK::clear_skillid() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.skillid_ = ::uint64_t{0u};
+  _impl_.skillid_ = 0u;
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000002U);
 }
-inline ::uint64_t GC_ATTACK::skillid() const {
+inline ::uint32_t GC_ATTACK::skillid() const {
   // @@protoc_insertion_point(field_get:Protocol.GC_ATTACK.skillId)
   return _internal_skillid();
 }
-inline void GC_ATTACK::set_skillid(::uint64_t value) {
+inline void GC_ATTACK::set_skillid(::uint32_t value) {
   _internal_set_skillid(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_set:Protocol.GC_ATTACK.skillId)
 }
-inline ::uint64_t GC_ATTACK::_internal_skillid() const {
+inline ::uint32_t GC_ATTACK::_internal_skillid() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.skillid_;
 }
-inline void GC_ATTACK::_internal_set_skillid(::uint64_t value) {
+inline void GC_ATTACK::_internal_set_skillid(::uint32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.skillid_ = value;
 }

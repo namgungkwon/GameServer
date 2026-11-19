@@ -513,7 +513,7 @@ inline constexpr GC_ATTACK::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
         posdata_{nullptr},
-        skillid_{::uint64_t{0u}} {}
+        skillid_{0u} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR GC_ATTACK::GC_ATTACK(::_pbi::ConstantInitialized)
@@ -538,7 +538,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr CG_MOVE::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        movedata_{nullptr} {}
+        movedata_{nullptr},
+        clienttick_{::uint64_t{0u}} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR CG_MOVE::CG_MOVE(::_pbi::ConstantInitialized)
@@ -566,6 +567,7 @@ inline constexpr CG_ATTACK::Impl_::Impl_(
         targets_{},
         _targets_cached_byte_size_{0},
         posdata_{nullptr},
+        clienttick_{::uint64_t{0u}},
         skillid_{0u} {}
 
 template <typename>
@@ -766,8 +768,10 @@ const ::uint32_t
         1,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_MOVE, _impl_._has_bits_),
-        4, // hasbit index offset
+        5, // hasbit index offset
+        PROTOBUF_FIELD_OFFSET(::Protocol::CG_MOVE, _impl_.clienttick_),
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_MOVE, _impl_.movedata_),
+        1,
         0,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Protocol::GC_MOVE, _impl_._has_bits_),
@@ -776,12 +780,14 @@ const ::uint32_t
         0,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_ATTACK, _impl_._has_bits_),
-        6, // hasbit index offset
+        7, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_ATTACK, _impl_.posdata_),
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_ATTACK, _impl_.targets_),
         PROTOBUF_FIELD_OFFSET(::Protocol::CG_ATTACK, _impl_.skillid_),
+        PROTOBUF_FIELD_OFFSET(::Protocol::CG_ATTACK, _impl_.clienttick_),
         1,
         0,
+        3,
         2,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::Protocol::GC_ATTACK, _impl_._has_bits_),
@@ -843,14 +849,14 @@ static const ::_pbi::MigrationSchema
         {79, sizeof(::Protocol::CG_REVIVE)},
         {86, sizeof(::Protocol::GC_REVIVE)},
         {93, sizeof(::Protocol::CG_MOVE)},
-        {98, sizeof(::Protocol::GC_MOVE)},
-        {103, sizeof(::Protocol::CG_ATTACK)},
-        {112, sizeof(::Protocol::GC_ATTACK)},
-        {119, sizeof(::Protocol::GC_DAMAGE)},
-        {128, sizeof(::Protocol::GC_REWARD)},
-        {133, sizeof(::Protocol::GC_LEVELUP)},
-        {138, sizeof(::Protocol::CG_CHAT)},
-        {145, sizeof(::Protocol::GC_CHAT)},
+        {100, sizeof(::Protocol::GC_MOVE)},
+        {105, sizeof(::Protocol::CG_ATTACK)},
+        {116, sizeof(::Protocol::GC_ATTACK)},
+        {123, sizeof(::Protocol::GC_DAMAGE)},
+        {132, sizeof(::Protocol::GC_REWARD)},
+        {137, sizeof(::Protocol::GC_LEVELUP)},
+        {142, sizeof(::Protocol::CG_CHAT)},
+        {149, sizeof(::Protocol::GC_CHAT)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::Protocol::_CL_CREATE_ACCOUNT_default_instance_._instance,
@@ -903,14 +909,15 @@ const char descriptor_table_protodef_Protocol_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "tId\030\001 \001(\004\022\'\n\006option\030\002 \001(\0162\027.Protocol.Res"
     "pawnOption\"a\n\tGC_REVIVE\022(\n\007posData\030\001 \001(\013"
     "2\027.Protocol.ObjectPosData\022*\n\010statData\030\002 "
-    "\001(\0132\030.Protocol.ObjectStatData\"5\n\007CG_MOVE"
-    "\022*\n\010moveData\030\001 \001(\0132\030.Protocol.ObjectMove"
-    "Data\"4\n\007GC_MOVE\022)\n\010moveData\030\001 \003(\0132\027.Prot"
-    "ocol.ObjectPosData\"W\n\tCG_ATTACK\022(\n\007posDa"
-    "ta\030\001 \001(\0132\027.Protocol.ObjectPosData\022\017\n\007tar"
-    "gets\030\002 \003(\004\022\017\n\007skillId\030\003 \001(\r\"F\n\tGC_ATTACK"
+    "\001(\0132\030.Protocol.ObjectStatData\"I\n\007CG_MOVE"
+    "\022\022\n\nclientTick\030\001 \001(\004\022*\n\010moveData\030\002 \001(\0132\030"
+    ".Protocol.ObjectMoveData\"4\n\007GC_MOVE\022)\n\010m"
+    "oveData\030\001 \003(\0132\027.Protocol.ObjectPosData\"k"
+    "\n\tCG_ATTACK\022(\n\007posData\030\001 \001(\0132\027.Protocol."
+    "ObjectPosData\022\017\n\007targets\030\002 \003(\004\022\017\n\007skillI"
+    "d\030\003 \001(\r\022\022\n\nclientTick\030\004 \001(\004\"F\n\tGC_ATTACK"
     "\022(\n\007posData\030\001 \001(\0132\027.Protocol.ObjectPosDa"
-    "ta\022\017\n\007skillId\030\002 \001(\004\"=\n\tGC_DAMAGE\022\020\n\010obje"
+    "ta\022\017\n\007skillId\030\002 \001(\r\"=\n\tGC_DAMAGE\022\020\n\010obje"
     "ctId\030\001 \001(\004\022\016\n\006damage\030\002 \001(\004\022\016\n\006isDead\030\003 \001"
     "(\010\"\030\n\tGC_REWARD\022\013\n\003exp\030\001 \001(\004\"0\n\nGC_LEVEL"
     "UP\022\"\n\004data\030\001 \001(\0132\024.Protocol.ObjectData\"9"
@@ -927,7 +934,7 @@ static ::absl::once_flag descriptor_table_Protocol_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
     false,
     false,
-    1464,
+    1504,
     descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once,
@@ -5426,6 +5433,7 @@ CG_MOVE::CG_MOVE(
   _impl_.movedata_ = (CheckHasBit(cached_has_bits, 0x00000001U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.movedata_)
                 : nullptr;
+  _impl_.clienttick_ = from._impl_.clienttick_;
 
   // @@protoc_insertion_point(copy_constructor:Protocol.CG_MOVE)
 }
@@ -5436,7 +5444,12 @@ PROTOBUF_NDEBUG_INLINE CG_MOVE::Impl_::Impl_(
 
 inline void CG_MOVE::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.movedata_ = {};
+  ::memset(reinterpret_cast<char*>(&_impl_) +
+               offsetof(Impl_, movedata_),
+           0,
+           offsetof(Impl_, clienttick_) -
+               offsetof(Impl_, movedata_) +
+               sizeof(Impl_::clienttick_));
 }
 CG_MOVE::~CG_MOVE() {
   // @@protoc_insertion_point(destructor:Protocol.CG_MOVE)
@@ -5496,16 +5509,16 @@ CG_MOVE::GetClassData() const {
   return CG_MOVE_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 1, 0, 2>
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2>
 CG_MOVE::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_._has_bits_),
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    2, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967292,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
+    2,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     CG_MOVE_class_data_.base(),
@@ -5515,14 +5528,20 @@ CG_MOVE::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::CG_MOVE>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .Protocol.ObjectMoveData moveData = 1;
+    // .Protocol.ObjectMoveData moveData = 2;
     {::_pbi::TcParser::FastMtS1,
-     {10, 0, 0,
+     {18, 0, 0,
       PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_.movedata_)}},
+    // uint64 clientTick = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(CG_MOVE, _impl_.clienttick_), 1>(),
+     {8, 1, 0,
+      PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_.clienttick_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // .Protocol.ObjectMoveData moveData = 1;
+    // uint64 clientTick = 1;
+    {PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_.clienttick_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
+    // .Protocol.ObjectMoveData moveData = 2;
     {PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_.movedata_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
@@ -5543,6 +5562,7 @@ PROTOBUF_NOINLINE void CG_MOVE::Clear() {
     ABSL_DCHECK(_impl_.movedata_ != nullptr);
     _impl_.movedata_->Clear();
   }
+  _impl_.clienttick_ = ::uint64_t{0u};
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -5566,10 +5586,19 @@ PROTOBUF_NOINLINE void CG_MOVE::Clear() {
   (void)cached_has_bits;
 
   cached_has_bits = this_._impl_._has_bits_[0];
-  // .Protocol.ObjectMoveData moveData = 1;
+  // uint64 clientTick = 1;
+  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+    if (this_._internal_clienttick() != 0) {
+      target = stream->EnsureSpace(target);
+      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
+          1, this_._internal_clienttick(), target);
+    }
+  }
+
+  // .Protocol.ObjectMoveData moveData = 2;
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        1, *this_._impl_.movedata_, this_._impl_.movedata_->GetCachedSize(), target,
+        2, *this_._impl_.movedata_, this_._impl_.movedata_->GetCachedSize(), target,
         stream);
   }
 
@@ -5596,12 +5625,20 @@ PROTOBUF_NOINLINE void CG_MOVE::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void)cached_has_bits;
 
-   {
-    // .Protocol.ObjectMoveData moveData = 1;
-    cached_has_bits = this_._impl_._has_bits_[0];
+  ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+  cached_has_bits = this_._impl_._has_bits_[0];
+  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
+    // .Protocol.ObjectMoveData moveData = 2;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.movedata_);
+    }
+    // uint64 clientTick = 1;
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      if (this_._internal_clienttick() != 0) {
+        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
+            this_._internal_clienttick());
+      }
     }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -5623,12 +5660,19 @@ void CG_MOVE::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    ABSL_DCHECK(from._impl_.movedata_ != nullptr);
-    if (_this->_impl_.movedata_ == nullptr) {
-      _this->_impl_.movedata_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.movedata_);
-    } else {
-      _this->_impl_.movedata_->MergeFrom(*from._impl_.movedata_);
+  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      ABSL_DCHECK(from._impl_.movedata_ != nullptr);
+      if (_this->_impl_.movedata_ == nullptr) {
+        _this->_impl_.movedata_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.movedata_);
+      } else {
+        _this->_impl_.movedata_->MergeFrom(*from._impl_.movedata_);
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      if (from._internal_clienttick() != 0) {
+        _this->_impl_.clienttick_ = from._impl_.clienttick_;
+      }
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -5648,7 +5692,12 @@ void CG_MOVE::InternalSwap(CG_MOVE* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  swap(_impl_.movedata_, other->_impl_.movedata_);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_.clienttick_)
+      + sizeof(CG_MOVE::_impl_.clienttick_)
+      - PROTOBUF_FIELD_OFFSET(CG_MOVE, _impl_.movedata_)>(
+          reinterpret_cast<char*>(&_impl_.movedata_),
+          reinterpret_cast<char*>(&other->_impl_.movedata_));
 }
 
 ::google::protobuf::Metadata CG_MOVE::GetMetadata() const {
@@ -5995,7 +6044,13 @@ CG_ATTACK::CG_ATTACK(
   _impl_.posdata_ = (CheckHasBit(cached_has_bits, 0x00000002U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.posdata_)
                 : nullptr;
-  _impl_.skillid_ = from._impl_.skillid_;
+  ::memcpy(reinterpret_cast<char*>(&_impl_) +
+               offsetof(Impl_, clienttick_),
+           reinterpret_cast<const char*>(&from._impl_) +
+               offsetof(Impl_, clienttick_),
+           offsetof(Impl_, skillid_) -
+               offsetof(Impl_, clienttick_) +
+               sizeof(Impl_::skillid_));
 
   // @@protoc_insertion_point(copy_constructor:Protocol.CG_ATTACK)
 }
@@ -6085,16 +6140,16 @@ CG_ATTACK::GetClassData() const {
   return CG_ATTACK_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 1, 0, 2>
+const ::_pbi::TcParseTable<2, 4, 1, 0, 2>
 CG_ATTACK::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_._has_bits_),
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    4,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     CG_ATTACK_class_data_.base(),
@@ -6104,7 +6159,10 @@ CG_ATTACK::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::CG_ATTACK>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // uint64 clientTick = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(CG_ATTACK, _impl_.clienttick_), 2>(),
+     {32, 2, 0,
+      PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.clienttick_)}},
     // .Protocol.ObjectPosData posData = 1;
     {::_pbi::TcParser::FastMtS1,
      {10, 1, 0,
@@ -6114,8 +6172,8 @@ CG_ATTACK::_table_ = {
      {18, 0, 0,
       PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.targets_)}},
     // uint32 skillId = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(CG_ATTACK, _impl_.skillid_), 2>(),
-     {24, 2, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(CG_ATTACK, _impl_.skillid_), 3>(),
+     {24, 3, 0,
       PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.skillid_)}},
   }}, {{
     65535, 65535
@@ -6125,7 +6183,9 @@ CG_ATTACK::_table_ = {
     // repeated uint64 targets = 2;
     {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.targets_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcRepeated | ::_fl::kPackedUInt64)},
     // uint32 skillId = 3;
-    {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.skillid_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt32)},
+    {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.skillid_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt32)},
+    // uint64 clientTick = 4;
+    {PROTOBUF_FIELD_OFFSET(CG_ATTACK, _impl_.clienttick_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::Protocol::ObjectPosData>()},
@@ -6150,7 +6210,11 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
       _impl_.posdata_->Clear();
     }
   }
-  _impl_.skillid_ = 0u;
+  if (BatchCheckHasBit(cached_has_bits, 0x0000000cU)) {
+    ::memset(&_impl_.clienttick_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.skillid_) -
+        reinterpret_cast<char*>(&_impl_.clienttick_)) + sizeof(_impl_.skillid_));
+  }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -6193,11 +6257,20 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
   }
 
   // uint32 skillId = 3;
-  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
     if (this_._internal_skillid() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
           3, this_._internal_skillid(), target);
+    }
+  }
+
+  // uint64 clientTick = 4;
+  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    if (this_._internal_clienttick() != 0) {
+      target = stream->EnsureSpace(target);
+      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
+          4, this_._internal_clienttick(), target);
     }
   }
 
@@ -6226,7 +6299,7 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
     // repeated uint64 targets = 2;
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       total_size +=
@@ -6239,8 +6312,15 @@ PROTOBUF_NOINLINE void CG_ATTACK::Clear() {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.posdata_);
     }
-    // uint32 skillId = 3;
+    // uint64 clientTick = 4;
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      if (this_._internal_clienttick() != 0) {
+        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
+            this_._internal_clienttick());
+      }
+    }
+    // uint32 skillId = 3;
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       if (this_._internal_skillid() != 0) {
         total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
             this_._internal_skillid());
@@ -6266,7 +6346,7 @@ void CG_ATTACK::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       _this->_internal_mutable_targets()->MergeFrom(from._internal_targets());
     }
@@ -6279,6 +6359,11 @@ void CG_ATTACK::MergeImpl(::google::protobuf::MessageLite& to_msg,
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      if (from._internal_clienttick() != 0) {
+        _this->_impl_.clienttick_ = from._impl_.clienttick_;
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       if (from._internal_skillid() != 0) {
         _this->_impl_.skillid_ = from._impl_.skillid_;
       }
@@ -6457,8 +6542,8 @@ GC_ATTACK::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::GC_ATTACK>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // uint64 skillId = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(GC_ATTACK, _impl_.skillid_), 1>(),
+    // uint32 skillId = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(GC_ATTACK, _impl_.skillid_), 1>(),
      {16, 1, 0,
       PROTOBUF_FIELD_OFFSET(GC_ATTACK, _impl_.skillid_)}},
     // .Protocol.ObjectPosData posData = 1;
@@ -6470,8 +6555,8 @@ GC_ATTACK::_table_ = {
   }}, {{
     // .Protocol.ObjectPosData posData = 1;
     {PROTOBUF_FIELD_OFFSET(GC_ATTACK, _impl_.posdata_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // uint64 skillId = 2;
-    {PROTOBUF_FIELD_OFFSET(GC_ATTACK, _impl_.skillid_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt64)},
+    // uint32 skillId = 2;
+    {PROTOBUF_FIELD_OFFSET(GC_ATTACK, _impl_.skillid_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt32)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::Protocol::ObjectPosData>()},
@@ -6491,7 +6576,7 @@ PROTOBUF_NOINLINE void GC_ATTACK::Clear() {
     ABSL_DCHECK(_impl_.posdata_ != nullptr);
     _impl_.posdata_->Clear();
   }
-  _impl_.skillid_ = ::uint64_t{0u};
+  _impl_.skillid_ = 0u;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -6522,11 +6607,11 @@ PROTOBUF_NOINLINE void GC_ATTACK::Clear() {
         stream);
   }
 
-  // uint64 skillId = 2;
+  // uint32 skillId = 2;
   if (CheckHasBit(cached_has_bits, 0x00000002U)) {
     if (this_._internal_skillid() != 0) {
       target = stream->EnsureSpace(target);
-      target = ::_pbi::WireFormatLite::WriteUInt64ToArray(
+      target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
           2, this_._internal_skillid(), target);
     }
   }
@@ -6562,10 +6647,10 @@ PROTOBUF_NOINLINE void GC_ATTACK::Clear() {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.posdata_);
     }
-    // uint64 skillId = 2;
+    // uint32 skillId = 2;
     if (CheckHasBit(cached_has_bits, 0x00000002U)) {
       if (this_._internal_skillid() != 0) {
-        total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
+        total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
             this_._internal_skillid());
       }
     }

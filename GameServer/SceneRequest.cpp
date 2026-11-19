@@ -37,25 +37,6 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 		return;
 	}
 
-	Protocol::ObjectPosData posData = pkt.posdata();
-	Vector3 attackPos = UtilMath::ToServerLocation(posData.location());
-
-	float posDiffSq = attacker->GetLocation().DistanceSq(attackPos);
-	if (posDiffSq > Config::Player::ATTACK_TOLERANCE_LENGTHSQ)
-	{
-		// 이상패킷
-		LOG_WARN(L"[SuspiciousPacket] Distance AttackPos from PlayerPos is to far -> distance :" + std::to_wstring(sqrt(posDiffSq)));
-
-		if (GServerStats)
-		{
-			GServerStats->game.suspiciousPacket.fetch_add(1);
-		}
-		return;
-	}
-
-	attacker->SetLocation(UtilMath::ToServerLocation(posData.location()));
-	attacker->SetYaw(posData.yaw());
-
 	CombatComponent* aCombat = attacker->GetComponent<CombatComponent>();
 	SkillComponent* aSkill = attacker->GetComponent<SkillComponent>();
 	StatComponent* aStat = attacker->GetComponent<StatComponent>();
@@ -63,6 +44,38 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 
 	if (aCombat == nullptr || aSkill == nullptr || aStat == nullptr)
 		return;
+
+	Protocol::ObjectPosData posData = pkt.posdata();
+	Vector3 clientPos = UtilMath::ToServerLocation(posData.location());
+	Vector3 serverPos = attacker->GetLocation();
+
+	// 처리되지 않은 이동을 여유거리로 선정
+	uint64 clientTick = pkt.clienttick();
+	MoveJob job = aMovement->GetPendingJob();
+
+	uint64 unprocessMs = 0;
+	if (job.velocity.IsZero() == false)
+	{
+		uint64 lastMoveRecieveTick = aMovement->GetPendingJob().sendClientTick;
+		unprocessMs = (lastMoveRecieveTick < clientTick) ? clientTick - lastMoveRecieveTick : 0;
+	}
+
+	const float allowDistance =
+		aMovement->GetMoveSpeed() * (static_cast<float>(unprocessMs) * 0.001f) + Config::Player::ATTACK_TOLERANCE_LENGTH;
+	const float allowDistanceSq = allowDistance * allowDistance;
+
+	float posDiffSq = serverPos.DistanceSq(clientPos);
+	if (posDiffSq > allowDistanceSq)
+	{
+		// 이상패킷
+		LOG_WARN(L"[SuspiciousPacket] possDiff is to far -> distance: " + std::to_wstring(sqrt(posDiffSq)) + L" AllowDistance: " + std::to_wstring(allowDistance));
+
+		if (GServerStats)
+		{
+			GServerStats->game.suspiciousPacket.fetch_add(1);
+		}
+		return;
+	}
 
 	const uint32 skillId = pkt.skillid();
 

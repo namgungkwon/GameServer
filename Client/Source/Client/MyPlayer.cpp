@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HAL/PlatformTime.h"
 
 AMyPlayer::AMyPlayer()
 {
@@ -113,16 +114,15 @@ void AMyPlayer::MoveTick(float DeltaTime)
 		InputDirection = CurrentInput.GetSafeNormal();
 
 	// 2. 플레이어 Yaw 기준으로 입력 회전
-	const float PlayerYaw = GetActorRotation().Yaw;
-	const FRotator YawRotation(0.f, PlayerYaw, 0.f);
+	const FRotator YawRotation(0.f, GetActorRotation().Yaw, 0.f);
 
 	const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector Right   = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 	// CurrentInput.Y = 전진/후진, CurrentInput.X = 좌/우라고 가정
 	FVector MoveDirection =
-		Forward * CurrentInput.X +
-		Right   * CurrentInput.Y;
+		Forward * InputDirection.X +
+		Right   * InputDirection.Y;
 
 	if (!MoveDirection.IsNearlyZero())
 	{
@@ -131,10 +131,11 @@ void AMyPlayer::MoveTick(float DeltaTime)
 	
 	FVector MoveVelocity = MoveDirection * moveSpeed;
 
-	FVector CorrectionVelocity = Diff * 3.f;
-	if (CorrectionVelocity.Size() > 0.5f)
+	FVector CorrectionVelocity = Diff * CorrectionStrength;
+	const float CorrectionSpeed = CorrectionVelocity.Size();
+	if (CorrectionSpeed > MaxCorrectionSpeed)
 	{
-		CorrectionVelocity = CorrectionVelocity.GetSafeNormal() * 0.5f;
+		CorrectionVelocity = CorrectionVelocity.GetSafeNormal() * MaxCorrectionSpeed;
 	}
 
 	MoveVelocity += CorrectionVelocity;
@@ -142,6 +143,11 @@ void AMyPlayer::MoveTick(float DeltaTime)
 	FVector NextLocation = CurrentLocation + FVector(MoveVelocity.X * DeltaTime, MoveVelocity.Y * DeltaTime, 0.f);
 
 	SetActorLocation(NextLocation, true);
+}
+
+uint64 AMyPlayer::GetLocalTick()
+{
+	return static_cast<uint64>(FPlatformTime::ToMilliseconds64(FPlatformTime::Cycles64()));
 }
 
 void AMyPlayer::SpawnPkt(const Protocol::ObjectData& Pkt)
@@ -231,6 +237,8 @@ void AMyPlayer::SendMovePkt()
 	
 	moveData->set_yaw(GetActorRotation().Yaw);
 
+	Pkt.set_clienttick(GetLocalTick());
+
 	if (CurrentInput.IsNearlyZero())
 	{
 		int a = 0;
@@ -273,7 +281,7 @@ void AMyPlayer::SendAttackPkt(TArray<AGameObject*> targets, int32 skillId)
 	{
 		Pkt.add_targets(target->GetObjectId());
 	}
-	
+	Pkt.set_clienttick(GetLocalTick());
 	SEND_PACKET(Pkt);
 }
 
