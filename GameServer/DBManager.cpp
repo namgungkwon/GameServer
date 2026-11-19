@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <chrono>
 #include "DBManager.h"
 #include "Jobqueue.h"
 
@@ -12,19 +13,18 @@
 ///////////////////////////////////////////////////////
 bool DBManager::Init(const DBConfig& config)
 {
-	wstring connStr;
-
+	wstring connStr = L"Driver={ODBC Driver 18 for SQL Server};";
+	connStr += L"Server="; connStr += config.host; connStr += L";";
+	connStr += L"database="; connStr += config.name; connStr += L";";
+	
 	if (config.trustedConnection)
 	{
-		connStr =
-			L"Driver={ODBC Driver 18 for SQL Server};		\
-		    Server=(localdb)\\ProjectModels;				\
-		    Database=portfolio;								\
-		    Trusted_Connection=Yes;";
+		connStr += L"Trusted_Conntection=Yes;";
 	}
 	else
 	{
-		// TODO
+		connStr += L"UID="; connStr += config.user; connStr += L";";
+		connStr += L"PID="; connStr += config.password; connStr += L";";
 	}
 
 	if (GDBConnectionPool->Connect(config.threads, connStr.c_str()) == false)
@@ -35,6 +35,8 @@ bool DBManager::Init(const DBConfig& config)
 	{
 		worker = MakeShared<JobQueue>();
 	}
+
+	::QueryPerformanceFrequency(&_freq);
 
 	return true;
 }
@@ -64,7 +66,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 		bind.BindParam(1, newId, static_cast<int32>(wName.size()));
 		bind.BindParam(2, templateId);
 
-		if (bind.Execute() == false)
+		if (Execute([&] { return bind.Execute(); }) == false)
 		{
 			return Protocol::CREATEACCOUNT_DUPLICATION;
 		}
@@ -80,7 +82,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 		bind.BindParam(0, newId, static_cast<int32>(wName.size()));
 		bind.BindCol(0, oPlayerId);
 
-		if (bind.Execute() == false || bind.Fetch() == false)
+		if (Execute([&] { return bind.Execute(); }) == false || bind.Fetch() == false)
 			return Protocol::DB_ERROR;
 	}
 
@@ -104,7 +106,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 		bind.BindParam(6, GGameData->GetPlayerData(1)->maxMp);
 		bind.BindParam(7, exp);
 
-		if (bind.Execute() == false)
+		if (Execute([&] { return bind.Execute(); }) == false)
 		{
 			return Protocol::DB_ERROR;
 		}
@@ -120,7 +122,7 @@ Protocol::Result DBManager::CreateCharacter(uint64 accountDBId, const string& na
 		bind.BindParam(0, newId, static_cast<int32>(wName.size()));
 		bind.BindCol(0, oPlayerId);
 
-		if (bind.Execute() == false || bind.Fetch() == false)
+		if (Execute([&] { return bind.Execute(); }) == false || bind.Fetch() == false)
 			return Protocol::DB_ERROR;
 	}
 
@@ -153,7 +155,7 @@ Protocol::Result DBManager::GetPlayerList(uint64 accoutDBId, OUT Vector<Protocol
 		bind.BindCol(2, oName);
 		bind.BindCol(3, oLevel);
 
-		if (bind.Execute() == false)
+		if (Execute([&] { return bind.Execute(); }) == false)
 			return Protocol::DB_ERROR;
 
 		while (bind.Fetch())
@@ -205,7 +207,7 @@ bool DBManager::GetPlayerDetail(uint64 accountDBId, int64 playerId, PlayerSummar
 	bind.BindCol(8, oMp);
 	bind.BindCol(9, oExp);
 
-	if (bind.Execute() == false || bind.Fetch() == false)
+	if (Execute([&] { return bind.Execute(); }) == false || bind.Fetch() == false)
 		return false;
 
 	summary->playerId		= playerId;
@@ -248,7 +250,7 @@ void DBManager::SavePlayer(uint64 playerId, const PlayerLoadData* load)
 	bind.BindParam(6, yaw);
 	bind.BindParam(7, playerId);
 
-	if (bind.Execute() == false)
+	if (Execute([&] { return bind.Execute(); }) == false)
 		return;
 }
 
@@ -264,6 +266,26 @@ void DBManager::SaveLevelUp(uint64 playerId, int32 level)
 	bind.BindParam(0, level);
 	bind.BindParam(1, playerId);
 
-	if (bind.Execute() == false)
+	if (Execute([&] { return bind.Execute(); }) == false)
 		return;
+}
+
+bool DBManager::Execute(std::function<bool()> fn)
+{
+	LARGE_INTEGER start; ::QueryPerformanceCounter(&start);
+	bool ret = fn();
+
+	if (GServerStats)
+	{
+		LARGE_INTEGER end; ::QueryPerformanceCounter(&end);
+		int64 spendTime = end.QuadPart - start.QuadPart;
+
+		GServerStats->DB.queryCount.fetch_add(1);
+		if (ret == false)
+			GServerStats->DB.queryFailed.fetch_add(1);
+
+		GServerStats->DB.queryTotalUs.fetch_add((spendTime * 1000000 / _freq.QuadPart));
+	}
+	
+	return ret;
 }

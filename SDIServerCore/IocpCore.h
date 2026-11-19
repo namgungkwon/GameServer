@@ -34,4 +34,7 @@ public:
 
 private:
 	HANDLE			_iocpHandle;
+
+private:
+	LARGE_INTEGER	_freq;
 };

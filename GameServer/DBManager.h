@@ -51,8 +51,14 @@ public:
     void                SavePlayer(uint64 playerId, const PlayerLoadData* load);
     void                SaveLevelUp(uint64 playerId, int32 level);
 
+private:
+    bool                Execute(std::function<bool()> fn);
+
 
 private:
 	Vector<JobQueueRef> _workers;
 	Atomic<uint32>      _choiceWorker;
+
+private:
+    LARGE_INTEGER       _freq;
 };

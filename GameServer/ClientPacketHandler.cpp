@@ -10,7 +10,7 @@
 #include "GameScene.h"
 #include "MovementComponent.h"
 
-
+#pragma optimize("", off)
 ///////////////////////////////////////////////////////
 //	<	ClientPacketHandler	>
 ///////////////////////////////////////////////////////
@@ -58,7 +58,8 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
 bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_CHARACTER& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false) 
+        return false;
 
     const uint64 accountId = gameSession->GetAccountDBId();
     const string name = pkt.name();
@@ -111,13 +112,13 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
 bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false) 
+        return false;
 
     // 중복 요청 검사
     if (gameSession->TryEnterGame() == false)
     {
         LOG_WARN(L"Request Client EnterGame Duplicate");
-        PROFILE_END(L"Handle_CG_ENTER_GAME");
         return true;
     }
 
@@ -153,7 +154,8 @@ bool Handle_CG_ENTER_GAME(PacketSessionRef& session, Protocol::CG_ENTER_GAME& pk
 bool Handle_CG_LEAVE_GAME(PacketSessionRef& session, Protocol::CG_LEAVE_GAME& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false) 
+        return false;
 
     gameSession->LeavePlayer();
 
@@ -163,15 +165,16 @@ bool Handle_CG_LEAVE_GAME(PacketSessionRef& session, Protocol::CG_LEAVE_GAME& pk
 bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false) 
+        return false;
 
     PlayerRef player = gameSession->GetPlayer();
-    if (player == nullptr)
-        return false;
+    if (player == nullptr) 
+        return true;
 
     GameSceneRef scene = player->GetScene();
     if (scene == nullptr)
-        return false;
+        return true;
 
     scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<ReviveRequest>(pkt, player)));
 
@@ -181,26 +184,27 @@ bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt)
 bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false)
+        return false;
 
     PlayerRef player = gameSession->GetPlayer();
     if (player == nullptr)
-        return false;
+        return true;
 
     GameSceneRef scene = player->GetScene();
     if (scene == nullptr)
-        return false;
+        return true;
 
     MovementComponent* mc = player->GetComponent<MovementComponent>();
     if (mc == nullptr)
-        return false;
+        return true;
 
     uint64 clientTick = pkt.clienttick();
 
     MoveJob oldJob = mc->GetPendingJob();
     if (clientTick < oldJob.sendClientTick)
     {
-        return false;
+        return true;
     }
 
     MoveJob job;
@@ -218,15 +222,16 @@ bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
 bool Handle_CG_ATTACK(PacketSessionRef& session, Protocol::CG_ATTACK& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false)
+        return false;
 
     PlayerRef player = gameSession->GetPlayer();
     if (player == nullptr)
-        return false;
+        return true;
     
     GameSceneRef scene = player->GetScene();
     if (scene == nullptr)
-        return false;
+        return true;
 
     scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<AttackRequest>(pkt, player)));
 
@@ -237,17 +242,19 @@ bool Handle_CG_ATTACK(PacketSessionRef& session, Protocol::CG_ATTACK& pkt)
 bool Handle_CG_CHAT(PacketSessionRef& session, Protocol::CG_CHAT& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-    if (gameSession->IsAuthenticated() == false) return false;
+    if (gameSession->IsAuthenticated() == false)
+        return false;
 
     PlayerRef player = gameSession->GetPlayer();
     if (player == nullptr)
-        return false;
+        return true;
 
     GameSceneRef scene = player->GetScene();
     if (scene == nullptr)
-        return false;
+        return true;
 
     scene->DoAsync(&GameScene::Request, static_pointer_cast<SceneRequest>(MakeShared<ChatRequest>(pkt, player)));
 
     return true;
 }
+#pragma optimize("", on)

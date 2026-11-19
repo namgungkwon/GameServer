@@ -29,7 +29,11 @@ void GameSession::OnDisconnected()
 void GameSession::OnRecvPacket(BYTE* buffer, int32 len)
 {
 	PacketSessionRef session = GetPacketSessionRef();
-	ClientPacketHandler::HandlePacket(session, buffer, len);
+
+	if (ClientPacketHandler::HandlePacket(session, buffer, len) == false)
+	{
+		Disconnect();
+	}
 }
 
 void GameSession::LeavePlayer()

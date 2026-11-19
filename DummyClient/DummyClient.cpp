@@ -179,6 +179,7 @@ void DummyClient::EnterGame()
 {
 	currentTick = GetTickCount64();
 	nextMoveTick = currentTick + MOVE_TIME;
+	nextDirChange = currentTick + GetRandom(MOVE_DIRECTION_CHANGE_MIN, MOVE_DIRECTION_CHANGE_MAX);
 	nextAttackTick = currentTick + GetRandom(ATTACK_TIME_MIN, ATTACK_TIME_MAX);
 	nextChatTick = currentTick + GetRandom(CHAT_TIME_MIN, CHAT_TIME_MAX);
 	nextWorldChatTick = currentTick + CHAT_WORLD_TIME;

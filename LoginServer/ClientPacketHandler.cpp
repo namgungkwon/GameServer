@@ -37,7 +37,6 @@ bool Handle_CL_CREATE_ACCOUNT(PacketSessionRef& session, Protocol::CL_CREATE_ACC
 
 bool Handle_CL_LOGIN(PacketSessionRef& session, Protocol::CL_LOGIN& pkt)
 {
-    PROFILE_BEGIN(L"Handle_CL_LOGIN");
     GDBManager->DoAsync(Job([id = pkt.id(), password = pkt.password(), session]()
         {
             uint64 accountId;
@@ -64,6 +63,5 @@ bool Handle_CL_LOGIN(PacketSessionRef& session, Protocol::CL_LOGIN& pkt)
                 });
 
         }));
-    PROFILE_END(L"Handle_CL_LOGIN");
     return true;
 }

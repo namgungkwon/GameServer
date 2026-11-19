@@ -15,10 +15,7 @@ int main()
 			{
 				while (true)
 				{
-					Profile profile(L"service::Process");
-					//PROFILE_BEGIN(L"service::Process");
 					service->Process();
-					//PROFILE_END(L"service::Process");
 				}
 			});
 	}

@@ -91,6 +91,7 @@ void ServerStats::Rendering()
     uint64 DBCount          = DB.queryCount.exchange(0);
     uint64 DBFail           = DB.queryFailed.load();
     uint64 DBTotalUs        = DB.queryTotalUs.exchange(0);
+    uint64 DBAvgUs          = (DBCount > 0) ? (DBTotalUs / DBCount) : 0;
 
     // System
     double cpuUsage         = system.cpuUsage;
@@ -150,7 +151,7 @@ void ServerStats::Rendering()
     stream << L"[DB]     ";
     stream << L"   Queries: " << DBCount << L"/s";
     stream << L"   Failed: " << DBFail;
-    stream << L"   DBTime: " << DBTotalUs << L"us";
+    stream << L"   DBAvgTime: " << DBAvgUs << L"us";
     stream << L"\033[K\n";
 
     // System

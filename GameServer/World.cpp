@@ -39,6 +39,8 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
         return;
 
     PlayerRef player = MakeShared<Player>();
+    player->SetSession(session);
+    session->SetPlayer(player);
     if (player->Init(summary, load) == false)
     {
         Protocol::GC_ENTER_GAME pkt;
@@ -48,10 +50,7 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
         session->ReleaseEnterGame();
         return;
     }
-
-    player->SetSession(session);
-    session->SetPlayer(player);
-
+    else
     {
         Protocol::GC_ENTER_GAME pkt;
         pkt.set_success(true);

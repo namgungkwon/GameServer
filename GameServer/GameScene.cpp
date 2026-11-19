@@ -18,16 +18,20 @@ void GameScene::StartUpdate()
 
 void GameScene::Update()
 {
-	PROFILE_BEGIN(L"GameScene::Update");
+	Profile profile0(L"GameScene::Update()");
+
 	const uint64 now = ::GetTickCount64();
-	const uint64 updateTickMs = Config::World::WORLD_UPDATE_TICK;
+	const uint64 updateTickMs = 30;//Config::World::WORLD_UPDATE_TICK;
+
+	const uint64 expectedTickCount = _lastUpdateTick + updateTickMs;
+	const uint64 deltaTime = now - _lastUpdateTick;
 
 	if (GServerStats)
-	{
-		const uint64 expectedTickCount = _lastUpdateTick + updateTickMs;
-		if (now > expectedTickCount)
+	{	
+		if (now > expectedTickCount)//if (now > expectedTickCount)
 		{
-			const uint64 lagMs = now - expectedTickCount;
+			//const uint64 lagMs = now - expectedTickCount;
+			const uint64 lagMs = deltaTime - updateTickMs;
 			GServerStats->game.lagTickCount.fetch_add(1);
 			GServerStats->game.lagTickMs.fetch_add(lagMs);
 
@@ -41,23 +45,29 @@ void GameScene::Update()
 		GServerStats->game.tickCount.fetch_add(1);
 	}
 
-	const uint64 deltaTime = now - _lastUpdateTick;
-	_lastUpdateTick = now;
-
-	DoTimer(Config::World::WORLD_UPDATE_TICK, &GameScene::Update);
-
-	for (const ZoneRef& zone : _zones)
+	_lastUpdateTick = expectedTickCount;
+	const uint64 nextDelay = (expectedTickCount > now) ? expectedTickCount - now : 0;
+	DoTimer(nextDelay, &GameScene::Update);
+	
 	{
-		zone->Update(_lastUpdateTick, deltaTime);
+		Profile profile1(L"ZoneUpdate");
+		for (const ZoneRef& zone : _zones)
+		{
+			zone->Update(_lastUpdateTick, deltaTime);
+		}
 	}
-
-	ProcessMovingEntity();
-
-	for (const ZoneRef& zone : _zones)
+	
 	{
-		zone->ClearPengingJobs();
+		Profile profile1(L"ProcessMovingEntity");
+		ProcessMovingEntity();
 	}
-	PROFILE_END(L"GameScene::Update");
+	{
+		Profile profile1(L"ClearPendingJobs");
+		for (const ZoneRef& zone : _zones)
+		{
+			zone->ClearPengingJobs();
+		}
+	}
 }
 
 void GameScene::ProcessMovingEntity()

@@ -24,7 +24,6 @@
 ///////////////////////////////////////////////////////
 void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
-	Profile p(L"AttackRequest::Execute");
 
 	if (attacker->GetState() == EntityState::Dead)
 		return;
@@ -163,7 +162,6 @@ void ReviveRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 ///////////////////////////////////////////////////////
 void ChatRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
-	Profile p(L"ChatRequest::Execute");
 	GameSceneRef targetScene = player->GetScene();
 	ZoneRef targetZone = player->GetZone();
 

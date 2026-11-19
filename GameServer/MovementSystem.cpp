@@ -13,7 +13,6 @@
 ///////////////////////////////////////////////////////
 void MovementSystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT Vector<EntityRef>& movingPlayer)
 {
-	PROFILE_BEGIN(L"MovementSystem::Update");
 	if (zone == nullptr)
 		return;
 
@@ -25,7 +24,6 @@ void MovementSystem::Update(ZoneRef zone, uint64 nowTick, uint64 deltaTime, OUT 
 				movingPlayer.push_back(player);
 		}
 	}
-	PROFILE_END(L"MovementSystem::Update");
 }
 
 bool MovementSystem::UpdatePlayerMove(PlayerRef player, uint64 nowTick, uint64 deltaTime)

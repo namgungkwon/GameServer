@@ -8,19 +8,18 @@
 
 bool DBManager::Init(const DBConfig& config)
 {
-	wstring connStr;
+	wstring connStr = L"Driver={ODBC Driver 18 for SQL Server};";
+	connStr += L"Server="; connStr += config.host; connStr += L";";
+	connStr += L"database="; connStr += config.name; connStr += L";";
 
 	if (config.trustedConnection)
 	{
-		connStr =
-			L"Driver={ODBC Driver 18 for SQL Server};		\
-		    Server=(localdb)\\ProjectModels;				\
-		    Database=portfolio;								\
-		    Trusted_Connection=Yes;";
+		connStr += L"Trusted_Conntection=Yes;";
 	}
 	else
 	{
-		// TODO
+		connStr += L"UID="; connStr += config.user; connStr += L";";
+		connStr += L"PID="; connStr += config.password; connStr += L";";
 	}
 
 	if (GDBConnectionPool->Connect(config.threads, connStr.c_str()) == false)

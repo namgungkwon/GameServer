@@ -130,8 +130,9 @@ void MeleeAttackEffect::Execute(GameScene* scene, DamageEvent event, const Entit
 				Protocol::GC_REWARD res;
 				res.set_exp(result.rewardExp);
 				SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
-				player->Send(sendBuffer);
 				player->GainExp(result.rewardExp);
+				if (ZoneRef zone = player->GetZone())
+					zone->BufferSend(sendBuffer, player);
 			}
 		};
 		};
