@@ -37,7 +37,7 @@
 ## DBManager ([GameServer/DBmanager.h](https://github.com/namgungkwon/GameServer/blob/main/GameServer/DBManager.h))
 
 - struct DBConn -> 일반적인 DB Query에 사용하는 구조체
-- struct DBTransactionGuard -> ACID 를 만족하기 위해 추가로 확장한 구조체
+- struct DBTransactionGuard -> 트랜잭션 시작·커밋·롤백을 보장하기 위한 RAII 기반 트랜잭션 관리 구조체
 
 ### 요청별 처리
 
