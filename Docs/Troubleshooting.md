@@ -19,8 +19,7 @@
 - 해당 PendingJob() 에서 송신하는 패킷의 Byte의 최대 크기를 계산해보았다.
 - Spawn Packet (382 * N) bytes, Despawn Packet (1 + (10 * N)) bytes, Move packet (39 * N) bytes([Common/Protocol.proto](https://github.com/namgungkwon/GameServer/blob/main/Common/Protobuf/Protocol.proto))
    - Google Proto는 같은 uint64 여도 크기에 따라 가변적인 크기로 보내기 때문에 최대 길이로 최대한 보수적으로 계산하였다. ex) 0 ~ 127 - 2byte, 128 ~ 16383 - 3bytes, ... , 최대 11 bytes
-   - 각 패킷의 크기는 Perplexity 를 사용하여 최대 크기를 계산하였음.
-- GameConfig에 해당 값을 기입하고 사용부에서 패킷이 일정 크기를 넘을 경우 바로 송신하여 일정 Byte를 넘지 못하게 코드를 개선하였다.
+- GameConfig에 해당 값을 기입하고 사용부에서 누적 패킷 크기가 임계값을 넘으면 즉시 Flush하여 새 SendBuffer를 사용한다.
 
 <img width="995" height="269" alt="SendBuffer Overwrite Config" src="https://github.com/user-attachments/assets/c21b2a4c-7919-4c1c-8d93-46cad62eab13" />
 
@@ -57,7 +56,7 @@
 | 2500 | 0 ~ 4 ms | 0.4 / 6.9 / 20.5 ms | 0.1 / 0.3 / 0.8 ms | 0.0 / 0.2 / 2.3 ms | 0.1 / 6.3 / 20.8 ms |
 | 3000 | 0 ~ 48 ms | 1.2 / 9.9 / 30.0 ms | 0.1 / 0.4 / 2.2 ms | 0.0 / 0.3 / 2.6 ms | 0.7 / 9.2 / 26.7 ms |
 
-- 측정수치는  GameSceneUpdate() (ZoneUpdate(), ProcessMovingEntity(), ClearPendingJob()) 표기
+- 측정수치는 최소, 평균, 최대 표기
 - 시간단위는 소수 첫째자리까지 표기(둘째자리에서 반올림)
 - 각 측정별 단위시간 내에 최대 시간을 기록하기 때문에 개별 합산값이 전체구간 합산을 초과할 수 있음
 
@@ -90,11 +89,11 @@
 | 2500 | 6.9 ms | 0.5 ms | - 6.4 ms |
 | 3000 | 9.9 ms | 0.7 ms | - 9.2 ms |
 - 평균 값 비교를 했을 때 Tick 처리 시간이 획기적으로 줄어드는 결과를 얻을 수 있었다.
-- 최대 값으로 비교를 하면 CCU 3000 기준 80 % 이상의 시간이 줄어들었다.
+- 최대 값으로 비교를 하면 CCU 3000 기준 최대값 기준 93 % 감소.
 
 # 기타 발생 문제들([오류수정사항/txt](https://github.com/namgungkwon/GameServer/blob/main/%EC%98%A4%EB%A5%98%20%EC%88%98%EC%A0%95%20%EC%82%AC%ED%95%AD.txt))
 | 문제 | 원인 | 결과 | 해결 후 배운 점 |
 |---|---|---|---|
 | 서버 공회전시에도 CPU 점유율 40% | CondVar의 Wake 조건이 잘못되었음 | 개별Thread점유율 8% -> 0 ~ 0.2% 로 정상적인 동작 확인 | CondVar 사용에 있어서 많은 지식을 얻을 수 있었다 |
 | CREATE_ID 시에 같은 아이디 중복 생성 가능 | wchar[255] name에서 실제 아이디 길이를 제외한 부분이 쓰레기 값으로 들어가 있어서 byte를 읽는 DB에서 전혀 다른 값으로 받아들이게 된 것 | 같은 아이디 중복 처리 확인 | 문자열 변환에 있어서 지식의 부족함을 알았다 |
-| Client 종료시 접속 유저의 이동 오류 | 코드를 수정하는 과정에서 return을 continue로 변경해주지 않아서 발생함 | 접속 종료시에도 정상적인 이동 수행확인 | 코드를 수정하고 난 이후에 해당 함수의 흐름을 전체 점검하는 습관을 들여야겠다는 생각을 하게 되었다.|
+| Client 종료시 접속 유저의 이동 오류 | 코드를 수정하는 과정에서 return을 continue로 변경해주지 않아서 발생함 | 접속 종료시에도 정상적인 이동 수행확인 | 수정 후 영향 범위와 제어 흐름을 재검증하는 습관을 들여야겠다는 생각을 하게 되었다.|
