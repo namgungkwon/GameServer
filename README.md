@@ -2,7 +2,7 @@
 # C++ IOCP 멀티플레이 게임 서버
 > Window IOCP 비동기 네트워크를 이용하여 CCU 3000 에서 안정화를 목표로 구현하고 있습니다.
 
-| [패킷설계](https://github.com/namgungkwon/GameServer/tree/main/Docs/Protocol.md) | [DB 설계](https://github.com/namgungkwon/GameServer/blob/main/Docs/Database.md) |
+| [패킷설계](https://github.com/namgungkwon/GameServer/tree/main/Docs/Protocol.md) | [DB 설계](https://github.com/namgungkwon/GameServer/blob/main/Docs/Database.md) | [트러블슈팅](https://github.com/namgungkwon/GameServer/blob/main/Docs/Troubleshooting.md) |
 
 ## 환경
 
