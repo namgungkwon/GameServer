@@ -28,7 +28,7 @@
 |CG\_AUTH\_TOKEN|토큰 검증|token|
 |GC\_AUTH\_TOKEN|토큰 검증(Redis) 응답, 캐릭터 목록(DB)|token, repeated summary|
 |CG\_CREATE\_CHARACTER|캐릭터 생성|name, templateId|
-|GC\_CRAETE\_CHARACTER|캐릭터 생성 응답(DB중복 확인), 업데이트 캐릭터 목록|result, repeated summary|
+|GC\_CREATE\_CHARACTER|캐릭터 생성 응답(DB중복 확인), 업데이트 캐릭터 목록|result, repeated summary|
 |CG\_ENTER\_GAME|인게임 입장|playerId|
 |GC\_ENTER\_GAME|인게임 입장 응답|success, objectData|
 |CG\_LEAVE\_GAME|퇴장|objectId|
@@ -52,6 +52,5 @@
 
 * 이동 : PacketHandler - Player::SetPendingJob() >> SceneUpdate시 MovementSystem에서 유효성 검사 - SceneUpdate시 GC\_MOVE, zone 변경시 GC\_SPAWN, GC\_DESPAWN >> PacketSender에서 송신
 * 공격 : PacketHandler - AttackRequest로 Job요청 >> SceneUpdate시 Execute호출 - 유효성검사 - GC\_Attack - 피격 판정 - GC\_Damage - 사망시 - GC\_REWARD >> PacketSender에서 송신
-
-\- 채팅 : PacketHandler - AttackRequest로 Job요청 >> SceneUpdate시 Execute호출 - 유효성검사 - GC\_CHAT(world or local) >> PacketSender에서 송신
+- 채팅 : PacketHandler - ChatRequest로 Job요청 >> SceneUpdate시 Execute호출 - 유효성검사 - GC\_CHAT(world or local) >> PacketSender에서 송신
 
