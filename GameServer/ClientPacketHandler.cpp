@@ -10,10 +10,10 @@
 #include "GameScene.h"
 #include "MovementComponent.h"
 
-#pragma optimize("", off)
 ///////////////////////////////////////////////////////
 //	<	ClientPacketHandler	>
 ///////////////////////////////////////////////////////
+#pragma optimize("", off)
 bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
@@ -33,7 +33,7 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
             return;
         }
 
-        GDBManager->DoAsync(Job([accountId, gameSession = std::move(gameSession)]()
+        GDBManager->DoAsync(Job([accountId, gameSession = gameSession]()
             {
                 Protocol::GC_AUTH_TOKEN res;
                 Vector<Protocol::ObjectSummaryData> summaries;
@@ -49,12 +49,15 @@ bool Handle_CG_AUTH_TOKEN(PacketSessionRef& session, Protocol::CG_AUTH_TOKEN& pk
                 gameSession->SetAccountDBId(accountId);
                 SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(res);
                 gameSession->Send(sendBuffer);
-            }));
+            })
+        );
+        
+        }
+    );
 
-        });
     return true;
 }
-
+#pragma optimize("", on)
 bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_CHARACTER& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
@@ -88,7 +91,7 @@ bool Handle_CG_CREATE_CHARACTER(PacketSessionRef& session, Protocol::CG_CREATE_C
                 return;
             }
 
-            GDBManager->DoAsync(Job([accountId, gameSession = std::move(gameSession)]()
+            GDBManager->DoAsync(Job([accountId, gameSession = gameSession]()
                 {
                     Protocol::GC_CREATE_CHARACTER res;
                     Vector<Protocol::ObjectSummaryData> summaries;
@@ -181,6 +184,7 @@ bool Handle_CG_REVIVE(PacketSessionRef& session, Protocol::CG_REVIVE& pkt)
     return true;
 }
 
+#pragma optimize("", off)
 bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
@@ -199,26 +203,17 @@ bool Handle_CG_MOVE(PacketSessionRef& session, Protocol::CG_MOVE& pkt)
     if (mc == nullptr)
         return true;
 
-    uint64 clientTick = pkt.clienttick();
-
-    MoveJob oldJob = mc->GetPendingJob();
-    if (clientTick < oldJob.sendClientTick)
-    {
-        return true;
-    }
-
     MoveJob job;
     Protocol::Vector3 rawVelocity = pkt.movedata().velocity();
     job.velocity = Vector3(rawVelocity.x(), rawVelocity.y(), rawVelocity.z());
     job.location = UtilMath::ToServerLocation(pkt.movedata().location());
     job.yaw = pkt.movedata().yaw();
     job.sendClientTick = pkt.clienttick();
-
-    player->GetComponent<MovementComponent>()->SetPendingJob(job);
+    mc->PushPendingJob(job);
 
     return true;
 }
-
+#pragma optimize("", on)
 bool Handle_CG_ATTACK(PacketSessionRef& session, Protocol::CG_ATTACK& pkt)
 {
     GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
@@ -257,4 +252,3 @@ bool Handle_CG_CHAT(PacketSessionRef& session, Protocol::CG_CHAT& pkt)
 
     return true;
 }
-#pragma optimize("", on)

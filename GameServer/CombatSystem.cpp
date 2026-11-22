@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CombatSystem.h"
 #include "Entity.h"
+#include "player.h"
 #include "GameData.h"
 #include "Zone.h"
 
@@ -84,6 +85,12 @@ const DamageResult CombatSystem::MakeDamageResult(const ZoneRef& zone, DamageEve
 				result.rewardExp = target->GetExp();
 				target->SetState(EntityState::Dead);
 			}
+		}
+
+		if (target->GetType() == Protocol::OBJECT_CATEGORY_PLAYER)
+		{
+			PlayerRef player = static_pointer_cast<Player>(target);
+			player->SetDirtyFlag(PLAYER_DIRTY_PLAYER_DETAIL);
 		}
 	}
 

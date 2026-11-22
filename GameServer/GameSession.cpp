@@ -8,6 +8,12 @@
 #include "job.h"
 #include "World.h"
 
+#pragma optimize("", off)
+GameSession::~GameSession()
+{
+	LOG_INFO(L"Delete Session");
+}
+#pragma optimize("", on)
 
 ///////////////////////////////////////////////////////
 //	<	GameSession	>
@@ -46,9 +52,8 @@ void GameSession::LeavePlayer()
 
 	SetPlayer(nullptr);
 
-	GDBManager->DoAsync(Job([id = player->GetDBId(),data = player->MakeLoadData()]() {
-		GDBManager->SavePlayer(id, &data);
-		}));
+	player->SetDirtyFlag(PLAYER_DIRTY_ALL);
+	player->UpdateDB();
 
 	GWorld->DoAsync(&World::LeaveEntity, static_pointer_cast<Entity>(player));
 }

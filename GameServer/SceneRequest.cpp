@@ -18,13 +18,11 @@
 #include "SkillComponent.h"
 #include "MovementComponent.h"
 
-#pragma optimize("", off)
 ///////////////////////////////////////////////////////
 //	<	AttackRequest	>
 ///////////////////////////////////////////////////////
 void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 {
-
 	if (attacker->GetState() == EntityState::Dead)
 		return;
 
@@ -50,17 +48,12 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 
 	// 처리되지 않은 이동을 여유거리로 선정
 	uint64 clientTick = pkt.clienttick();
-	MoveJob job = aMovement->GetPendingJob();
+	uint64 lastProcessedTick = aMovement->GetLastMoveProcessedClientTick();
 
-	uint64 unprocessMs = 0;
-	if (job.velocity.IsZero() == false)
-	{
-		uint64 lastMoveRecieveTick = aMovement->GetPendingJob().sendClientTick;
-		unprocessMs = (lastMoveRecieveTick < clientTick) ? clientTick - lastMoveRecieveTick : 0;
-	}
+	uint64 unprocessMs = (lastProcessedTick < clientTick) ? clientTick - lastProcessedTick : 0;
 
 	const float allowDistance =
-		aMovement->GetMoveSpeed() * (static_cast<float>(unprocessMs) * 0.001f) + Config::Player::ATTACK_TOLERANCE_LENGTH;
+		aMovement->GetMoveSpeed() * (static_cast<float>(unprocessMs) * 0.001f) + Config::Validation::ATTACK_TOLERANCE_LENGTH;
 	const float allowDistanceSq = allowDistance * allowDistance;
 
 	float posDiffSq = serverPos.DistanceSq(clientPos);
@@ -75,6 +68,7 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 		}
 		return;
 	}
+
 
 	const uint32 skillId = pkt.skillid();
 
@@ -107,7 +101,6 @@ void AttackRequest::Execute(const GameSceneRef& scene, uint64 currentTick)
 
 	skillInstance->Execute(targets);
 }
-#pragma optimize("", on)
 
 ///////////////////////////////////////////////////////
 //	<	ReviveRequest	>

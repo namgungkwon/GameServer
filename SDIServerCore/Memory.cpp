@@ -82,7 +82,6 @@ Memory::~Memory()
 	_pools.clear();
 }
 
-#pragma optimize("", off)
 void* Memory::Allocate(size_t size)
 {
 	MemoryHeader* header = nullptr;
@@ -109,7 +108,6 @@ void* Memory::Allocate(size_t size)
 
 	return MemoryHeader::AttachHeader(header, allocSize);
 }
-#pragma optimize("", on)
 
 void Memory::Release(void* ptr)
 {

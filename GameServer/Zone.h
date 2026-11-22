@@ -16,6 +16,7 @@ public:
 	void								Init();
 	void								Update(uint64 now, uint64 deltaTime);
 	void								ClearPengingJobs();
+	void								UpdatePlayerDB();
 
 public:
 	void								EnterZone(EntityRef entity);

@@ -14,5 +14,5 @@ public:
 	static bool			UpdatePlayerMove(PlayerRef player, uint64 nowTick, uint64 deltaTime);
 
 private:
-	static Vector3		GetNextPos(MovementComponent* mc, MoveJob& job, uint64 deltaTime);
+	static Vector3		GetNextPos(const Vector3& location, float moveSpeed, const MoveJob& job, uint64 deltaTime);
 };

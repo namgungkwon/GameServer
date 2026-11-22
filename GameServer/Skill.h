@@ -61,7 +61,7 @@ public:
 	bool Execute(Vector<EntityRef>& targets);
 
 private:
-	EntityRef _owner;
+	std::weak_ptr<Entity> _owner;
 	GETSET(SkillDefinitionRef, _definition, Definition);
 
 private:

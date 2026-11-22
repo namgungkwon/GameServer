@@ -66,12 +66,6 @@ void Zone::LeaveZone(EntityRef entity)
 	case Protocol::OBJECT_CATEGORY_PLAYER:
 	{
 		_players.erase(objectId);
-		if (_players.empty())
-		{
-			_pendingSpawns.clear();
-			_pendingDespawns.clear();
-			_pendingMoves.clear();
-		}
 		break;
 	}
 	case Protocol::OBJECT_CATEGORY_MONSTER:
@@ -161,7 +155,7 @@ void Zone::BufferSend(SendBufferRef sendBuffer, PlayerRef player)
 }
 
 void Zone::BufferBroadCast(SendBufferRef sendBuffer, uint64 expectId)
-{
+{	
 	Vector<PlayerRef> targets;
 	targets.reserve(_players.size());
 	for (auto& [id, player] : _players)
@@ -183,6 +177,9 @@ void Zone::ClearPengingJobs()
 {
 	if (_players.empty())
 	{
+		_pendingSpawns.clear();
+		_pendingDespawns.clear();
+		_pendingMoves.clear();
 		return;
 	}
 
@@ -233,5 +230,13 @@ void Zone::ClearPengingJobs()
 		if (pkt.movedata_size() > 0)
 			PacketBroadCast(pkt);
 		_pendingMoves.clear();
+	}
+}
+
+void Zone::UpdatePlayerDB()
+{
+	for (auto& [id, object] : _players)
+	{
+		object->UpdateDB();
 	}
 }

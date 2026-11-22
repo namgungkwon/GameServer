@@ -46,4 +46,5 @@ private:
 
 private:
 	uint64			_lastUpdateTick = 0;
+	uint64			_lastDBUpdateTick = 0;
 };

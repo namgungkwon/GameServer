@@ -23,8 +23,8 @@ public:
 public:
 	bool			CanMove(uint64 now)						{ return now > _moveDelayEndTick; }
 
-	void			SetPendingJob(const MoveJob& job)		{ WRITE_LOCK; pendingJob = job;  }
-	MoveJob			GetPendingJob()							{ WRITE_LOCK; return pendingJob; }
+	void			PushPendingJob(MoveJob job);
+	Vector<MoveJob>	GetPendingJob();
 
 	void			SetMoveSpeed(float moveSpeed)			{ _moveSpeed = UtilMath::Max(moveSpeed, 0.f); }
 	float			GetMoveSpeed()							{ return _moveSpeed; }
@@ -34,8 +34,8 @@ public:
 
 private:
 	USE_LOCK;
-	MoveJob			pendingJob					= MoveJob();
-	uint64			_lastMoveReceiveClientTick;
+	Vector<MoveJob>	_pendingJob;
+	GET(uint64,			_lastMoveProcessedClientTick, LastMoveProcessedClientTick);
 
 private:
 	float			_moveSpeed					= 0.f;

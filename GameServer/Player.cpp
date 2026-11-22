@@ -15,7 +15,7 @@
 ///////////////////////////////////////////////////////
 Player::~Player()
 {
-	//LOG_INFO(L"DeletePlayer");
+
 }
 
 bool Player::Init(const PlayerSummaryData& summary, const PlayerLoadData& load)
@@ -40,7 +40,7 @@ bool Player::Init(const PlayerSummaryData& summary, const PlayerLoadData& load)
 
 	// Component
 	MovementComponent* mc = AddComponent<MovementComponent>(shared_from_this());
-	mc->SetPendingJob(MoveJob{ GetLocation(), Vector3(), GetYaw() });
+	mc->PushPendingJob(MoveJob{ GetLocation(), Vector3(), GetYaw() });
 
 	StatComponent* sc = AddComponent<StatComponent>(shared_from_this());
 	sc->SetCurrentHP(load.hp);
@@ -62,7 +62,7 @@ void Player::Respawn(const Vector3& respawnLocation)
 	sc->SetCurrentMP(sc->GetMaxMP());
 
 	MovementComponent* mc = AddComponent<MovementComponent>(shared_from_this());
-	mc->SetPendingJob(MoveJob{ respawnLocation, Vector3(), GetYaw() });
+	mc->PushPendingJob(MoveJob{ respawnLocation, Vector3(), GetYaw() });
 }
 
 void Player::GainExp(uint64 exp)
@@ -155,6 +155,18 @@ SendBufferRef Player::SendInfoMessage(const string& message)
 	pkt.set_chat(message);
 
 	return ClientPacketHandler::MakeSendBuffer(pkt);
+}
+
+void Player::UpdateDB()
+{
+	if (_dirtyFlag == PLAYER_DIRTY_NONE)
+		return;
+
+	if (_dirtyFlag & PLAYER_DIRTY_PLAYER_DETAIL)
+	{
+		GDBManager->DoAsync(Job([_playerDBId = _playerDBId, loadData = std::move(MakeLoadData())]() {
+			GDBManager->SavePlayer(_playerDBId, &loadData); }));
+	}
 }
 
 bool Player::InitPlayerLevelData(int32 level)

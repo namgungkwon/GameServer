@@ -110,8 +110,11 @@ void AMyPlayer::MoveTick(float DeltaTime)
 
 	FVector InputDirection = FVector::ZeroVector;
 	
-	if (CurrentInput.IsNearlyZero() == false)
-		InputDirection = CurrentInput.GetSafeNormal();
+	if (CurrentInput.IsNearlyZero())
+	{
+		return;
+	}
+	InputDirection = CurrentInput.GetSafeNormal();
 
 	// 2. 플레이어 Yaw 기준으로 입력 회전
 	const FRotator YawRotation(0.f, GetActorRotation().Yaw, 0.f);
@@ -238,11 +241,6 @@ void AMyPlayer::SendMovePkt()
 	moveData->set_yaw(GetActorRotation().Yaw);
 
 	Pkt.set_clienttick(GetLocalTick());
-
-	if (CurrentInput.IsNearlyZero())
-	{
-		int a = 0;
-	}
 	
 	SEND_PACKET(Pkt);
 	LastSentInput = CurrentInput;

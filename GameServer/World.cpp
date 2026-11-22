@@ -47,7 +47,7 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
         pkt.set_success(false);
         SendBufferRef sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
         session->Send(sendBuffer);
-        session->ReleaseEnterGame();
+        session->Disconnect();
         return;
     }
     else
@@ -74,14 +74,15 @@ void World::EnterPlayer(GameSessionRef session, PlayerSummaryData summary, Playe
                 }
                 });
         }
-    }
 
-    if (GServerStats)
-    {
-        GServerStats->game.activePlayers.fetch_add(1);
+        if (GServerStats)
+        {
+            GServerStats->game.activePlayers.fetch_add(1);
+        }
     }
 }
 
+#pragma optimize("", off)
 bool World::EnterEntity(EntityRef entity)
 {
     if (entity == nullptr)
@@ -89,7 +90,10 @@ bool World::EnterEntity(EntityRef entity)
 
     const ZoneRef& mainZone = GetZoneByPos(entity->GetLocation());
     if (mainZone == nullptr)
+    {
+        const ZoneRef& temp = GetZoneByPos(entity->GetLocation());
         return false;
+    }
 
     const GameSceneRef& mainScene = mainZone->GetScene();
     if (mainScene == nullptr)
@@ -109,7 +113,6 @@ bool World::EnterEntity(EntityRef entity)
                 if (zone == mainZone) 
                 {
                     zone->EnterZone(entity);
-                    entity->SetScene(zone->GetScene());
                 }
                 zone->AddPendingSpawn(entity);
             }
@@ -119,11 +122,14 @@ bool World::EnterEntity(EntityRef entity)
 
     _entities[entity->GetObjectId()] = std::move(entity);
 }
+#pragma optimize("", on)
 
 void World::LeaveEntity(EntityRef entity)
 {
     if (entity == nullptr)
         return;
+
+    _entities.erase(entity->GetObjectId());
 
     ZoneRef mainZone = entity->GetZone();
     if (mainZone == nullptr)
@@ -148,7 +154,6 @@ void World::LeaveEntity(EntityRef entity)
             }
             }));
     }
-    _entities.erase(entity->GetObjectId());
 
     if (GServerStats)
     {

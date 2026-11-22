@@ -21,16 +21,17 @@ void GameScene::Update()
 	Profile profile0(L"GameScene::Update()");
 
 	const uint64 now = ::GetTickCount64();
-	const uint64 updateTickMs = 30;//Config::World::WORLD_UPDATE_TICK;
+	const uint64 updateTickMs = Config::World::WORLD_UPDATE_TICK;
 
 	const uint64 expectedTickCount = _lastUpdateTick + updateTickMs;
-	const uint64 deltaTime = now - _lastUpdateTick;
+	uint64 deltaTime = (now - _lastUpdateTick);
+	if (deltaTime > Config::World::WORLD_UPDATE_TICK_MAX)
+		deltaTime = Config::World::WORLD_UPDATE_TICK_MAX;
 
 	if (GServerStats)
 	{	
-		if (now > expectedTickCount)//if (now > expectedTickCount)
+		if (now > expectedTickCount)
 		{
-			//const uint64 lagMs = now - expectedTickCount;
 			const uint64 lagMs = deltaTime - updateTickMs;
 			GServerStats->game.lagTickCount.fetch_add(1);
 			GServerStats->game.lagTickMs.fetch_add(lagMs);
@@ -50,7 +51,7 @@ void GameScene::Update()
 	DoTimer(nextDelay, &GameScene::Update);
 	
 	{
-		Profile profile1(L"ZoneUpdate");
+		Profile profile(L"ZoneUpdate");
 		for (const ZoneRef& zone : _zones)
 		{
 			zone->Update(_lastUpdateTick, deltaTime);
@@ -58,14 +59,28 @@ void GameScene::Update()
 	}
 	
 	{
-		Profile profile1(L"ProcessMovingEntity");
+		Profile profile(L"ProcessMovingEntity");
 		ProcessMovingEntity();
 	}
+
 	{
-		Profile profile1(L"ClearPendingJobs");
+		Profile profile(L"ClearPendingJobs");
 		for (const ZoneRef& zone : _zones)
 		{
 			zone->ClearPengingJobs();
+		}
+	}
+
+	{
+		if (now < _lastDBUpdateTick)
+			return;
+
+		_lastDBUpdateTick = now + Config::Player::DB_UPDATE_TICK;
+
+		Profile profile(L"DB Save");
+		for (const ZoneRef& zone : _zones)
+		{
+			zone->UpdatePlayerDB();
 		}
 	}
 }

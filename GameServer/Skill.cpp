@@ -41,6 +41,10 @@ bool SkillInstance::AddCombo(uint64 now)
 
 bool SkillInstance::Execute(Vector<EntityRef>& targets)
 {
+	EntityRef owner = _owner.lock();
+	if (owner == nullptr)
+		return true;
+	
 	if (_definition->effectFactory.size() <= _combo)
 	{
 		LOG_ERROR(L"Invalid Skill Combo SkillId: " + std::to_wstring(_definition->GetSkillId()) + L", Skill Combo: " + std::to_wstring(_combo));
@@ -49,7 +53,7 @@ bool SkillInstance::Execute(Vector<EntityRef>& targets)
 
 	for (auto& item : _definition->effectFactory[_combo])
 	{
-		item->Clone()->RunEffect(_owner, targets, _definition->GetSkillId());
+		item->Clone()->RunEffect(owner, targets, _definition->GetSkillId());
 	}
 
 	return true;
